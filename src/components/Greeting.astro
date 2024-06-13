@@ -1,0 +1,10 @@
+---
+const messages = ["Hi", "Hello", "Howdy", "Hey there"];
+const randomMessage = () =>
+  messages[Math.floor(Math.random() * messages.length)];
+const msg = randomMessage();
+---
+
+<p class="text-xl text-current">
+  👋 {msg}! I'm <span class="font-bold tracking-tight">Jorge Balibrea</span>
+</p>

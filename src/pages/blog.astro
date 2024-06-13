@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import BlogPost from "../components/BlogPost.astro";
+import HomeLayout from "../layouts/HomeLayout.astro";
+const allPosts = await getCollection("posts");
+---
+
+<HomeLayout title="Title cambiado">
+  <main transition:animate="slide" class="px-8 pb-12">
+    <h1>Blog</h1>
+    <ul>
+      {
+        allPosts.map((post) => (
+          <BlogPost url={`/posts/${post.slug}/`} title={post.data.title} />
+        ))
+      }
+    </ul>
+  </main>
+</HomeLayout>

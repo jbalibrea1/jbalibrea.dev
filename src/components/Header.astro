@@ -1,0 +1,20 @@
+---
+import Navigation from "./Navigation.astro";
+import ThemeIcon from "./ThemeIcon.astro";
+---
+
+<header
+  class="sticky top-0 backdrop-blur-md bg-neutral-100/30 dark:bg-zinc-900/60 z-50 w-full px-8"
+>
+  <nav class="flex py-6 justify-between items-center max-w-4xl">
+    <a
+      href="/"
+      class="text-xl font-semibold tracking-tight opacity-80 hover:opacity-100 transition-opacity"
+      >jbalibrea.dev</a
+    >
+    <div class="flex gap-8 items-center">
+      <Navigation />
+      <ThemeIcon />
+    </div>
+  </nav>
+</header>
