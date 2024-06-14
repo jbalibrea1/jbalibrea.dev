@@ -7,6 +7,7 @@ export default {
       animation: {
         flip: "flip 6s infinite steps(2, end)",
         rotate: "rotate 3s linear infinite both",
+        shimmer: "shimmer 8s infinite",
       },
       keyframes: {
         flip: {
@@ -19,8 +20,21 @@ export default {
             transform: "rotate(90deg)",
           },
         },
+        shimmer: {
+          "0%, 90%, 100%": {
+            "background-position": "calc(-100% - var(--shimmer-width)) 0",
+          },
+          "30%, 60%": {
+            "background-position": "calc(100% + var(--shimmer-width)) 0",
+          },
+        },
       },
+      scale: ["group-a-hover"],
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant("group-a-hover", ".group-a:hover &");
+    },
+  ],
 };
