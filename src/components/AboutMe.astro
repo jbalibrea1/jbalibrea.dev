@@ -7,7 +7,7 @@ import Greeting from "../components/Greeting.astro";
 <div
   class="flex flex-col-reverse sm:flex-row items-center md:items-start gap-4"
 >
-  <div class="flex flex-col gap-4 justify-end">
+  <div class="flex flex-col gap-4 justify-start items-start">
     <Greeting />
     <div>
       <p class="text-lg text-current">
@@ -23,41 +23,7 @@ import Greeting from "../components/Greeting.astro";
       my skills.
     </p>
     <div class="flex items-center gap-8 flex-wrap">
-      <!-- <Button text="Open to work" href="mailto:jorge.balibrea1@gmail.com">
-        <svg
-          class="w-4 ms-2 transition duration-75 ease-in group-hover:scale-125"
-          viewBox="-0.5 0 25 25"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          ><g stroke-width="0"></g><g stroke-linecap="round">
-            <path
-              d="M9.00977 21.39H19.0098C20.0706 21.39 21.0881 20.9685 21.8382 20.2184C22.5883 19.4682 23.0098 18.4509 23.0098 17.39V7.39001C23.0098 6.32915 22.5883 5.31167 21.8382 4.56152C21.0881 3.81138 20.0706 3.39001 19.0098 3.39001H7.00977C5.9489 3.39001 4.93148 3.81138 4.18134 4.56152C3.43119 5.31167 3.00977 6.32915 3.00977 7.39001V12.39"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-            <path
-              d="M1.00977 18.39H11.0098"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-            <path
-              d="M1.00977 15.39H5.00977"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-            <path
-              d="M22.209 5.41992C16.599 16.0599 9.39906 16.0499 3.78906 5.41992"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </g></svg
-        >
-      </Button> -->
-      <div class="flex gap-2">
+      <div class="flex gap-2 items-center">
         <a
           href="https://www.linkedin.com/in/jbalibrea/"
           target="_blank"
@@ -93,8 +59,7 @@ import Greeting from "../components/Greeting.astro";
   </div>
   <Image
     src={jorge}
-    class="rounded-full w-24 aspect-[9/12] sm:w-48 sm:h-48 shadow-md bg-neutral-50 dark:bg-zinc-800"
+    class="rounded-full w-24 aspect-[0.67] sm:w-48 sm:h-48 shadow-md bg-gray-200 dark:bg-neutral-800"
     alt="Jorge Balibrea"
   />
 </div>
-<div class="shrink-0 bg-border"></div>

@@ -5,6 +5,8 @@
 <button
   id="themeToggle"
   class="transition ease-in hover:rotate-12 opacity-80 hover:opacity-100"
+  aria-label="Toggle dark mode"
+  title="Toggle dark mode"
 >
   <svg width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path
@@ -41,6 +43,14 @@
 </style>
 <script is:inline>
   document.addEventListener("astro:page-load", () => {
+    const updateThemeColor = (theme) => {
+      const metaThemeColor = document.getElementById("theme-color");
+      metaThemeColor.setAttribute(
+        "content",
+        theme === "dark" ? "#000000" : "#ffffff",
+      );
+    };
+
     const theme = (() => {
       if (
         typeof localStorage !== "undefined" &&
@@ -61,6 +71,7 @@
     }
 
     window.localStorage.setItem("theme", theme);
+    updateThemeColor(theme);
 
     const handleToggleClick = () => {
       const element = document.documentElement;
@@ -77,8 +88,16 @@
 </script>
 <script>
   document.addEventListener("astro:after-swap", () => {
-    localStorage.theme === "dark"
-      ? document.documentElement.classList.add("dark")
-      : document.documentElement.classList.remove("dark");
+    const theme = localStorage.theme === "dark" ? "dark" : "light";
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    const metaThemeColor = document.getElementById("theme-color");
+    metaThemeColor?.setAttribute(
+      "content",
+      theme === "dark" ? "#000000" : "#ffffff",
+    );
   });
 </script>
