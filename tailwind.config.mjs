@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import defaultTheme from "tailwindcss/defaultTheme";
 export default {
   darkMode: "selector",
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
@@ -30,6 +31,9 @@ export default {
         },
       },
       scale: ["group-a-hover"],
+      fontFamily: {
+        sans: ['"Roboto"', ...defaultTheme.fontFamily.sans],
+      },
     },
   },
   plugins: [

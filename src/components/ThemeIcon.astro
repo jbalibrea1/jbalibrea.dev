@@ -43,13 +43,7 @@
 </style>
 <script is:inline>
   document.addEventListener("astro:page-load", () => {
-    const updateThemeColor = (theme) => {
-      const metaThemeColor = document.getElementById("theme-color");
-      metaThemeColor.setAttribute(
-        "content",
-        theme === "dark" ? "#000000" : "#ffffff",
-      );
-    };
+    const metaThemeColor = document.getElementById("theme-color");
 
     const theme = (() => {
       if (
@@ -64,6 +58,11 @@
       return "light";
     })();
 
+    metaThemeColor.setAttribute(
+      "content",
+      theme === "dark" ? "#000000" : "#ffffff",
+    );
+
     if (theme === "light") {
       document.documentElement.classList.remove("dark");
     } else {
@@ -71,7 +70,6 @@
     }
 
     window.localStorage.setItem("theme", theme);
-    updateThemeColor(theme);
 
     const handleToggleClick = () => {
       const element = document.documentElement;
@@ -79,6 +77,7 @@
 
       const isDark = element.classList.contains("dark");
       localStorage.setItem("theme", isDark ? "dark" : "light");
+      metaThemeColor.setAttribute("content", isDark ? "#18181b" : "#f5f5f5");
     };
 
     document
@@ -86,7 +85,7 @@
       .addEventListener("click", handleToggleClick);
   });
 </script>
-<script>
+<!-- <script>
   document.addEventListener("astro:after-swap", () => {
     const theme = localStorage.theme === "dark" ? "dark" : "light";
     if (theme === "dark") {
@@ -100,4 +99,4 @@
       theme === "dark" ? "#000000" : "#ffffff",
     );
   });
-</script>
+</script> -->

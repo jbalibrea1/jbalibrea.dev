@@ -5,20 +5,18 @@ import Greeting from "../components/Greeting.astro";
 ---
 
 <div
-  class="flex flex-col-reverse sm:flex-row items-center md:items-start gap-4"
+  class="flex flex-col-reverse sm:flex-row items-center md:items-start gap-4 sm:gap-16"
 >
-  <div class="flex flex-col gap-4 justify-start items-start">
+  <div class="flex flex-col gap-4 justify-start items-start flex-1">
     <Greeting />
-    <div>
-      <p class="text-lg text-current">
-        A web developer fullstack from Murcia, Spain.
-      </p>
-      <p class="text-lg text-current">
-        I have experience with MERN stack (MongoDB, React, Express, Node.js),
-        MySQL, Laravel and other technologies.
-      </p>
-    </div>
-    <p class="text-md text-current my-4">
+    <p class="text-lg text-current">
+      A web developer fullstack from Murcia, Spain.
+    </p>
+    <p class="text-lg text-current">
+      I have experience with MERN stack (MongoDB, React, Express, Node.js),
+      MySQL, Laravel and other technologies.
+    </p>
+    <p class="text-md text-current">
       I love facing new challenges, learning new things every day and improving
       my skills.
     </p>
@@ -59,7 +57,7 @@ import Greeting from "../components/Greeting.astro";
   </div>
   <Image
     src={jorge}
-    class="rounded-full w-24 aspect-[0.67] sm:w-48 sm:h-48 shadow-md bg-gray-200 dark:bg-neutral-800"
+    class="rounded-full w-24 aspect2-[0.67] sm:w-40 shadow-md bg-gray-200 dark:bg-neutral-800"
     alt="Jorge Balibrea"
   />
 </div>
