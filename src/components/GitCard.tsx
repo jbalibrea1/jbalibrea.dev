@@ -43,17 +43,17 @@ export function GitCard() {
           `,
         }}
       />
-      <div className="space-y-4 p-4">
+      <div className="space-y-6 sm:space-y-4 py-4 px-6">
         <h3 className=" dark:text-slate-200 font-bold tracking-tight transition duration-75 hover:text-blue-700 dark:hover:text-white">
           <a
             href={repo.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group-a inline-flex items-center max-w-fit justify-start transition duration-75 hover:underline decoration-dotted opacity-80 hover:opacity-100 "
+            className="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 hover:underline decoration-dotted opacity-80 hover:opacity-100 "
           >
             {repo.name}
             <svg
-              className="w-3 h-3 ms-2 mb-2 transition ease-in-out -rotate-45 group-a-hover:scale-x-110 "
+              className="w-3 h-3 ms-2 mb-2 transition ease-in-out  -rotate-45 group-a-hover:scale-x-110 "
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
