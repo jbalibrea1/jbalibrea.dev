@@ -15,7 +15,7 @@ const { title, description = descriptionDefault } = Astro.props;
 
 <!doctype html>
 <html
-  lang="en"
+  lang="es"
   class="scroll-smooth max-h-[400px] overflow-y-auto
   [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:rounded-full
@@ -35,32 +35,38 @@ const { title, description = descriptionDefault } = Astro.props;
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
 
+    <!-- Open Graph -->
     <meta property="og:title" content="jbalibrea.dev" />
     <meta name="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://jbalibrea.dev" />
     <meta property="og:locale" content="es_ES" />
-
-    <!-- <meta property="og:image" content="https://jbalibrea.dev/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" /> -->
     <meta property="og:site_name" content="jbalibrea.dev" />
-    <!-- <meta name="twitter:card" content="summary_large_image" /> -->
-    <!-- <meta name="twitter:site" content="@jbalibrea" />
-    <meta name="twitter:creator" content="@jbalibrea" /> -->
-    <meta name="twitter:title" content="jbalibrea.dev" />
+    <meta property="og:image" content="https://jbalibrea.dev/avatar.png" />
+    <meta property="og:image:width" content="240" />
+    <meta property="og:image:height" content="240" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@jbalibrea1" />
+    <meta name="twitter:creator" content="@jbalibrea1" />
+    <meta name="twitter:title" content="Jorge Balibrea - jbalibrea.dev" />
     <meta name="twitter:description" content={description} />
-    <meta
-      name="twitter:description"
-      content="Portfolio de Jorge Balibrea, desarrollador web full stack especializado en tecnologías como React, Node.js, MongoDB, y más. Explora mis proyectos, habilidades y experiencias profesionales, y lee mis blogs sobre desarrollo web y tecnología en jbalibrea.dev."
-    />
-    <!-- <meta name="twitter:image" content="https://jbalibrea.dev/og-image.png" /> -->
+    <meta name="twitter:image" content="https://jbalibrea.dev/avatar.png" />
+    <meta name="twitter:image:alt" content="Avatar de Jorge Balibrea" />
+    <meta name="twitter:url" content="https://jbalibrea.dev" />
 
     <meta
       name="keywords"
-      content="jbalibrea, jorge balibrea, portfolio, blog, developer, web developer, full stack, react, node.js, mongodb, typescript, javascript, web development, software development, technology, tech, programming, code, coding, software engineer, engineer, web, web design, web development, web developer portfolio, web developer blog, web developer projects, web developer skills, web developer experience, web developer resume, web developer cv, web developer about, web developer contact, web developer jbalibrea, web developer jorge balibrea, web developer react, web developer node.js, web developer mongodb, web developer typescript, web developer javascript, web developer software development, web developer technology, web developer tech, web developer programming, web developer code, web developer coding, web developer software engineer, web developer engineer, web developer web, web developer web design, web developer web development"
+      content="jbalibrea, jorge balibrea, portfolio, blog, web developer, full stack developer, react, node.js, mongodb, typescript, javascript, web development, software development, technology, programming, coding, software engineer"
     />
 
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS Feed de jbalibrea.dev"
+      href={`${Astro.site}rss.xml`}
+    />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -79,6 +85,7 @@ const { title, description = descriptionDefault } = Astro.props;
     />
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <title>{title}</title>
     <slot name="head" />
     <ViewTransitions />

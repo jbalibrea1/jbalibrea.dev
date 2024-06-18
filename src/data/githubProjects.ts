@@ -3,7 +3,7 @@ import type { Github } from "../interfaces/Github";
 export const githubProjects: Github[] = [
   {
     name: "jbalibrea.dev - Portfolio",
-    url: "https://github.com/jbalibrea1/portfolio-jbalibrea",
+    url: "https://github.com/jbalibrea1/jbalibrea.dev",
     description:
       "🚀My personal portfolio built with Astro, TypeScript, React, and TailwindCSS",
     tags: ["TypeScript", "Astro", "Tailwind", "React", "Portfolio"],
