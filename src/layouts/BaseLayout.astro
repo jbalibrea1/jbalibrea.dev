@@ -3,6 +3,7 @@ import { ViewTransitions } from "astro:transitions";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import "../styles/global.css";
+
 interface Props {
   title: string;
 }
@@ -24,19 +25,27 @@ const { title } = Astro.props;
 >
   <head>
     <meta charset="utf-8" />
-    <meta name="theme-color" id="theme-color" content="#ffffff" />
+    <meta id="theme-color" name="theme-color" content="#f5f5f5" />
     <meta name="generator" content={Astro.generator} />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="My personal portfolio - jbalibrea.dev" />
+    <meta name="description" content="Jorge Balibrea - jbalibrea.dev" />
 
     <meta property="og:title" content="jbalibrea.dev" />
-    <meta property="og:description" content="My personal portfolio" />
+    <meta property="og:description" content="Jorge Balibrea - jbalibrea.dev" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://jbalibrea.dev" />
+    <meta property="og:locale" content="en_US" />
+
     <!-- <meta property="og:image" content="https://jbalibrea.dev/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" /> -->
     <meta property="og:site_name" content="jbalibrea.dev" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- <meta name="twitter:site" content="@jbalibrea" />
+    <meta name="twitter:creator" content="@jbalibrea" /> -->
+    <meta name="twitter:title" content="jbalibrea.dev" />
+    <meta name="twitter:description" content="Jorge Balibrea - jbalibrea.dev" />
+    <!-- <meta name="twitter:image" content="https://jbalibrea.dev/og-image.png" /> -->
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

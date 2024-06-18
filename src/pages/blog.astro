@@ -5,9 +5,11 @@ import HomeLayout from "../layouts/HomeLayout.astro";
 const allPosts = await getCollection("posts");
 ---
 
-<HomeLayout title="Title cambiado">
-  <main transition:animate="slide" class="px-8 pb-12">
-    <h1>Blog</h1>
+<HomeLayout title="Blogs - jbalibrea.dev">
+  <main class="flex flex-col gap-8 pt-5 px-8 pb-32" transition:name={"test"}>
+    <h1 class="text-2xl text-current">
+      Bienvenido a mi <span class="font-bold tracking-tight"> Blog</span>
+    </h1>
     <ul>
       {
         allPosts.map((post) => (

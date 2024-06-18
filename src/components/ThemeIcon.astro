@@ -58,15 +58,12 @@
       return "light";
     })();
 
-    metaThemeColor.setAttribute(
-      "content",
-      theme === "dark" ? "#000000" : "#ffffff",
-    );
-
     if (theme === "light") {
       document.documentElement.classList.remove("dark");
+      metaThemeColor.setAttribute("content", "#f5f5f5");
     } else {
       document.documentElement.classList.add("dark");
+      metaThemeColor.setAttribute("content", "#18181b");
     }
 
     window.localStorage.setItem("theme", theme);
@@ -85,18 +82,16 @@
       .addEventListener("click", handleToggleClick);
   });
 </script>
-<!-- <script>
+<script>
   document.addEventListener("astro:after-swap", () => {
     const theme = localStorage.theme === "dark" ? "dark" : "light";
+    const metaThemeColor = document.getElementById("theme-color");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
+      metaThemeColor?.setAttribute("content", "#18181b");
     } else {
       document.documentElement.classList.remove("dark");
+      metaThemeColor?.setAttribute("content", "#f5f5f5");
     }
-    const metaThemeColor = document.getElementById("theme-color");
-    metaThemeColor?.setAttribute(
-      "content",
-      theme === "dark" ? "#000000" : "#ffffff",
-    );
   });
-</script> -->
+</script>

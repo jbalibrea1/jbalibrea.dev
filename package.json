@@ -1,5 +1,5 @@
 {
-  "name": "jbalibrea-portfolio",
+  "name": "jbalibrea.dev",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -27,6 +27,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.13",
     "prettier": "^3.3.1",
     "prettier-plugin-astro": "^0.14.0"
   }

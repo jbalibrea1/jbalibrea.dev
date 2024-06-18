@@ -37,6 +37,7 @@ export default {
     },
   },
   plugins: [
+    require("@tailwindcss/typography"),
     function ({ addVariant }) {
       addVariant("group-a-hover", ".group-a:hover &");
     },

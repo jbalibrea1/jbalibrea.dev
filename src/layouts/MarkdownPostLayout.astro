@@ -1,34 +1,22 @@
 ---
 import { fade } from "astro:transitions";
+import Prose from "../components/Prose.astro";
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout title={frontmatter.title}>
-  <p>{frontmatter.pubDate.toString().slice(0, 10)}</p>
-  <p transition:animate={fade({ duration: "2s" })}>
-    <em>{frontmatter.description}</em>
-  </p>
-  <p>Escrito por: <a href="/about/">{frontmatter.author}</a></p>
-  <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
-  <slot />
+<BaseLayout title={`${frontmatter.title} - jbalibrea.dev`}>
+  <Prose>
+    <header class="pt-5 px-8">
+      <p>{frontmatter.pubDate.toString().slice(0, 10)}</p>
+      <p transition:animate={fade({ duration: "1s" })}>
+        <em>{frontmatter.description}</em>
+      </p>
+      <p>Escrito por: <strong>{frontmatter.author}</strong></p>
+      <img src={frontmatter.image.url} alt={frontmatter.image.alt} />
+    </header>
+    <main class="px-8 pb-32">
+      <slot />
+    </main>
+  </Prose>
 </BaseLayout>
-<style>
-  a {
-    color: #00539f;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd;
-  }
-</style>
