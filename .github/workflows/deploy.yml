@@ -26,4 +26,4 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           port: 22
           SOURCE: "./dist/*"
-          TARGET: "/var/www/portfolio"
+          TARGET: "/var/www/jbalibrea.dev"
