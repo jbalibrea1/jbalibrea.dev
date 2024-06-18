@@ -1,7 +1,7 @@
 ---
 title: "Interceptor con Axios"
 pubDate: 2024-06-18
-description: "En este post vamos a ver cómo  modificar una  petición antes de enviarla o una respuesta antes de recibirla con axios. Para ello haremos uso de un interceptor junto con casos prácticos de autenticación."
+description: "En este post vamos a ver cómo se puede modificar una petición HTTP antes o después de que se envíe utilizando Axios. Para ello haremos uso de un interceptor junto con casos prácticos de autenticación."
 author: "Jorge Balibrea"
 image:
   url: "/blog/blog-1-axios-interceptor.png"

@@ -6,14 +6,29 @@ import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout title={`${frontmatter.title} - jbalibrea.dev`}>
+<BaseLayout
+  title={`${frontmatter.title} - jbalibrea.dev`}
+  description=`${frontmatter.description} - jbalibrea.dev`
+>
   <Prose>
     <header class="pt-5 px-8">
-      <p>{frontmatter.pubDate.toString().slice(0, 10)}</p>
+      <time datetime={frontmatter.pubDate.toISOString()}>
+        {
+          frontmatter.pubDate.toLocaleDateString("es-es", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })
+        }
+      </time>
       <p transition:animate={fade({ duration: "1s" })}>
         <em>{frontmatter.description}</em>
       </p>
-      <p>Escrito por: <strong>{frontmatter.author}</strong></p>
+      <p>
+        Escrito por: <strong class="font-semibold tracking-tight"
+          >{frontmatter.author}</strong
+        >
+      </p>
       <img
         src={frontmatter.image.url}
         alt={frontmatter.image.alt}
@@ -21,7 +36,9 @@ const { frontmatter } = Astro.props;
       />
     </header>
     <main class="px-8 pb-32">
-      <slot />
+      <article>
+        <slot />
+      </article>
     </main>
   </Prose>
 </BaseLayout>

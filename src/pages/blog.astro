@@ -1,21 +1,27 @@
 ---
 import { getCollection } from "astro:content";
-import BlogPost from "../components/BlogPost.astro";
+import PostCard from "../components/PostCard.astro";
 import HomeLayout from "../layouts/HomeLayout.astro";
 const allPosts = await getCollection("posts");
+
+const title = "Blogs - jbalibrea.dev";
+const description =
+  "Artículos sobre desarrollo web, diseño y tecnología. jbalibrea.dev";
 ---
 
-<HomeLayout title="Blogs - jbalibrea.dev">
+<HomeLayout title={title} description={description}>
   <main class="flex flex-col gap-8 pt-5 px-8 pb-32" transition:name={"test"}>
     <h1 class="text-2xl text-current">
-      Bienvenido a mi <span class="font-bold tracking-tight"> Blog</span>
+      Bienvenido a mi <span class="font-bold tracking-tight">
+        Blog personal</span
+      >
     </h1>
-    <ul>
-      {
-        allPosts.map((post) => (
-          <BlogPost url={`/posts/${post.slug}/`} title={post.data.title} />
-        ))
-      }
-    </ul>
+    <p>
+      Aquí encontrarás una colección de artículos sobre desarrollo web, diseño y
+      tecnología.
+    </p>
+    <article class="flex flex-col gap-4 max-w-lg m-auto">
+      {allPosts.map((post) => <PostCard post={post} />)}
+    </article>
   </main>
 </HomeLayout>
