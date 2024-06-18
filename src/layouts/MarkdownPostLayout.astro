@@ -2,6 +2,7 @@
 import { fade } from "astro:transitions";
 import Prose from "../components/Prose.astro";
 import BaseLayout from "./BaseLayout.astro";
+
 const { frontmatter } = Astro.props;
 ---
 
@@ -13,7 +14,11 @@ const { frontmatter } = Astro.props;
         <em>{frontmatter.description}</em>
       </p>
       <p>Escrito por: <strong>{frontmatter.author}</strong></p>
-      <img src={frontmatter.image.url} alt={frontmatter.image.alt} />
+      <img
+        src={frontmatter.image.url}
+        alt={frontmatter.image.alt}
+        class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
+      />
     </header>
     <main class="px-8 pb-32">
       <slot />

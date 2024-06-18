@@ -1,10 +1,10 @@
 ---
 title: "Interceptor con Axios"
 pubDate: 2024-06-18
-description: "En este post vamos a ver cómo establecer un interceptor con axios."
+description: "En este post vamos a ver cómo  modificar una  petición antes de enviarla o una respuesta antes de recibirla con axios. Para ello haremos uso de un interceptor junto con casos prácticos de autenticación."
 author: "Jorge Balibrea"
 image:
-  url: "/src/assets/blog/blog1-interceptor.png"
+  url: "/blog/blog-1-axios-interceptor.png"
   alt: "Interceptor con Axios"
 tags: ["axios", "interceptor", "http", "api", "autenticación"]
 ---
