@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import BlogPost from "../../components/BlogPost.astro";
+import PostCard from "../../components/PostCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
@@ -26,9 +26,15 @@ const { posts } = Astro.props;
 ---
 
 <BaseLayout title={tag}>
-  {
-    posts.map((post) => (
-      <BlogPost url={`/posts/${post.slug}/`} title={post.data.title} />
-    ))
-  }
+  <main class="flex flex-col gap-8 pt-5 px-8 pb-32" transition:name={"test"}>
+    <h1 class="text-2xl text-current">
+      Bienvenido a mi <span class="font-bold tracking-tight">
+        Blog personal</span
+      >
+    </h1>
+    <p>Filtrando artículos por <strong>{tag}</strong></p>
+    <article class="flex flex-col gap-4 max-w-lg m-auto">
+      {posts.map((post) => <PostCard post={post} />)}
+    </article>
+  </main>
 </BaseLayout>
