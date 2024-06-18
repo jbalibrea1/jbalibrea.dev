@@ -1,0 +1,30 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies and Build
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Deploy to VPS
+        uses: easingthemes/ssh-deploy@v2
+        with:
+          server: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+
+          local: "./dist/*"
+          remote: "/var/www/portfolio"
