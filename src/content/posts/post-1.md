@@ -9,14 +9,14 @@ image:
 tags: ["axios", "interceptor", "http", "api", "autenticación"]
 ---
 
+Estoy muy emocionado de compartir con ustedes mi primera entrada de blog. ¡Espero que les guste!.
+
 **Tabla de contenidos:**
 
 - [Interceptor con Axios](#interceptor-con-axios)
 - [Caso práctico con autenticación](#caso-práctico-con-autenticación)
 
 # Interceptor con Axios
-
-Estoy muy emocionado de compartir con ustedes mi primera entrada de blog. ¡Espero que les guste!.
 
 Vamos a hablar de como establecer un interceptor con [axios](https://axios-http.com/).
 
