@@ -21,10 +21,10 @@ jobs:
       - name: Deploy to VPS
         uses: easingthemes/ssh-deploy@main
         with:
-          server: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remoteHost: ${{ secrets.SERVER_IP }}
+          remoteUser: ${{ secrets.SERVER_USERNAME }}
+          sshPrivateKey: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
 
-          local: "./dist/*"
-          remote: "/var/www/portfolio"
+      source: ./dist/*
+      target: /var/www/portfolio
