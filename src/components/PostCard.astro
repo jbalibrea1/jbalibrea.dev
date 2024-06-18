@@ -3,20 +3,22 @@ const { post } = Astro.props;
 ---
 
 <div
-  class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 transition duration-75 ease-in opacity-90 hover:opacity-100"
+  class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 overflow-hidden"
 >
-  <img
-    class="w-full h-auto rounded-t-xl max-h-44"
-    src={post.data.image.url}
-    alt={post.data.image.alt}
-  />
+  <a href={`/posts/${post.slug}/`}>
+    <img
+      class="w-full h-auto min-h-32 rounded-t-xl max-h-44 object-cover transition ease-in-out scale-105 hover:scale-100 opacity:80 hover:opacity-100"
+      src={post.data.image.url}
+      alt={post.data.image.alt}
+    />
+  </a>
   <div class="p-4 md:p-5">
     <h3
-      class="dark:text-slate-200 text-lg font-bold tracking-tight transition duration-75 hover:text-blue-700 dark:hover:text-white"
+      class="dark:text-slate-200 text-xl font-bold tracking-tight transition duration-75 hover:text-blue-700 dark:hover:text-white"
     >
       <a
         href={`/posts/${post.slug}/`}
-        class="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 hover:underline decoration-dotted opacity-80 hover:opacity-100"
+        class="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 underline decoration-dotted opacity-80 hover:opacity-100"
       >
         {post.data.title}
         <svg
@@ -35,7 +37,7 @@ const { post } = Astro.props;
         </svg>
       </a>
     </h3>
-    <p class="mt-1 text-gray-800 dark:text-slate-200">
+    <p class="mt-1 text-gray-800 dark:text-slate-200 text-md">
       {post.data.description}
     </p>
   </div>
