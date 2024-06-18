@@ -25,6 +25,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.SERVER_IP }}
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           port: 22
-
-      source: ./dist/*
-      target: /var/www/portfolio
+          SOURCE: "./dist/*"
+          TARGET: "/var/www/portfolio"
