@@ -70,7 +70,7 @@ export function GitCard() {
           </a>
         </h3>
         <p className="text-sm dark:text-slate-200">
-          {repo.description ? repo.description : "Sin descripción"}
+          {repo.description ? repo.description : "Description empty"}
         </p>
         <div className="flex gap-2 flex-wrap">
           {repo.tags.map((tag) => (

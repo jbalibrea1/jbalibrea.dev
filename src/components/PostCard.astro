@@ -7,7 +7,7 @@ const { post } = Astro.props;
 >
   <a href={`/posts/${post.slug}/`}>
     <img
-      class="w-full h-auto min-h-32 rounded-t-xl max-h-44 object-cover transition ease-in-out scale-105 hover:scale-100 opacity:80 hover:opacity-100"
+      class="w-full h-auto min-h-32 rounded-t-xl max-h-44 object-cover transition duration-300 ease-in-out scale-105 hover:scale-100 opacity:100 hover:opacity-80"
       src={post.data.image.url}
       alt={post.data.image.alt}
     />
