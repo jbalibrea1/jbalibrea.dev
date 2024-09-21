@@ -7,7 +7,7 @@ const { post } = Astro.props;
 >
   <a href={`/posts/${post.slug}/`}>
     <img
-      class="w-full h-auto min-h-32 rounded-t-xl max-h-44 object-cover transition duration-300 ease-in-out scale-105 hover:scale-100 opacity:100 hover:opacity-80"
+      class="w-full h-32 rounded-t-xl max-h-44 object-cover transition duration-300 ease-in-out scale-105 hover:scale-100 opacity:100 hover:opacity-80"
       src={post.data.image.url}
       alt={post.data.image.alt}
     />
@@ -40,5 +40,31 @@ const { post } = Astro.props;
     <p class="mt-1 text-gray-800 dark:text-slate-200 text-md">
       {post.data.description}
     </p>
+    <div class="flex items-start justify-between gap-2 mt-4">
+      <span>
+        {
+          post.data.tags.map((tag) => (
+            <a
+              href={`/tags/${tag}/`}
+              class="text-xs bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-slate-300 px-2 py-1 rounded-full mr-2 hover:bg-gray-300 dark:hover:bg-neutral-700 transition duration-75 ease-in-out"
+            >
+              {tag}
+            </a>
+          ))
+        }
+      </span>
+      <time
+        datetime={post.data.pubDate.toISOString()}
+        class="text-gray-500 dark:text-slate-400 text-sm flex-shrink-0"
+      >
+        {
+          post.data.pubDate.toLocaleDateString('es-es', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
+        }
+      </time>
+    </div>
   </div>
 </div>

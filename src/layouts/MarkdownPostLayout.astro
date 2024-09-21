@@ -1,34 +1,36 @@
 ---
-import { fade } from "astro:transitions";
-import Prose from "../components/Prose.astro";
-import BaseLayout from "./BaseLayout.astro";
+import { fade } from 'astro:transitions';
+import Prose from '../components/Prose.astro';
+import BaseLayout from './BaseLayout.astro';
 
 const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout
-  title={`${frontmatter.title} - jbalibrea.dev`}
-  description=`${frontmatter.description} - jbalibrea.dev`
+  title={`${frontmatter.title} - Blog jbalibrea.dev`}
+  description=`${frontmatter.description} - Blog jbalibrea.dev`
 >
   <Prose>
     <header class="pt-5 px-8">
-      <time datetime={frontmatter.pubDate.toISOString()}>
-        {
-          frontmatter.pubDate.toLocaleDateString("es-es", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })
-        }
-      </time>
-      <p transition:animate={fade({ duration: "1s" })}>
-        <em>{frontmatter.description}</em>
-      </p>
-      <p>
-        Escrito por: <strong class="font-semibold tracking-tight"
-          >{frontmatter.author}</strong
-        >
-      </p>
+      <div transition:animate={fade({ duration: '1s' })}>
+        <p>
+          <em>{frontmatter.description}</em>
+        </p>
+        <p>
+          <strong class="font-semibold tracking-tight"
+            >{frontmatter.author}
+          </strong> |
+          <time datetime={frontmatter.pubDate.toISOString()}>
+            {
+              frontmatter.pubDate.toLocaleDateString('es-es', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })
+            }
+          </time>
+        </p>
+      </div>
       <img
         src={frontmatter.image.url}
         alt={frontmatter.image.alt}
@@ -37,6 +39,7 @@ const { frontmatter } = Astro.props;
     </header>
     <main class="px-8 pb-32">
       <article>
+        <h1>{frontmatter.title}</h1>
         <slot />
       </article>
     </main>

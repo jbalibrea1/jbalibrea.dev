@@ -1,10 +1,11 @@
 ---
-const messages = ["Hey", "Hola", "Saludos", "Qué tal", "Hello", "Hi"];
+const messages = ['Hey', 'Hola', 'Saludos', 'Qué tal', 'Hello', 'Hi'];
 const randomMessage = () =>
   messages[Math.floor(Math.random() * messages.length)];
 const msg = randomMessage();
 ---
 
+<h1 class="sr-only">Jorge Balibrea - Desarrollador Web Full Stack</h1>
 <p class="text-xl sm:text-2xl text-current flex flex-row gap-1 flex-wrap">
   👋 {msg}! Me llamo <span class="font-bold tracking-tight">Jorge Balibrea</span
   >

@@ -1,16 +1,19 @@
 ---
-import { getCollection } from "astro:content";
-import PostCard from "../components/PostCard.astro";
-import HomeLayout from "../layouts/HomeLayout.astro";
-const allPosts = await getCollection("posts");
+import { getCollection } from 'astro:content';
+import PostCard from '../components/PostCard.astro';
+import HomeLayout from '../layouts/HomeLayout.astro';
+const allPosts = (await getCollection('posts')).sort(
+  (a, b) =>
+    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
 
-const title = "Blogs - jbalibrea.dev";
+const title = 'Blog de Desarrollo Web y Tecnología - jbalibrea.dev';
 const description =
-  "Artículos de Jorge Balibrea sobre desarrollo web, diseño y tecnología - jbalibrea.dev";
+  'Artículos de Jorge Balibrea sobre desarrollo web, diseño y tecnología - jbalibrea.dev';
 ---
 
 <HomeLayout title={title} description={description}>
-  <main class="flex flex-col gap-8 pt-5 px-8 pb-32" transition:name={"test"}>
+  <main class="flex flex-col gap-8 pt-5 px-8 pb-32" transition:name={'test'}>
     <h1 class="text-2xl text-current">
       Bienvenido a mi <span class="font-bold tracking-tight">
         Blog personal</span
@@ -20,7 +23,8 @@ const description =
       Aquí encontrarás una colección de artículos sobre desarrollo web, diseño y
       tecnología.
     </p>
-    <article class="flex flex-col gap-4 max-w-lg m-auto">
+    <!-- <article class="flex flex-col gap-4 max-w-lg m-auto"> -->
+    <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
       {allPosts.map((post) => <PostCard post={post} />)}
     </article>
   </main>
