@@ -6,7 +6,7 @@ author: "Jorge Balibrea"
 image:
   url: "/blog/1/blog-1-axios-interceptor.png"
   alt: "Interceptor con Axios"
-tags: ["axios", "interceptor", "http", "api", "nodejs", "javascript"]
+tags: ["axios", "interceptor", "http", "api", "nodejs", "JavaScript"]
 ---
 
 Estoy muy emocionado de compartir con ustedes mi primera entrada de blog. ¡Espero que les guste!.
