@@ -30,7 +30,7 @@ Para establecer un interceptor en axios, podemos utilizar el método `intercepto
 
 Como buena práctica se recomienda crear un archivo api.js donde se configure la instancia de axios y se añadan los interceptores. A continuación procedemos a crear una instancia de axios y añadir los interceptores que necesitemos.
 
-```jsx
+```js
 import axios from "axios";
 
 const api = axios.create({
@@ -57,7 +57,7 @@ Si la petición se envía correctamente, el primer argumento de la función `use
 
 Un caso muy habitual y práctico es el uso de interceptores en la autenticación. Podemos añadir un interceptor que añada el token de autorización a la cabecera de la petición antes de que se envíe.
 
-```jsx
+```js
 import axios from "axios";
 
 const api = axios.create({
@@ -86,12 +86,12 @@ _En este ejemplo, estamos haciendo uso del localStorage para almacenar el token 
 
 Ya solo nos queda importar la instancia de axios en los servicios o componentes donde necesitemos hacer peticiones a la API.
 
-```jsx
+```js
 import api from "@utils/api";
 
 const fetchData = async () => {
   try {
-    const res = await api.get("https://api.route.com/private_data");
+    const res = await api.get("https://api.example.com/private_data");
     console.log(res.data);
   } catch (error) {
     console.error(error);
