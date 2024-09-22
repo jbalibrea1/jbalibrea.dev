@@ -7,12 +7,12 @@ import HomeLayout from '../layouts/HomeLayout.astro';
 ---
 
 <HomeLayout title="Jorge Balibrea - jbalibrea.dev">
-  <main class="flex flex-col gap-8 pt-5 px-8 pb-32" transition:name={'test'}>
+  <main transition:name={'pages'}>
     <AboutMe />
     <div class="flex justify-end items-center">
       <Button href="/repositories" text="Explorar mis repositorios">
         <svg
-          class="w-3 h-3 ms-2 transition duration-75 ease-in group-hover:scale-x-125"
+          class="w-3 h-3 ms-2 group-hover:scale-x-125"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

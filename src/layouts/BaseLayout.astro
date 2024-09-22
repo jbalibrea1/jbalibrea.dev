@@ -16,17 +16,7 @@ const { title, description = descriptionDefault } = Astro.props;
 ---
 
 <!doctype html>
-<html
-  lang="es"
-  class="scroll-smooth max-h-[400px] overflow-y-auto
-  [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
->
+<html lang="es">
   <head>
     <script
       type="text/partytown"
@@ -113,9 +103,7 @@ const { title, description = descriptionDefault } = Astro.props;
     <ViewTransitions />
   </head>
 
-  <body
-    class="container relative max-w-4xl mx-auto text-slate-900 dark:text-slate-50 bg-neutral-100 dark:bg-zinc-900 lg:px-0 min-h-screen"
-  >
+  <body>
     <Header />
     <slot />
     <Footer />

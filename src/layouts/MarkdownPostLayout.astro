@@ -10,10 +10,11 @@ const { frontmatter } = Astro.props;
   title={`${frontmatter.title} - Blog jbalibrea.dev`}
   description=`${frontmatter.description} - Blog jbalibrea.dev`
 >
-  <Prose>
-    <main class="pb-32 pt-5 px-8 sm:px-0">
+  <!-- <main class="pt-5 px-8 sm:px-0"> -->
+  <main class="max-w-full">
+    <Prose>
       <div>
-        <h1 class="mb-1">
+        <h1 class="mb-1" transition:name={`title-${frontmatter.title}`}>
           {frontmatter.title}
         </h1>
         <p class="m-0 text-sm">
@@ -24,19 +25,20 @@ const { frontmatter } = Astro.props;
             {
               frontmatter.pubDate.toLocaleDateString('es-es', {
                 year: 'numeric',
-                month: 'short',
+                month: 'long',
                 day: 'numeric',
               })
             }
           </time>
         </p>
-        <img
-          src={frontmatter.image.url}
-          alt={frontmatter.image.alt}
-          class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
-        />
         <div transition:animate={fade({ duration: '1s' })}>
-          <p>
+          <img
+            src={frontmatter.image.url}
+            alt={frontmatter.image.alt}
+            class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
+            transition:name={`img-${frontmatter.image.url}`}
+          />
+          <p transition:name={`desc-${frontmatter.description}`}>
             <em>{frontmatter.description}</em>
           </p>
         </div>
@@ -45,6 +47,6 @@ const { frontmatter } = Astro.props;
       <article>
         <slot />
       </article>
-    </main>
-  </Prose>
+    </Prose>
+  </main>
 </BaseLayout>

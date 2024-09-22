@@ -4,7 +4,7 @@
 
 <button
   id="themeToggle"
-  class="transition ease-in hover:rotate-12 opacity-80 hover:opacity-100"
+  class="transition ease-in hover:rotate-12 opacity-90 hover:opacity-100"
   aria-label="Toggle dark mode"
   title="Toggle dark mode"
 >
@@ -42,56 +42,56 @@
   }
 </style>
 <script is:inline>
-  document.addEventListener("astro:page-load", () => {
-    const metaThemeColor = document.getElementById("theme-color");
+  document.addEventListener('astro:page-load', () => {
+    const metaThemeColor = document.getElementById('theme-color');
 
     const theme = (() => {
       if (
-        typeof localStorage !== "undefined" &&
-        localStorage.getItem("theme")
+        typeof localStorage !== 'undefined' &&
+        localStorage.getItem('theme')
       ) {
-        return localStorage.getItem("theme");
+        return localStorage.getItem('theme');
       }
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        return "dark";
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
       }
-      return "light";
+      return 'light';
     })();
 
-    if (theme === "light") {
-      document.documentElement.classList.remove("dark");
-      metaThemeColor.setAttribute("content", "#f5f5f5");
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+      metaThemeColor.setAttribute('content', '#f5f5f5');
     } else {
-      document.documentElement.classList.add("dark");
-      metaThemeColor.setAttribute("content", "#18181b");
+      document.documentElement.classList.add('dark');
+      metaThemeColor.setAttribute('content', '#18181b');
     }
 
-    window.localStorage.setItem("theme", theme);
+    window.localStorage.setItem('theme', theme);
 
     const handleToggleClick = () => {
       const element = document.documentElement;
-      element.classList.toggle("dark");
+      element.classList.toggle('dark');
 
-      const isDark = element.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-      metaThemeColor.setAttribute("content", isDark ? "#18181b" : "#f5f5f5");
+      const isDark = element.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      metaThemeColor.setAttribute('content', isDark ? '#18181b' : '#f5f5f5');
     };
 
     document
-      .getElementById("themeToggle")
-      .addEventListener("click", handleToggleClick);
+      .getElementById('themeToggle')
+      .addEventListener('click', handleToggleClick);
   });
 </script>
 <script>
-  document.addEventListener("astro:after-swap", () => {
-    const theme = localStorage.theme === "dark" ? "dark" : "light";
-    const metaThemeColor = document.getElementById("theme-color");
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-      metaThemeColor?.setAttribute("content", "#18181b");
+  document.addEventListener('astro:after-swap', () => {
+    const theme = localStorage.theme === 'dark' ? 'dark' : 'light';
+    const metaThemeColor = document.getElementById('theme-color');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      metaThemeColor?.setAttribute('content', '#18181b');
     } else {
-      document.documentElement.classList.remove("dark");
-      metaThemeColor?.setAttribute("content", "#f5f5f5");
+      document.documentElement.classList.remove('dark');
+      metaThemeColor?.setAttribute('content', '#f5f5f5');
     }
   });
 </script>

@@ -1,5 +1,10 @@
 ---
 const { post } = Astro.props;
+const maxChars = 200;
+const truncatedDescription =
+  post.data.description.length > maxChars
+    ? post.data.description.substring(0, maxChars) + '...'
+    : post.data.description;
 ---
 
 <div
@@ -7,19 +12,21 @@ const { post } = Astro.props;
 >
   <a href={`/posts/${post.slug}/`}>
     <img
-      class="w-full h-32 rounded-t-xl max-h-44 object-cover transition duration-300 ease-in-out scale-105 hover:scale-100 opacity:100 hover:opacity-80"
+      class="w-full h-32 rounded-t-xl max-h-44 object-cover transition duration-300 ease-in-out scale-105 hover:scale-100 opacity:100 hover:opacity-90"
       src={post.data.image.url}
       alt={post.data.image.alt}
+      transition:name={`img-${post.data.image.url}`}
     />
   </a>
   <div class="p-4 md:p-5 flex flex-col justify-between flex-1">
     <div>
       <h3
-        class="dark:text-slate-200 text-xl font-bold tracking-tight transition duration-75 hover:text-blue-700 dark:hover:text-white"
+        class="dark:text-slate-200 text-xl font-bold tracking-tight transition duration-75 hover:text-pink-700 dark:hover:text-pink-700"
       >
         <a
           href={`/posts/${post.slug}/`}
-          class="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 underline decoration-dotted opacity-80 hover:opacity-100"
+          class="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 underline decoration-dotted opacity-90 hover:opacity-100"
+          transition:name={`title-${post.data.title}`}
         >
           {post.data.title}
           <svg
@@ -38,12 +45,15 @@ const { post } = Astro.props;
           </svg>
         </a>
       </h3>
-      <p class="mt-1 text-gray-800 dark:text-slate-200 text-md">
-        {post.data.description}
+      <p
+        class="mt-1 text-gray-800 dark:text-slate-200 text-md"
+        transition:name={`desc-${post.data.description}`}
+      >
+        {truncatedDescription}
       </p>
     </div>
     <div class="flex items-start justify-between gap-2 mt-4">
-      <span>
+      <span class="flex flex-wrap gap-1">
         {
           post.data.tags.map((tag) => (
             <a

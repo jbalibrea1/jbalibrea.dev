@@ -6,15 +6,67 @@
   @font-face {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 400;
+    font-weight: 100;
     font-display: swap;
-    src: url(/fonts/Roboto.woff2) format("woff2");
+    src: url(/fonts/Roboto-Thin.woff2) format("woff2");
   }
+
   @font-face {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 200;
+    font-weight: 300;
     font-display: swap;
     src: url(/fonts/Roboto-Light.woff2) format("woff2");
+  }
+
+  @font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/fonts/Roboto-Regular.woff2) format("woff2");
+  }
+
+  @font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(/fonts/Roboto-Medium.woff2) format("woff2");
+  }
+
+  @font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(/fonts/Roboto-Bold.woff2) format("woff2");
+  }
+
+  @font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(/fonts/Roboto-Black.woff2) format("woff2");
+  }
+
+  html {
+    @apply scroll-smooth max-h-[400px] overflow-y-auto
+    [&::-webkit-scrollbar]:w-2
+    [&::-webkit-scrollbar-track]:rounded-full
+    [&::-webkit-scrollbar-track]:bg-gray-100
+    [&::-webkit-scrollbar-thumb]:rounded-full
+    [&::-webkit-scrollbar-thumb]:bg-gray-300
+    dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500;
+  }
+
+  body {
+    @apply flex min-h-screen flex-col items-center container relative max-w-4xl mx-auto text-slate-900 dark:text-slate-50 bg-neutral-100 dark:bg-zinc-900 lg:px-0;
+  }
+
+  main {
+    @apply flex-1 flex flex-col gap-8 pt-5 px-8;
   }
 }
