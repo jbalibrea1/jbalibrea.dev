@@ -1,3 +1,4 @@
+import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -7,6 +8,13 @@ import { defineConfig } from "astro/config";
 // https://astro.build/config
 export default defineConfig({
   site: "https://jbalibrea.dev",
+  markdown: {
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "catppuccin-mocha",
+      defaultColor: false,
+    },
+  },
   integrations: [
     tailwind(),
     react(),
@@ -15,6 +23,13 @@ export default defineConfig({
       config: {
         forward: ["dataLayer.push"],
       },
+    }),
+    mdx({
+      // `gfm` overridden to `false`
+      shikiConfig: {
+        defaultColor: false,
+      },
+      gfm: true,
     }),
   ],
 });
