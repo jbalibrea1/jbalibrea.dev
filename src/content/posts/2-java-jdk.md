@@ -48,8 +48,7 @@ Para instalar Adoptium Eclipse Temurin OpenJDK, sigue estos pasos:
    - Inicio -> Escribimos "variables de entorno" -> Editar las variables de entorno del sistema -> Variables de entorno
    - Añadimos la siguiente variable de entorno globales:
    - `JAVA_HOME`: `C:\Java\jdk-21.0.4+7`
-   - Y editamos la variable `PATH` añadiendo al final el siguiente valor:
-   - `PATH`: `%JAVA_HOME%\bin`
+   - Y editamos la variable `PATH` añadiendo el valor `%JAVA_HOME%\bin`.
      <img src="/blog/2/variables-entorno.png" alt="Variables de entorno" class="zoomable-image"/>
 4. Comprobamos que la instalación ha sido correcta ejecutando el comando `java -version` en la consola de comandos. Deberíamos ver algo similar a esto:
 
