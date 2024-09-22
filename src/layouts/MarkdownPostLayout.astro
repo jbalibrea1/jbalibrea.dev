@@ -11,15 +11,15 @@ const { frontmatter } = Astro.props;
   description=`${frontmatter.description} - Blog jbalibrea.dev`
 >
   <Prose>
-    <header class="pt-5 px-8">
-      <div transition:animate={fade({ duration: '1s' })}>
-        <p>
-          <em>{frontmatter.description}</em>
-        </p>
-        <p>
+    <main class="pb-32 pt-5 px-8 sm:px-0">
+      <div>
+        <h1 class="mb-1">
+          {frontmatter.title}
+        </h1>
+        <p class="m-0 text-sm">
           <strong class="font-semibold tracking-tight"
             >{frontmatter.author}
-          </strong> |
+          </strong>
           <time datetime={frontmatter.pubDate.toISOString()}>
             {
               frontmatter.pubDate.toLocaleDateString('es-es', {
@@ -30,16 +30,19 @@ const { frontmatter } = Astro.props;
             }
           </time>
         </p>
+        <img
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
+        />
+        <div transition:animate={fade({ duration: '1s' })}>
+          <p>
+            <em>{frontmatter.description}</em>
+          </p>
+        </div>
       </div>
-      <img
-        src={frontmatter.image.url}
-        alt={frontmatter.image.alt}
-        class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
-      />
-    </header>
-    <main class="px-8 pb-32">
+      <hr class="my-8" />
       <article>
-        <h1>{frontmatter.title}</h1>
         <slot />
       </article>
     </main>
