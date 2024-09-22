@@ -1,7 +1,7 @@
 ---
 title: "Instalar JDK en Windows"
 pubDate: 2024-09-16
-description: "En este post vamos a ver cómo instalar el JDK (Java Development Kit) de Java en Windows."
+description: "Si eres un desarrollador de Java o si has estudiado un ciclo de Desarrollo de Aplicaciones Web (DAW) o Multiplataforma (DAM) y te has preguntado ¿Por qué instalamos el jdk de oracle? ¿Qué es el jdk? ¿Qué opciones tengo para instalar el jdk? En este post vamos a ver cómo instalar el JDK de Java en Windows y las diferentes opciones que tenemos."
 author: "Jorge Balibrea"
 image:
   url: "/blog/2/java.png"
