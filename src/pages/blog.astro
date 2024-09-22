@@ -1,7 +1,7 @@
 ---
+import PostCard from '@/components/PostCard.astro';
+import HomeLayout from '@/layouts/HomeLayout.astro';
 import { getCollection } from 'astro:content';
-import PostCard from '../components/PostCard.astro';
-import HomeLayout from '../layouts/HomeLayout.astro';
 const allPosts = (await getCollection('posts')).sort(
   (a, b) =>
     new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()

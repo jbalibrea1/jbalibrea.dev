@@ -1,4 +1,4 @@
-import type { Github } from "../interfaces/Github";
+import type { Github } from "@/interfaces/Github";
 
 export const githubProjects: Github[] = [
   {

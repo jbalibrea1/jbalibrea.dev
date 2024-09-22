@@ -1,6 +1,6 @@
 ---
+import Prose from '@/components/Prose.astro';
 import { fade } from 'astro:transitions';
-import Prose from '../components/Prose.astro';
 import BaseLayout from './BaseLayout.astro';
 
 const { frontmatter } = Astro.props;
@@ -10,7 +10,6 @@ const { frontmatter } = Astro.props;
   title={`${frontmatter.title} - Blog jbalibrea.dev`}
   description=`${frontmatter.description} - Blog jbalibrea.dev`
 >
-  <!-- <main class="pt-5 px-8 sm:px-0"> -->
   <main class="max-w-full">
     <Prose>
       <h1 class="mb-1" transition:name={`title-${frontmatter.title}`}>
