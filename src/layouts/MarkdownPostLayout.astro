@@ -13,35 +13,33 @@ const { frontmatter } = Astro.props;
   <!-- <main class="pt-5 px-8 sm:px-0"> -->
   <main class="max-w-full">
     <Prose>
-      <div>
-        <h1 class="mb-1" transition:name={`title-${frontmatter.title}`}>
-          {frontmatter.title}
-        </h1>
-        <p class="m-0 text-sm">
-          <strong class="font-semibold tracking-tight"
-            >{frontmatter.author}
-          </strong>
-          <time datetime={frontmatter.pubDate.toISOString()}>
-            {
-              frontmatter.pubDate.toLocaleDateString('es-es', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })
-            }
-          </time>
+      <h1 class="mb-1" transition:name={`title-${frontmatter.title}`}>
+        {frontmatter.title}
+      </h1>
+      <p class="m-0 text-sm">
+        <strong class="font-semibold tracking-tight"
+          >{frontmatter.author}
+        </strong>
+        <time datetime={frontmatter.pubDate.toISOString()}>
+          {
+            frontmatter.pubDate.toLocaleDateString('es-es', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
+        </time>
+      </p>
+      <div transition:animate={fade({ duration: '1s' })}>
+        <img
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
+          transition:name={`img-${frontmatter.image.url}`}
+        />
+        <p transition:name={`desc-${frontmatter.description}`}>
+          <em>{frontmatter.description}</em>
         </p>
-        <div transition:animate={fade({ duration: '1s' })}>
-          <img
-            src={frontmatter.image.url}
-            alt={frontmatter.image.alt}
-            class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
-            transition:name={`img-${frontmatter.image.url}`}
-          />
-          <p transition:name={`desc-${frontmatter.description}`}>
-            <em>{frontmatter.description}</em>
-          </p>
-        </div>
       </div>
       <hr class="my-8" />
       <article>
