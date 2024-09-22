@@ -13,16 +13,14 @@ Estoy muy emocionado de compartir con ustedes mi primera entrada de blog. ¡Espe
 
 **Tabla de contenidos:**
 
-- [Interceptor con Axios](#interceptor-con-axios)
+- [Qué es un interceptor](#qué-es-un-interceptor)
 - [Caso práctico con autenticación](#caso-práctico-con-autenticación)
 
-# Interceptor con Axios
-
-Vamos a hablar de como establecer un interceptor con [axios](https://axios-http.com/).
+## Qué es un interceptor
 
 Para aquellos que no lo sepan, un interceptor es un patrón de diseño que se utiliza para encapsular la lógica de la petición y la respuesta de una petición HTTP. En el caso de axios, podemos utilizar los interceptores para añadir lógica a las peticiones antes de que se envíen y a las respuestas antes de que se reciban.
 
-Para empezar deberemos instalar axios en nuestro proyecto:
+Vamos a hablar de como establecer un interceptor con [axios](https://axios-http.com/). Para empezar deberemos instalar axios en nuestro proyecto:
 
 ```bash
 pnpm install axios
@@ -55,7 +53,7 @@ export default api;
 
 Si la petición se envía correctamente, el primer argumento de la función `use` se ejecutará y se pasará la configuración de la petición como argumento. En caso de error, se ejecutará el segundo argumento de la función `use`.
 
-# Caso práctico con autenticación
+## Caso práctico con autenticación
 
 Un caso muy habitual y práctico es el uso de interceptores en la autenticación. Podemos añadir un interceptor que añada el token de autorización a la cabecera de la petición antes de que se envíe.
 

@@ -20,8 +20,6 @@ tags: ["java", "jdk", "instalación", "DAW", "windows"]
 
 El **JDK (Java Development Kit)** es un conjunto de herramientas que nos permiten desarrollar aplicaciones en Java. Incluye el compilador de Java, las bibliotecas de clases de Java, la máquina virtual de Java (JVM) y otras herramientas necesarias para desarrollar aplicaciones en Java.
 
-En este post vamos a ver cómo instalar el JDK.
-
 ## Guía para instalar un JDK: opciones y recomendaciones
 
 Cuando desarrollas en Java, uno de los primeros pasos es instalar el Java Development Kit (JDK). Existen varias distribuciones del JDK, y cada una tiene características particulares, lo que puede hacer que elegir una versión sea todo un desafío.
@@ -32,8 +30,8 @@ A continuación, te presento las opciones más populares y sus principales difer
 
 - **OpenJDK**: Es la versión de código abierto de Java. Es la opción más popular para proyectos de código abierto y para la mayoría de los desarrolladores. OpenJDK es la base de la mayoría de las distribuciones de Java, incluidas las versiones de Oracle y Adoptium Eclipse Temurin. <a href="https://openjdk.java.net/" target="_blank">Descargar OpenJDK</a>
 
-- ✅**Adoptium Eclipse Temurin OpenJDK**: Adoptium es una organización que proporciona distribuciones de OpenJDK de alta calidad. Ofrece soporte a largo plazo (LTS) y actualizaciones regulares.  
-  Es una excelente opción para proyectos de código abierto y para la mayoría de los desarrolladores. Tiene soporte en diferentes versiones, por lo que si necesitas una versión anterior de Java, puedes descargarla y estar seguro de que recibirás actualizaciones de seguridad. <a href="https://adoptium.net/" target="_blank">Descargar Adoptium Eclipse Temurin OpenJDK</a>
+- ✅**Adoptium Eclipse Temurin OpenJDK**: Adoptium es una organización que proporciona distribuciones de OpenJDK de alta calidad. **Ofrece soporte a largo plazo (LTS) y actualizaciones regulares**.  
+  Es una excelente opción para proyectos de código abierto y para la mayoría de los desarrolladores. **Tiene soporte en diferentes versiones, por lo que si necesitas una versión anterior de Java, puedes descargarla y estar seguro de que recibirás actualizaciones de seguridad**. <a href="https://adoptium.net/" target="_blank">Descargar Adoptium Eclipse Temurin OpenJDK</a>
 
 Existen otras distribuciones como Amazon Corretto, Azul Zulu, etc., que también son buenas opciones. Sin embargo, para el caso de uso personal y la mayoría de los proyectos, Adoptium Eclipse Temurin OpenJDK es la mejor opción.
 
