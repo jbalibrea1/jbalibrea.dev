@@ -1,0 +1,46 @@
+---
+import PostCard from '@/components/PostCard.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import getShortedPosts from '@utils/getSorterPosts';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts');
+  const shortedPosts = getShortedPosts(allPosts);
+
+  const uniqueTags = [
+    ...new Set(shortedPosts.map((post) => post.data.tags).flat()),
+  ];
+
+  return uniqueTags.map((tag: any) => {
+    const filteredPosts = shortedPosts.filter((post) =>
+      post.data.tags.includes(tag)
+    );
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout title={tag}>
+  <main>
+    <h1
+      class="text-4xl text-current uppercase inline-block font-extrabold tracking-tight"
+    >
+      Tags
+    </h1>
+    <p>Filtrando artículos por <span transition:name={tag}>{tag}</span></p>
+    <ul>
+      {
+        posts.map(({ data, slug }) => (
+          <PostCard href={`/blog/posts/${slug}`} post={data} />
+        ))
+      }
+    </ul>
+  </main>
+</BaseLayout>

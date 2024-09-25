@@ -7,7 +7,7 @@ const pageTitle = 'Tags - Blog jbalibrea.dev';
 ---
 
 <BaseLayout title={pageTitle}>
-  <main transition:name={'pages'}>
+  <main>
     <h1 class="text-2xl text-current font-bold tracking-tight">
       Índice de Tags
     </h1>
@@ -15,7 +15,9 @@ const pageTitle = 'Tags - Blog jbalibrea.dev';
       {
         tags.map((tag) => (
           <p class="text-xs bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-slate-300 px-2 py-1 rounded-full mr-2 hover:bg-gray-300 dark:hover:bg-neutral-700 transition duration-75 ease-in-out">
-            <a href={`/tags/${tag}`}>{tag}</a>
+            <a href={`/blog/tags/${tag}`} transition:name={tag}>
+              {tag}
+            </a>
           </p>
         ))
       }
