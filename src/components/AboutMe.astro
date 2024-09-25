@@ -5,14 +5,15 @@ import { Image } from 'astro:assets';
 ---
 
 <div
-  class="flex flex-col-reverse sm:flex-row items-center md:items-start gap-4 sm:gap-16"
+  class="flex flex-col-reverse sm:flex-row items-center sm:items-start gap-4 sm:gap-16"
 >
   <div class="flex flex-col gap-4 justify-start items-start flex-1">
     <Greeting />
-    <h2 class="text-lg text-current">
-      Soy un desarrollador web full stack de Murcia, España.
+    <h2 class="text-lg">
+      <strong class="dark:text-white">Desarrollador web full stack</strong> de Murcia,
+      España.
     </h2>
-    <p class="text-lg text-current">
+    <p class="text-lg">
       Tengo experiencia con el stack MERN (MongoDB, Express, React, Node.js),
       JavaScript, MySQL, Laravel y otras tecnologías.
     </p>
@@ -20,7 +21,7 @@ import { Image } from 'astro:assets';
       <!-- TODO mejorar -->
       <span class="invisible">Disponible para trabajarcontáctame</span>
       <span
-        class="font-bold tracking-tight text-pink-700 dark:text-pink-500 absolute top-0 left-0 group-hover:-translate-y-full transition-transform ease-in-out duration-500 hover:duration-300 underline decoration-dotted underline-offset-4"
+        class="font-bold tracking-tight text-accent absolute top-0 left-0 group-hover:-translate-y-full transition-transform ease-in-out duration-500 hover:duration-300 underline decoration-dotted underline-offset-4"
         >💼 Disponible para trabajar
       </span>
       <span
@@ -28,7 +29,7 @@ import { Image } from 'astro:assets';
       >
         <a
           href="mailto:jorge.balibrea1@gmail.com"
-          class="inline-flex items-center px-2 text-sm font-medium text-pink-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-pink-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-purple-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-pink-100 dark:hover:text-pink-300 dark:border-gray-600 dark:focus:ring-gray-700 group transition duration-300 ease-in-out"
+          class="inline-flex items-center px-2 text-sm font-medium text-accent bg-white border border-gray-200 rounded-lg hover:bg-gray-100 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-purple-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-pink-100 dark:hover:text-pink-300 dark:border-gray-600 dark:focus:ring-gray-700 group transition duration-300 ease-in-out"
           >jorge.balibrea1@gmail.com
           <svg
             class="w-4 ms-2 transition duration-75 ease-in group-hover:scale-125"
@@ -65,7 +66,7 @@ import { Image } from 'astro:assets';
         </a>
       </span>
     </div>
-    <p class="text-md text-current">
+    <p class="text-current">
       Me encanta enfrentar nuevos desafíos, aprender cosas nuevas cada día y
       mejorar mis habilidades.
     </p>
@@ -106,7 +107,7 @@ import { Image } from 'astro:assets';
   </div>
   <Image
     src={jorge}
-    class="rounded-full w-24 aspect2-[0.67] sm:w-40 shadow-md bg-gray-200 dark:bg-neutral-800"
+    class="rounded-full w-24 aspect2-[0.67] sm:w-40 shadow-md bg-gray-200 dark:bg-zinc-800 border-accent-2 border-"
     alt="Jorge Balibrea - Imagen de perfil"
   />
 </div>

@@ -1,7 +1,7 @@
+import { githubProjects } from "@/data/githubProjects";
+import type { Github } from "@/interfaces/Github";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { useEffect, useState } from "react";
-import { githubProjects } from "../data/githubProjects";
-import type { Github } from "../interfaces/Github";
 
 export function GitCard() {
   const mouseX = useMotionValue(0);
@@ -28,7 +28,6 @@ export function GitCard() {
       key={repo.url}
       onMouseMove={(e) => {
         const { left, top } = e.currentTarget.getBoundingClientRect();
-
         mouseX.set(e.clientX - left);
         mouseY.set(e.clientY - top);
       }}
