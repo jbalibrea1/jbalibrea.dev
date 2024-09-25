@@ -3,25 +3,39 @@ import Prose from '@/components/Prose.astro';
 import { fade } from 'astro:transitions';
 import BaseLayout from './BaseLayout.astro';
 
-const { frontmatter } = Astro.props;
+const { post, posts } = Astro.props;
+
+const { title, description, author, pubDate, image } = post;
+const titleSlug = title.split(' ').join('-').toLowerCase();
+/* ========== Prev/Next Posts ========== */
+const allPosts = posts.map(({ data: { title }, slug }) => ({
+  slug,
+  title,
+}));
+
+// const currentPostIndex = allPosts.findIndex(a => a.slug === post.slug);
+const currentPostIndex = allPosts.findIndex((a) => a.title === post.title);
+
+const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
+const nextPost =
+  currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
 ---
 
 <BaseLayout
-  title={`${frontmatter.title} - Blog jbalibrea.dev`}
-  description=`${frontmatter.description} - Blog jbalibrea.dev`
+  title={`${title} - Blog jbalibrea.dev`}
+  description=`${description} - Blog jbalibrea.dev`
+  sticky={false}
 >
   <main class="max-w-full">
     <Prose>
-      <h1 class="mb-1" transition:name={`title-${frontmatter.title}`}>
-        {frontmatter.title}
+      <h1 class="mb-1" transition:name={titleSlug}>
+        {title}
       </h1>
       <p class="m-0 text-sm">
-        <strong class="font-semibold tracking-tight"
-          >{frontmatter.author}
-        </strong>
-        <time datetime={frontmatter.pubDate.toISOString()}>
+        <strong class="font-semibold tracking-tight">{author} </strong>
+        <time datetime={pubDate.toISOString()}>
           {
-            frontmatter.pubDate.toLocaleDateString('es-es', {
+            post.pubDate.toLocaleDateString('es-es', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
@@ -30,14 +44,8 @@ const { frontmatter } = Astro.props;
         </time>
       </p>
       <div transition:animate={fade({ duration: '1s' })}>
-        <img
-          src={frontmatter.image.url}
-          alt={frontmatter.image.alt}
-          class="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
-          transition:name={`img-${frontmatter.image.url}`}
-        />
-        <p transition:name={`desc-${frontmatter.description}`}>
-          <em>{frontmatter.description}</em>
+        <p transition:name={`desc-${description}`}>
+          <em>{description}</em>
         </p>
       </div>
       <hr class="my-8" />
@@ -45,5 +53,183 @@ const { frontmatter } = Astro.props;
         <slot />
       </article>
     </Prose>
+    <!-- <div class="grid grid-cols-1 gap-6 sm:grid-cols-2"> -->
+    <div class="flex flex-col justify-between md:flex-row">
+      {
+        prevPost && (
+          <a
+            href={`/blog/posts/${prevPost.slug}`}
+            class="flex items-center gap-1 opacity-80 hover:opacity-100 text-2xl tracking-tight transition duration-75 ease-in-out"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left flex-none text-link"
+            >
+              <>
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M15 6l-6 6l6 6" />
+              </>
+            </svg>
+            <div>
+              <span>Post Anterior</span>
+              <div class="text-sm text-accent-2 tracking-wide">
+                {prevPost.title}
+              </div>
+            </div>
+          </a>
+        )
+      }
+      {
+        nextPost && (
+          <a
+            href={`/blog/posts/${nextPost.slug}`}
+            class={`flex justify-end items-center gap-1 text-right opacity-80 hover:opacity-100 text-2xl tracking-tight transition duration-75 ease-in-out ${!prevPost ? 'ml-auto' : ''}`}
+          >
+            <div>
+              <span>Post Siguiente</span>
+              <div class="text-sm text-accent-2 tracking-wide">
+                {nextPost.title}
+              </div>
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right flex-none text-link"
+            >
+              <>
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M9 6l6 6l-6 6" />
+              </>
+            </svg>
+          </a>
+        )
+      }
+    </div>
   </main>
 </BaseLayout>
+
+<script is:inline data-astro-rerun>
+  /** Create a progress indicator
+   *  at the top */
+  function createProgressBar() {
+    // Create the main container div
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'fixed top-0 z-10 h-1 w-full';
+
+    // Create the progress bar div
+    const progressBar = document.createElement('div');
+    progressBar.className = 'h-1 w-0 bg-accent';
+    progressBar.id = 'myBar';
+
+    // Append the progress bar to the progress container
+    progressContainer.appendChild(progressBar);
+
+    // Append the progress container to the document body or any other desired parent element
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  /** Update the progress bar
+   *  when user scrolls */
+  function updateScrollProgress() {
+    document.addEventListener('scroll', () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById('myBar');
+        if (myBar) {
+          myBar.style.width = scrolled + '%';
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  /** Attaches links to headings in the document,
+   *  allowing sharing of sections easily */
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll('h2, h3, h4, h5, h6')
+    );
+    for (const heading of headings) {
+      heading.classList.add('group');
+      const link = document.createElement('a');
+      link.className =
+        'heading-link ml-2 opacity-0 group-hover:opacity-100 focus:opacity-100';
+      link.href = '#' + heading.id;
+
+      const span = document.createElement('span');
+      span.ariaHidden = 'true';
+      span.innerText = '#';
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  /** Attaches copy buttons to code blocks in the document,
+   * allowing users to copy code easily. */
+  function attachCopyButtons() {
+    const copyButtonLabel = 'Copy';
+    const codeBlocks = Array.from(document.querySelectorAll('pre'));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'relative';
+
+      const copyButton = document.createElement('button');
+      copyButton.className =
+        'copy-code absolute right-3 -top-3 rounded  px-2 py-1 text-xs leading-4 font-medium bg-gray-700 text-white ';
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute('tabindex', '0');
+      codeBlock.appendChild(copyButton);
+
+      // wrap codebock with relative parent element
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener('click', async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector('code');
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? '');
+
+      // visual feedback that task is completed
+      button.innerText = 'Copied';
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  /* Go to page start after page swap */
+  // document.addEventListener('astro:after-swap', () =>
+  //   window.scrollTo({ left: 0, top: 0, behavior: 'instant' })
+  // );
+</script>

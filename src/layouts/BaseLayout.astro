@@ -7,12 +7,13 @@ import '@/styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  sticky?: boolean;
 }
 
 const descriptionDefault =
   'Jorge Balibrea, desarrollador web especializado en tecnologías como React, Node.js, JavaScript, Express y más, con sede en Murcia, España. Explora mis proyectos, habilidades y experiencias profesionales. Lee mis blogs sobre desarrollo web y tecnología en jbalibrea.dev.';
 
-const { title, description = descriptionDefault } = Astro.props;
+const { title, description = descriptionDefault, sticky } = Astro.props;
 ---
 
 <!doctype html>
@@ -70,7 +71,15 @@ const { title, description = descriptionDefault } = Astro.props;
 
     <meta
       name="keywords"
-      content="jbalibrea, jorge balibrea, portfolio, blog, web developer, full stack developer, react, node.js, mongodb, typescript, javascript, web development, software development, technology, programming, coding, software engineer"
+      content="jbalibrea, jorge balibrea, web developer, software developer, full stack developer"
+    />
+
+    <!--  Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
     />
 
     <link
@@ -104,8 +113,57 @@ const { title, description = descriptionDefault } = Astro.props;
   </head>
 
   <body>
-    <Header />
+    <Header sticky={sticky} />
     <slot />
+    <button
+      aria-label="Back to Top"
+      class="z-90 fixed bottom-8 end-4 flex h-10 w-10 translate-y-28 items-center justify-center rounded-full border-2 border-transparent bg-zinc-200 text-3xl opacity-0 transition-all duration-300 hover:border-accent-2 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 dark:bg-zinc-700 sm:end-8 sm:h-12 sm:w-12"
+      data-show="false"
+      id="to-top-btn"
+      ><svg
+        aria-hidden="true"
+        class="h-6 w-6 text-accent-2"
+        fill="none"
+        focusable="false"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M4.5 15.75l7.5-7.5 7.5 7.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
     <Footer />
+    <script is:inline data-astro-rerun>
+      /** Scrolls the document to the top when
+       * the "Back to Top" button is clicked. */
+      function backToTop() {
+        document.querySelector('#to-top-btn')?.addEventListener('click', () => {
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        });
+      }
+      backToTop();
+
+      /** Show or hide the "Back to Top" button
+       * based on the scroll position. */
+      function showBackToTop() {
+        const toTopBtn = document.querySelector('#to-top-btn');
+        if (toTopBtn) {
+          if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+          ) {
+            toTopBtn.dataset.show = 'true';
+          } else {
+            toTopBtn.dataset.show = 'false';
+          }
+        }
+      }
+      document.addEventListener('scroll', showBackToTop);
+    </script>
   </body>
 </html>
