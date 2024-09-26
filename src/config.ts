@@ -1,3 +1,3 @@
 export const SITE = {
-  postPerPage: 2,
+  postPerPage: 4,
 };
