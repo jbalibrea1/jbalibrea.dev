@@ -8,26 +8,25 @@ const { post, posts } = Astro.props;
 
 const { title, description, author, pubDateTime, modDateTime } = post;
 const titleSlug = title.split(' ').join('-').toLowerCase();
+
 /* ========== Prev/Next Posts ========== */
 const allPosts = posts.map(({ data: { title }, slug }) => ({
   slug,
   title,
 }));
 
-// const currentPostIndex = allPosts.findIndex(a => a.slug === post.slug);
 const currentPostIndex = allPosts.findIndex((a) => a.title === post.title);
-
 const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
 const nextPost =
   currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
 ---
 
 <BaseLayout
-  title={`${title} - Blog jbalibrea.dev`}
-  description=`${description} - Blog jbalibrea.dev`
+  title={`${title}`}
+  description=`${description} - Artículo de Jorge Balibrea`
   sticky={false}
 >
-  <main class="max-w-full">
+  <main>
     <Prose>
       <h1
         class="mb-1 antialiased hover:subpixel-antialiased"
@@ -52,7 +51,6 @@ const nextPost =
         <slot />
       </article>
     </Prose>
-    <!-- <div class="grid grid-cols-1 gap-6 sm:grid-cols-2"> -->
     <div class="flex flex-col justify-between md:flex-row">
       {
         prevPost && (
@@ -120,7 +118,6 @@ const nextPost =
       }
     </div>
   </main>
-
   <script is:inline data-astro-rerun>
     /** Create a progress indicator
      *  at the top */
