@@ -1,15 +1,16 @@
 ---
 title: "Interceptor con Axios"
-pubDate: 2024-06-18T15:22:00Z
-description: "En este post exploraremos cómo modificar una petición HTTP antes de enviarla o al recibir la respuesta utilizando Axios. Utilizaremos interceptores y exploraremos casos prácticos."
+pubDateTime: 2024-06-18T11:22:00Z
+description: "Modificar peticiones HTTP con interceptores en Axios."
 author: "Jorge Balibrea"
 image:
-  url: "/blog/1/blog-1-axios-interceptor.png"
+  url: "/blog/interceptor-axios/interceptor-axios.png"
   alt: "Interceptor con Axios"
-tags: ["axios", "interceptor", "http", "api", "nodejs", "JavaScript"]
+tags: ["axios", "http", "javascript"]
 ---
 
-Estoy muy emocionado de compartir con ustedes mi primera entrada de blog. ¡Espero que les guste!.
+Estoy muy emocionado de compartir con ustedes mi primera entrada de blog.
+En este post exploraremos cómo modificar una petición HTTP antes de enviarla o al recibir la respuesta utilizando Axios. Utilizaremos interceptores y exploraremos casos prácticos. ¡Espero que les guste!.
 
 **Tabla de contenidos:**
 
@@ -18,7 +19,12 @@ Estoy muy emocionado de compartir con ustedes mi primera entrada de blog. ¡Espe
 
 ## Qué es un interceptor
 
-Para aquellos que no lo sepan, un interceptor es un patrón de diseño que se utiliza para encapsular la lógica de la petición y la respuesta de una petición HTTP. En el caso de axios, podemos utilizar los interceptores para añadir lógica a las peticiones antes de que se envíen y a las respuestas antes de que se reciban.
+Un interceptor es un patrón de diseño que se utiliza para encapsular la lógica de la petición y la respuesta de una petición HTTP. En el caso de axios, podemos utilizar los interceptores para añadir lógica a las peticiones antes de que se envíen y a las respuestas antes de que se reciban.
+
+<img
+  src="/blog/interceptor-axios/interceptor-axios.png"
+  alt="Interceptor con Axios"
+/>
 
 Vamos a hablar de como establecer un interceptor con [axios](https://axios-http.com/). Para empezar deberemos instalar axios en nuestro proyecto:
 
@@ -26,8 +32,7 @@ Vamos a hablar de como establecer un interceptor con [axios](https://axios-http.
 pnpm install axios
 ```
 
-Para establecer un interceptor en axios, podemos utilizar el método
-`interceptors` de la instancia de axios.
+Para establecer un interceptor en axios, podemos utilizar el método `interceptors` de la instancia de axios.
 
 Como buena práctica se recomienda crear un archivo api.js donde se configure la instancia de axios y se añadan los interceptores. A continuación procedemos a crear una instancia de axios y añadir los interceptores que necesitemos.
 
@@ -41,6 +46,9 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Código a ejecutar antes de enviar la petición
+    console.log("Interceptando la petición", config);
+    // Si necesitamos modificar la configuración de la petición, lo hacemos aquí
+    // config.headers....
     return config;
   },
   (error) => {
