@@ -10,6 +10,7 @@ export default {
         accent: "hsl(var(--theme-accent) / <alpha-value>)",
         "accent-2": "hsl(var(--theme-accent-2) / <alpha-value>)",
         bgColor: "hsl(var(--theme-bg) / <alpha-value>)",
+        "bgColor-2": "hsl(var(--theme-bg-2) / <alpha-value>)",
         link: "hsl(var(--theme-link) / <alpha-value>)",
         quote: "hsl(var(--theme-quote) / <alpha-value>)",
         textColor: "hsl(var(--theme-text) / <alpha-value>)",
@@ -43,7 +44,8 @@ export default {
       },
       scale: ["group-a-hover"],
       fontFamily: {
-        sans: ['"Montserrat"', ...defaultTheme.fontFamily.sans],
+        sans: ['"Montserrat"', '"Poppins"', ...defaultTheme.fontFamily.sans],
+        poppins: ["'Poppins'", ...defaultTheme.fontFamily.serif],
       },
     },
   },
