@@ -52,12 +52,13 @@
   }
 
   html {
-    @apply scroll-smooth  
+    @apply scroll-smooth 
     [&::-webkit-scrollbar]:w-3
     [&::-webkit-scrollbar-thumb]:rounded-full
     [&::-webkit-scrollbar-thumb]:bg-neutral-300;
     --theme-bg: 0deg 0% 98%;
-    --theme-link: 172deg 18% 41%;
+    --theme-bg-2: 0deg 0% 100%;
+    --theme-link: 330deg 49% 47%;
     --theme-text: 203deg 11% 15%;
     --theme-accent: 340deg 63% 52%;
     --theme-accent-2: 170deg 50% 35%;
@@ -74,6 +75,7 @@
   html.dark {
     @apply scroll-smooth [&::-webkit-scrollbar-thumb]:bg-neutral-600;
     --theme-bg: 222deg 14% 18%;
+    --theme-bg-2: 222deg 14% 13%;
     --theme-link: 330deg 49% 67%;
     --theme-text: 0deg 0% 88%;
     --theme-accent: 340deg 100% 83%;
@@ -88,7 +90,7 @@
   }
 
   main {
-    @apply flex-1 flex flex-col gap-4 pt-5 px-8;
+    @apply flex-1 flex flex-col gap-4 pt-5 px-8 w-full;
   }
 
   .prose a {
