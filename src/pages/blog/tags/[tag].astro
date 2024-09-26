@@ -1,6 +1,7 @@
 ---
 import PostCard from '@/components/PostCard.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@components/Button.astro';
 import getShortedPosts from '@utils/getSorterPosts';
 import { getCollection } from 'astro:content';
 
@@ -27,14 +28,22 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<BaseLayout title={tag}>
+<BaseLayout title={`Artículos # ${tag}`}>
   <main>
-    <h1
-      class="text-4xl text-current uppercase inline-block font-extrabold tracking-tight"
-    >
-      Tags
-    </h1>
-    <p>Filtrando artículos por <span transition:name={tag}>{tag}</span></p>
+    <div class="flex flex-row justify-between">
+      <h1
+        class="text-4xl text-current uppercase inline-block font-extrabold tracking-tight dark:text-white"
+      >
+        # Tags
+      </h1>
+      <Button text="Ver todos los tags" href="/blog/tags" />
+    </div>
+    <p>
+      Filtrando artículos por: <span
+        transition:name={tag}
+        class="font-bold dark:text-white">#{tag}</span
+      >
+    </p>
     <ul>
       {
         posts.map(({ data, slug }) => (

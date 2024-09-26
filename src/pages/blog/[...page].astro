@@ -1,15 +1,12 @@
 ---
 import PostCard from '@/components/PostCard.astro';
-import HomeLayout from '@/layouts/HomeLayout.astro';
+import type { PageProps as Props } from '@/interfaces/PageProps';
 import Pagination from '@components/Pagination.astro';
 import { SITE } from '@config';
+import BaseLayout from '@layouts/BaseLayout.astro';
 import getShortedPosts from '@utils/getSorterPosts';
-import type { GetStaticPaths, Page } from 'astro';
-import type { CollectionEntry } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
-
-// const allPosts = await getCollection('posts');
-// const ShorterPosts = getShortedPosts(allPosts);
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection('posts');
@@ -17,18 +14,15 @@ export const getStaticPaths = (async ({ paginate }) => {
   return paginate(sortedPosts, { pageSize: SITE.postPerPage });
 }) satisfies GetStaticPaths;
 
-export interface Props {
-  page: Page<CollectionEntry<'posts'>>;
-}
-const { page } = Astro.props;
-const title = 'Blog de Desarrollo Web y Tecnología - jbalibrea.dev';
+const { page }: Props = Astro.props;
+const title = 'Blog';
 const description =
-  'Artículos de Jorge Balibrea sobre desarrollo web, diseño y tecnología - jbalibrea.dev';
+  'Artículos sobre Desarrollo de Software Full Stack y Tecnología. Recursos, tutoriales y reflexiones sobre el apasionante mundo del software y su práctica.';
 ---
 
-<HomeLayout title={title} description={description}>
+<BaseLayout title={title} description={description}>
   <main>
-    <section class="pb-8">
+    <div class="pb-8">
       <h1 class="text-4xl text-current uppercase inline-block mb-4">
         Blog de <span class="font-extrabold tracking-tight dark:text-white">
           jbalibrea</span
@@ -52,21 +46,25 @@ const description =
         </svg>
         <span class="sr-only">RSS Feed</span>
       </a>
-      <p>
+      <h2>
         Desarrollador apasionado por la programación. Iré escribiendo artículos
         sobre lo que más me gusta: el desarrollo de software, tanto en el lado
         del frontend como en el backend, junto con temas de crecimiento personal
         y profesional. ¡Espero que encuentres contenido interesante y útil para
         tu propio desarrollo!
-      </p>
-    </section>
+      </h2>
+    </div>
     <ul>
       {
         page.data.map(({ data, slug }) => (
-          <PostCard href={`/blog/posts/${slug}`} post={data} />
+          <li class="mt-10">
+            <article>
+              <PostCard href={`/blog/posts/${slug}`} post={data} />
+            </article>
+          </li>
         ))
       }
     </ul>
     <Pagination page={page} />
   </main>
-</HomeLayout>
+</BaseLayout>

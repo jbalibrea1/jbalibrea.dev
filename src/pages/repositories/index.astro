@@ -1,15 +1,20 @@
 ---
 import Button from '@/components/Button.astro';
 import { GitCard } from '@/components/GitCard';
-import HomeLayout from '@/layouts/HomeLayout.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<HomeLayout title="Repositorios - jbalibrea.dev">
+<BaseLayout title="Repositorios">
   <main transition:name={'pages'}>
-    <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
-      <h2 class="text-md font-semibold text-gray-900 dark:text-white">
-        Algunos de mis repositorios en GitHub
-      </h2>
+    <h1 class="text-4xl text-current uppercase inline-block">
+      Repositorios de <span
+        class="font-extrabold tracking-tight dark:text-white"
+      >
+        jbalibrea</span
+      >
+    </h1>
+    <h2>Explora algunos de mis repositorios en GitHub.</h2>
+    <div class="flex justify-end items-center">
       <Button
         text="Ver GitHub"
         href="https://github.com/jbalibrea1"
@@ -36,4 +41,4 @@ import HomeLayout from '@/layouts/HomeLayout.astro';
       <GitCard client:load />
     </section>
   </main>
-</HomeLayout>
+</BaseLayout>
