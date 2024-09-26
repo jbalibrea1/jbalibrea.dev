@@ -5,7 +5,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
 ---
 
-<BaseLayout title="404 Not Found - jbalibrea.dev">
+<BaseLayout
+  title="404 - Página No Encontrada"
+  description="404 - Página no encontrada. Lo sentimos, la página que buscas no existe. Regresa a la página de inicio."
+>
   <main class="justify-center">
     <div class="lg:flex lg:items-center lg:gap-12">
       <div class="w-full lg:w-1/2">
@@ -18,11 +21,13 @@ import { Image } from 'astro:assets';
           Página no encontrada
         </h1>
         <p class="mt-4 text-gray-500 dark:text-gray-400">
-          La página que buscas no existe. Puedes volver al inicio o usar el
-          buscador para encontrar lo que necesitas.
+          La página que buscas no existe.
         </p>
         <p class="mt-4 text-gray-500 dark:text-gray-400">
-          Si crees que esto es un error puedes contactar conmigo.
+          Si crees que esto es un error puedes contactar conmigo. <a
+            href="github.com/jbalibrea1"
+            class="text-accent">Github</a
+          >
         </p>
         <div class="flex items-center mt-6 gap-x-3">
           <Button href="/" text="Volver al inicio" />
