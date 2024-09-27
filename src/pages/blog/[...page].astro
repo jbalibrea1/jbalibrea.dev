@@ -1,0 +1,70 @@
+---
+import PostCard from '@/components/PostCard.astro';
+import type { PageProps as Props } from '@/interfaces/PageProps';
+import Pagination from '@components/Pagination.astro';
+import { SITE } from '@config';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import getShortedPosts from '@utils/getSorterPosts';
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getCollection('posts');
+  const sortedPosts = getShortedPosts(posts);
+  return paginate(sortedPosts, { pageSize: SITE.postPerPage });
+}) satisfies GetStaticPaths;
+
+const { page }: Props = Astro.props;
+const title = 'Blog';
+const description =
+  'Artículos sobre Desarrollo de Software Full Stack y Tecnología. Recursos, tutoriales y reflexiones sobre el apasionante mundo del software y su práctica.';
+---
+
+<BaseLayout title={title} description={description}>
+  <main>
+    <div class="pb-8">
+      <h1 class="text-4xl text-current uppercase inline-block mb-4">
+        Blog de <span class="font-extrabold tracking-tight dark:text-white">
+          jbalibrea</span
+        >
+      </h1>
+      <a
+        target="_blank"
+        href="/rss.xml"
+        class="inline-block"
+        aria-label="rss feed"
+        title="RSS Feed"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 scale-110 fill-accent"
+          ><path
+            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
+          ></path><path
+            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
+          ></path><circle cx="6" cy="18" r="2"></circle>
+        </svg>
+        <span class="sr-only">RSS Feed</span>
+      </a>
+      <h2>
+        Desarrollador apasionado por la programación. Iré escribiendo artículos
+        sobre lo que más me gusta: el desarrollo de software, tanto en el lado
+        del frontend como en el backend, junto con temas de crecimiento personal
+        y profesional. ¡Espero que encuentres contenido interesante y útil para
+        tu propio desarrollo!
+      </h2>
+    </div>
+    <ul>
+      {
+        page.data.map(({ data, slug }) => (
+          <li class="mt-10">
+            <article>
+              <PostCard href={`/blog/posts/${slug}`} post={data} />
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+    <Pagination page={page} />
+  </main>
+</BaseLayout>

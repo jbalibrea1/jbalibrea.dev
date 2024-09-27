@@ -5,8 +5,14 @@ const randomMessage = () =>
 const msg = randomMessage();
 ---
 
-<h1 class="sr-only">Jorge Balibrea - Desarrollador Web Full Stack</h1>
-<p class="text-xl sm:text-2xl text-current flex flex-row gap-1 flex-wrap">
-  👋 {msg}! Me llamo <span class="font-bold tracking-tight">Jorge Balibrea</span
+<div>
+  <p class="text-lg text-current sm:inline-block">
+    <span aria-label="saludo">👋</span>
+    {msg}! Me llamo{' '}
+  </p>
+  <h1
+    class="font-extrabold text-3xl sm:text-4xl tracking-tight dark:text-white inline-block"
   >
-</p>
+    Jorge Balibrea
+  </h1>
+</div>

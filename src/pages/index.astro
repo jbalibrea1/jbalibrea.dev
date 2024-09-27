@@ -3,10 +3,10 @@ import AboutMe from '@/components/AboutMe.astro';
 import Button from '@/components/Button.astro';
 import LastProject from '@/components/LastProject.astro';
 import TimeLine from '@/components/TimeLine.astro';
-import HomeLayout from '@/layouts/HomeLayout.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<HomeLayout title="Jorge Balibrea - jbalibrea.dev">
+<BaseLayout title="Jorge Balibrea Portfolio">
   <main transition:name={'pages'}>
     <AboutMe />
     <div class="flex justify-end items-center">
@@ -30,4 +30,4 @@ import HomeLayout from '@/layouts/HomeLayout.astro';
     <LastProject />
     <TimeLine />
   </main>
-</HomeLayout>
+</BaseLayout>

@@ -1,15 +1,16 @@
 ---
 import Navigation from './Navigation.astro';
 import ThemeIcon from './ThemeIcon.astro';
+const { sticky = true } = Astro.props;
 ---
 
 <header
-  class="sticky top-0 backdrop-blur-md bg-neutral-100/30 dark:bg-zinc-900/60 z-50 w-full px-8"
+  class={`top-0 backdrop-blur-md bg-bgColor/60 z-50 w-full px-8 ${sticky ? 'sticky' : ''}`}
 >
   <nav class="flex py-3 justify-between items-center max-w-4xl">
     <a
       href="/"
-      class="text-xl font-extrabold tracking-tight opacity-90 hover:opacity-100 transition-opacity bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 text-transparent"
+      class="md:text-2xl font-black opacity-90 hover:opacity-100 transition-opacity bg-clip-text bg-gradient-to-r from-header-2 to-header text-transparent"
       >jbalibrea.dev</a
     >
     <div class="flex gap-8 items-center">

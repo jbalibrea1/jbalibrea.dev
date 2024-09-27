@@ -1,10 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 import defaultTheme from "tailwindcss/defaultTheme";
+
 export default {
   darkMode: "selector",
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
+      colors: {
+        accent: "hsl(var(--theme-accent) / <alpha-value>)",
+        "accent-2": "hsl(var(--theme-accent-2) / <alpha-value>)",
+        bgColor: "hsl(var(--theme-bg) / <alpha-value>)",
+        "bgColor-2": "hsl(var(--theme-bg-2) / <alpha-value>)",
+        link: "hsl(var(--theme-link) / <alpha-value>)",
+        quote: "hsl(var(--theme-quote) / <alpha-value>)",
+        textColor: "hsl(var(--theme-text) / <alpha-value>)",
+        header: "hsl(var(--theme-header) / <alpha-value>)",
+        "header-2": "hsl(var(--theme-header-2) / <alpha-value>)",
+      },
       animation: {
         flip: "flip 6s infinite steps(2, end)",
         rotate: "rotate 3s linear infinite both",
@@ -32,7 +44,8 @@ export default {
       },
       scale: ["group-a-hover"],
       fontFamily: {
-        sans: ['"Roboto"', ...defaultTheme.fontFamily.sans],
+        sans: ['"Montserrat"', '"Poppins"', ...defaultTheme.fontFamily.sans],
+        poppins: ["'Poppins'", ...defaultTheme.fontFamily.serif],
       },
     },
   },

@@ -7,7 +7,7 @@ const { text, href, target = '_self' } = Astro.props;
 <a
   href={href}
   target={target}
-  class="inline-flex items-center px-4 py-2 text-sm font-medium text-pink-800 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-pink-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-purple-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-pink-100 dark:hover:text-pink-300 dark:border-gray-600 dark:focus:ring-gray-700 group transition duration-300 ease-in-out"
+  class="inline-flex items-center px-4 py-2 text-sm font-medium bg-bgColor-2 hover:bg-bgColor/20 border border-gray-200 rounded-lg text-accent/90 hover:text-accent focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-accent-2 dark:border-gray-600 dark:focus:ring-gray-700 group transition duration-300 ease-in-out hover:scale-[1.02]"
   >{text}
   <slot />
 </a>
