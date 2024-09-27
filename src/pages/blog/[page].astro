@@ -22,7 +22,7 @@ const description =
 
 <BaseLayout title={title} description={description}>
   <main>
-    <div class="pb-8">
+    <div class="pb-4">
       <h1 class="text-4xl text-current uppercase inline-block">
         Blog de <span class="font-extrabold tracking-tight dark:text-white">
           jbalibrea</span
@@ -54,7 +54,7 @@ const description =
     <ul>
       {
         page.data.map(({ data, slug }) => (
-          <li class="mt-10">
+          <li class="mb-10">
             <article>
               <PostCard href={`/blog/posts/${slug}`} post={data} />
             </article>
