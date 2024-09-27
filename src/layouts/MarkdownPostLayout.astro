@@ -3,22 +3,30 @@ import Prose from '@/components/Prose.astro';
 import { fade } from 'astro:transitions';
 import BaseLayout from './BaseLayout.astro';
 import { FormattedDatetime } from '@/components/DateTime';
-
+import type { InfoPost } from '@/interfaces/InfoPost';
 const { post, posts } = Astro.props;
 
 const { title, description, author, pubDateTime, modDateTime } = post;
 const titleSlug = title.split(' ').join('-').toLowerCase();
 
 /* ========== Prev/Next Posts ========== */
-const allPosts = posts.map(({ data: { title }, slug }) => ({
-  slug,
-  title,
-}));
+const allPostInfo = posts.map(
+  ({ data: { title }, slug }): InfoPost => ({
+    slug,
+    title,
+  })
+);
 
-const currentPostIndex = allPosts.findIndex((a) => a.title === post.title);
-const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
+const currentPostIndex = allPostInfo.findIndex(
+  (a: InfoPost) => a.title === post.title
+);
+
+const prevPost =
+  currentPostIndex !== 0 ? allPostInfo[currentPostIndex - 1] : null;
 const nextPost =
-  currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
+  currentPostIndex !== allPostInfo.length
+    ? allPostInfo[currentPostIndex + 1]
+    : null;
 ---
 
 <BaseLayout
