@@ -2,7 +2,7 @@
 import Datetime from './DateTime';
 import Tag from './Tag.astro';
 const { post, href } = Astro.props;
-const { title, pubDateTime, modDateTime, description, auhtor, tags } = post;
+const { title, pubDateTime, modDateTime, description, tags } = post;
 const titleSlug = title.split(' ').join('-').toLowerCase();
 ---
 
