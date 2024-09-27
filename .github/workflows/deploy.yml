@@ -17,7 +17,7 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install
-          pnpm run build
+          pnpm build
 
       - name: Deploy to VPS
         uses: easingthemes/ssh-deploy@main
