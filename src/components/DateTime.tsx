@@ -1,4 +1,5 @@
 import type { DateTimeProps } from "@interfaces/DateTime";
+import { formattedDate, formattedTime } from "@utils/formattedDateTime";
 
 export default function Datetime({
   pubDateTime,
@@ -7,15 +8,15 @@ export default function Datetime({
   className = "",
 }: DateTimeProps) {
   return (
-    <div className="flex flex-col items-end">
+    <div className="flex flex-col items-start md:items-end">
       <div
         className={`flex items-center space-x-2 opacity-80 ${className}`.trim()}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={`${
-            size === "sm" ? "scale-90" : "scale-100"
-          } inline-block h-6 w-6 min-w-[1.375rem] fill-black dark:fill-white`}
+            size === "sm" ? "scale-40" : "scale-100"
+          } inline-block h-6 w-6 fill-black dark:fill-white`}
           aria-hidden="true"
         >
           <path d="M7 11h2v2H7zm0 4h2v2H7zm4-4h2v2h-2zm0 4h2v2h-2zm4-4h2v2h-2zm0 4h2v2h-2z"></path>
@@ -48,16 +49,8 @@ export const FormattedDatetime = ({
     modDateTime && modDateTime > pubDateTime ? modDateTime : pubDateTime,
   );
 
-  const date = myDatetime.toLocaleDateString(["es-ES"], {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
-  const time = myDatetime.toLocaleTimeString(["es-ES"], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const date = formattedDate(myDatetime);
+  const time = formattedTime(myDatetime);
 
   return (
     <>
