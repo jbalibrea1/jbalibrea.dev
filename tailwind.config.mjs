@@ -7,15 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        accent: "hsl(var(--theme-accent) / <alpha-value>)",
-        "accent-2": "hsl(var(--theme-accent-2) / <alpha-value>)",
-        bgColor: "hsl(var(--theme-bg) / <alpha-value>)",
-        "bgColor-2": "hsl(var(--theme-bg-2) / <alpha-value>)",
-        link: "hsl(var(--theme-link) / <alpha-value>)",
-        quote: "hsl(var(--theme-quote) / <alpha-value>)",
-        textColor: "hsl(var(--theme-text) / <alpha-value>)",
-        header: "hsl(var(--theme-header) / <alpha-value>)",
-        "header-2": "hsl(var(--theme-header-2) / <alpha-value>)",
+        accent: "rgb(var(--theme-accent))",
+        "accent-2": "rgb(var(--theme-accent-2))",
+        bgColor: "rgb(var(--theme-bg))",
+        "bgColor-2": "rgb(var(--theme-bg-2))",
+        link: "rgb(var(--theme-link))",
+        quote: "rgb(var(--theme-quote))",
+        textColor: "rgb(var(--theme-text))",
+        header: "rgb(var(--theme-header))",
+        "header-2": "rgb(var(--theme-header-2))",
       },
       animation: {
         flip: "flip 6s infinite steps(2, end)",
