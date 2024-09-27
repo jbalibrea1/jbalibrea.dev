@@ -25,6 +25,6 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.SERVER_IP }}
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
-          port: ${{ secrets.SERVER_PORT }}
+          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
           SOURCE: "./dist/*"
           TARGET: "/var/www/jbalibrea.dev"
