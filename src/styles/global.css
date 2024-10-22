@@ -4,16 +4,13 @@
 
 @layer base {
   html {
-    @apply scroll-smooth 
-    [&::-webkit-scrollbar]:w-3
-    [&::-webkit-scrollbar-thumb]:rounded-full
-    [&::-webkit-scrollbar-thumb]:bg-neutral-300;
+    @apply scroll-smooth [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-300;
     --theme-bg: 250 250 250;
     --theme-bg-2: 255 255 255;
     --theme-link: 179 61 120;
     --theme-text: 34 39 42;
     --theme-accent: 210 55 107;
-    --theme-accent-2: 45 134 119;
+    --theme-accent-2: 0 118 98;
     --theme-quote: 203 42 66;
     --theme-header: 245 102 157;
     --theme-header-2: 107 52 147;
@@ -43,6 +40,7 @@
   .prose a {
     @apply text-accent opacity-80;
   }
+
   .prose a:hover {
     @apply opacity-100;
   }

@@ -25,7 +25,7 @@ export function GitCard() {
 
   return githubProjects.map((repo: Github) => (
     <article
-      key={repo.url}
+      key={repo.repoUrl}
       onMouseMove={(e) => {
         const { left, top } = e.currentTarget.getBoundingClientRect();
         mouseX.set(e.clientX - left);
@@ -43,31 +43,58 @@ export function GitCard() {
         }}
       />
       <div className="space-y-6 sm:space-y-4 py-4 px-6">
-        <h3 className="font-bold tracking-tight transition duration-75 hover:text-accent inline-block text-accent">
-          <a
-            href={repo.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 hover:underline decoration-accent-2  decoration-dotted underline-offset-2 opacity-90 hover:opacity-100 "
-          >
-            {repo.name}
-            <svg
-              className="w-3 h-3 ms-2 mb-2 transition ease-in-out  -rotate-45 group-a-hover:scale-x-110 "
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 14 10"
+        <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+          <h3 className="font-bold tracking-tight transition duration-75 hover:text-accent inline-block text-accent">
+            <a
+              href={repo.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:underline decoration-accent-2  decoration-dotted underline-offset-2 opacity-90 hover:opacity-100"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              ></path>
-            </svg>
-          </a>
-        </h3>
+              {repo.name}
+              <svg
+                className="w-3 h-3 ms-2 mb-2 transition ease-in-out -rotate-45 group-a-hover:scale-110"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                ></path>
+              </svg>
+            </a>
+          </h3>
+          {repo.publicUrl && (
+            <a
+              href={repo.publicUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-105 hover:underline decoration-accent-2  decoration-dotted underline-offset-2 opacity-90 hover:opacity-100  font-bold tracking-tight  duration-75 hover:text-accent-2 text-accent-2"
+            >
+              Visita la demo
+              {/* <svg */}
+              {/*   className="w-3 h-3 ms-2 mb-2 transition ease-in-out  -rotate-45 group-a-hover:scale-x-110 " */}
+              {/*   aria-hidden="true" */}
+              {/*   xmlns="http://www.w3.org/2000/svg" */}
+              {/*   fill="currentColor" */}
+              {/*   viewBox="0 0 14 10" */}
+              {/* > */}
+              {/*   <path */}
+              {/*     stroke="currentColor" */}
+              {/*     strokeLinecap="round" */}
+              {/*     strokeLinejoin="round" */}
+              {/*     strokeWidth="2" */}
+              {/*     d="M1 5h12m0 0L9 1m4 4L9 9" */}
+              {/*   ></path> */}
+              {/* </svg> */}
+            </a>
+          )}
+        </div>
         <p className="text-sm dark:text-slate-200">
           {repo.description ? repo.description : "Description empty"}
         </p>

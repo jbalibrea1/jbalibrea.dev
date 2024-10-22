@@ -1,6 +1,7 @@
 export interface Github {
   name: string;
-  url: string;
+  repoUrl: string;
+  publicUrl?: string | null;
   description: string | null;
   tags: string[];
 }
