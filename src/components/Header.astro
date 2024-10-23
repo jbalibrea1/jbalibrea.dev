@@ -1,5 +1,4 @@
 ---
-import Navigation from './Navigation.astro';
 import ThemeIcon from './ThemeIcon.astro';
 const { sticky = true } = Astro.props;
 ---
@@ -16,7 +15,9 @@ const { sticky = true } = Astro.props;
       >jbalibrea.dev</a
     >
     <div class="flex gap-8 items-center">
-      <Navigation />
+      <div class="uppercase opacity-90 hover:opacity-100 transition-opacity">
+        <a href="/blog">Blog</a>
+      </div>
       <ThemeIcon />
     </div>
   </nav>
