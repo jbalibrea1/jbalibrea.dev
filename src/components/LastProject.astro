@@ -1,11 +1,11 @@
 ---
-import idealDark from '@/assets/IdealDark-min.png';
-import idealWhite from '@/assets/IdealWhite-min.png';
-import { Image } from 'astro:assets';
+import idealDark from "@/assets/IdealDark-min.png";
+import idealWhite from "@/assets/IdealWhite-min.png";
+import { Image } from "astro:assets";
 ---
 
-<div
-  class="relative isolate overflow-hidden bg-white dark:bg-neutral-900 px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0 rounded-lg"
+<section
+  class="relative isolate overflow-hidden bg-slate-100/40 dark:bg-neutral-900 px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0 rounded-lg shadow-sm"
 >
   <div class="absolute inset-0 -z-10 overflow-hidden">
     <svg
@@ -27,7 +27,7 @@ import { Image } from 'astro:assets';
       <svg
         x="50%"
         y="-1"
-        class="overflow-visible fill-gray-50 dark:fill-neutral-800"
+        class="overflow-visible fill-slate-200 dark:fill-neutral-800"
       >
         <path
           d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
@@ -48,12 +48,8 @@ import { Image } from 'astro:assets';
     >
       <div class="lg:pr-4">
         <div class="lg:max-w-lg">
-          <p class="text-base font-semibold leading-7 text-accent-2">
-            Mi último proyecto
-          </p>
-
-          <h3
-            class="group mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-slate-50 sm:text-4xl opacity-90 hover:opacity-100 inline-flex transition ease-in-out hover:scale-105"
+          <p
+            class="group mt-2 text-3xl font-bold tracking-tight text-accent-2/70 sm:text-4xl hover:text-accent-2 inline-flex transition ease-in-out hover:scale-[1.02] hover:underline decoration-accent decoration-solid underline-offset-4"
           >
             <a href="https://idealista-watch.es" target="_blank">
               IdealistaWatch</a
@@ -72,12 +68,11 @@ import { Image } from 'astro:assets';
                 stroke-width="2"
                 d="M1 5h12m0 0L9 1m4 4L9 9"></path>
             </svg>
-          </h3>
+          </p>
           <p class="mt-6 text-sm leading-8 text-gray-700 dark:text-slate-300">
-            Este proyecto es el trabajo final del curso de DAW, en el cual he
-            desarrollado junto con mi compañero Borja, una aplicación web para
-            la gestión y seguimiento de precios de las diferentes viviendas en
-            Idealista.
+            Proyecto fin de curso DAW, aplicación web para la gestión y
+            seguimiento de precios de las diferentes viviendas en Idealista,
+            desarrollado junto con mi compañero Borja.
           </p>
         </div>
       </div>
@@ -248,17 +243,7 @@ import { Image } from 'astro:assets';
             </li>
           </ul>
         </div>
-        <h3
-          class="mt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-slate-50"
-        >
-          Despliegue
-        </h3>
-        <p class="mt-6 text-sm">
-          Para el despliegue, utilizamos nuestro propio VPS, donde instalamos un
-          servidor Apache2 y configuramos los diferentes VirtualHosts tanto para
-          el front como para el back.
-        </p>
       </div>
     </div>
   </div>
-</div>
+</section>
