@@ -1,7 +1,8 @@
 export interface Github {
-  name: string;
+  title: string;
   repoUrl: string;
-  publicUrl?: string | null;
-  description: string | null;
+  publicUrl?: string;
+  pinned?: boolean;
+  description: string;
   tags: string[];
 }

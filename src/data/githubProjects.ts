@@ -2,45 +2,63 @@ import type { Github } from "@/interfaces/Github";
 
 export const githubProjects: Github[] = [
   {
-    name: "shortener generator",
+    title: "shortener generator",
     repoUrl: "https://github.com/jbalibrea1/shortener",
     publicUrl: "https://sh.jbalibrea.dev",
+    pinned: true,
     description:
-      "✂️ This is a simple URL shortener service built with Next.js, shadcn, Node.js, Express, and MongoDB",
+      "✂️  Acortador de URL's con QR, genera urls únicas como /XyZpwd junto con su QR 😉. Creado con Next.js + shadcn, Node.js, Express y MongoDB",
 
     tags: ["Next.js", "Node.js", "Express", "MongoDB", "shadcn"],
   },
   {
-    name: "jbalibrea.dev - Portfolio",
+    title: "jbalibrea.dev - Portfolio",
     repoUrl: "https://github.com/jbalibrea1/jbalibrea.dev",
     description:
-      "🚀 My personal portfolio built with Astro, TypeScript, React, and TailwindCSS",
+      "🚀 Portfolio personal construido con Astro, TypeScript, React y TailwindCSS",
     tags: ["TypeScript", "Astro", "Tailwind", "React", "Portfolio"],
   },
   {
-    name: "IdealistaWatch",
+    title: "dotfiles",
+    repoUrl: "https://github.com/jbalibrea1/dotfiles",
+    description: "✨ Mis dotfiles personales para Nvim, Tmux, i3 y más",
+    tags: ["linux", "lua", "dotfiles", "Nvim", "tmux"],
+  },
+  {
+    title: "shortener api in different languages",
+    repoUrl: "https://github.com/jbalibrea1/short-url-back",
+    pinned: true,
+    description: "🌍 Diferentes lenguajes, misma API",
+    tags: ["Go", "Node.js", "Express"],
+  },
+  {
+    title: "TODO CS50",
+    repoUrl: "https://github.com/jbalibrea1/cs50-project",
+    pinned: true,
+    description:
+      "📝 Pequeño proyecto TODO creado con Flask, utilizando templates jinja y SQLite como base de datos",
+    tags: ["Flask", "SQLite", "Bootstrap"],
+  },
+  {
+    title: "IdealistaWatch",
     repoUrl: "https://github.com/borjamorenoMurciaeduca/proyecto-final-daw",
     publicUrl: "https://idealista-watch.es",
+    pinned: true,
     description:
-      "🏡 Web application to monitor price and properties of Idealista, add notes and shared with other users",
+      "🏡 Aplicación web para monitorizar precios y propiedades de Idealista, añadir notas y compartirlas con otros usuarios",
     tags: ["React", "Laravel", "MUI", "MySQL", "Clean architecture", "Python"],
   },
+
   {
-    name: "dotfiles",
-    repoUrl: "https://github.com/jbalibrea1/dotfiles",
-    description: "✨ My personal dotfiles for Neovim, Tmux, i3 and more",
-    tags: ["lua", "dotfiles", "neovim", "tmux"],
-  },
-  {
-    name: "GO",
+    title: "GO",
     repoUrl: "https://github.com/jbalibrea1/go",
     description: "Initials go examples",
     tags: ["Go"],
   },
   {
-    name: "Full Stack Open - Deep Dive into Modern Web Development",
+    title: "Full Stack Open - Deep Dive into Modern Web Development",
     repoUrl: "https://github.com/jbalibrea1/fullstackopen",
-    description: "🧾My solutions to the Full Stack Open course",
+    description: "🧾 Mis soluciones al curso Full Stack Open",
     tags: ["React", "TypeScript", "MongoDB", "Node.js", "GraphQL", "Express"],
   },
 ];
