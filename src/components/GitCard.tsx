@@ -1,7 +1,7 @@
-import { githubProjects } from "@/data/githubProjects";
-import type { Github } from "@/interfaces/Github";
-import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
-import { useEffect, useState } from "react";
+import { githubProjects } from '@/data/githubProjects';
+import type { Github } from '@/interfaces/Github';
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export function GitCard({ latest = false }) {
   const mouseX = useMotionValue(0);
@@ -10,14 +10,14 @@ export function GitCard({ latest = false }) {
 
   useEffect(() => {
     const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains("dark"));
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
     };
     checkDarkMode();
 
     const observer = new MutationObserver(checkDarkMode);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["class"],
+      attributeFilter: ['class'],
     });
 
     return () => observer.disconnect();
@@ -42,12 +42,12 @@ export function GitCard({ latest = false }) {
         className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100"
         style={{
           background: useMotionTemplate`
-            radial-gradient(200px circle at ${mouseX}px ${mouseY}px, ${isDarkMode ? "rgba(45,134,119,0.1)" : "rgba(45,134,119,0.10)"}, transparent 80%)
+            radial-gradient(200px circle at ${mouseX}px ${mouseY}px, ${isDarkMode ? 'rgba(45,134,119,0.1)' : 'rgba(45,134,119,0.10)'}, transparent 80%)
           `,
         }}
       />
       <div className="space-y-6 sm:space-y-4 py-4 px-6">
-        <div className="flex flex-col md:flex-row md:gap-4 flex-wrap">
+        <div className="flex flex-row gap-2 flex-wrap">
           <h3 className="font-bold tracking-tight transition duration-75 hover:text-accent inline-block text-accent">
             <a
               href={repo.repoUrl}
@@ -85,7 +85,7 @@ export function GitCard({ latest = false }) {
           )}
         </div>
         <p className="text-sm dark:text-slate-200">
-          {repo.description ? repo.description : "Description empty"}
+          {repo.description ? repo.description : 'Description empty'}
         </p>
         <div className="flex gap-2 flex-wrap">
           {repo.tags.map((tag) => (
