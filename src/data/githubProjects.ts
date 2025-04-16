@@ -34,10 +34,10 @@ export const githubProjects: Github[] = [
   {
     title: 'IdealistaWatch',
     repoUrl: 'https://github.com/borjamorenoMurciaeduca/proyecto-final-daw',
-    publicUrl: 'https://idealista-watch.es',
+    publicUrl: 'https://ideal.jbalibrea.dev',
     pinned: true,
     description:
-      '🏡 Aplicación web para monitorizar precios y propiedades de Idealista, añadir notas y compartirlas con otros usuarios',
+      '🏡 Aplicación web para monitorear precios y propiedades de Idealista de manera privada. Permite agregar notas y compartirlas de forma pública o privada. Usuario y contraseña test:test.',
     tags: ['React', 'Laravel', 'MUI', 'MySQL', 'Clean architecture', 'Python'],
   },
   {
