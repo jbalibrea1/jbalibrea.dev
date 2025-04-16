@@ -1,11 +1,11 @@
-import type { DateTimeProps } from "@interfaces/DateTime";
-import { formattedDate, formattedTime } from "@utils/formattedDateTime";
+import type { DateTimeProps } from '@interfaces/DateTime';
+import { formattedDate, formattedTime } from '@utils/formattedDateTime';
 
 export default function Datetime({
   pubDateTime,
   modDateTime,
-  size = "sm",
-  className = "",
+  size = 'sm',
+  className = '',
 }: DateTimeProps) {
   return (
     <div className="flex flex-col items-start md:items-end">
@@ -15,7 +15,7 @@ export default function Datetime({
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={`${
-            size === "sm" ? "scale-40" : "scale-100"
+            size === 'sm' ? 'scale-40' : 'scale-100'
           } inline-block h-6 w-6 fill-black dark:fill-white`}
           aria-hidden="true"
         >
@@ -23,7 +23,7 @@ export default function Datetime({
           <path d="M5 22h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2h-2V2h-2v2H9V2H7v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2zM19 8l.001 12H5V8h14z"></path>
         </svg>
 
-        <span className={`italic ${size === "sm" ? "text-sm" : "text-base"}`}>
+        <span className={`italic ${size === 'sm' ? 'text-sm' : 'text-base'}`}>
           <FormattedDatetime
             pubDateTime={pubDateTime}
             modDateTime={modDateTime}
@@ -31,7 +31,7 @@ export default function Datetime({
         </span>
       </div>
       {modDateTime && modDateTime > pubDateTime ? (
-        <span className={`italic ${size === "sm" ? "text-xs" : "text-base"}`}>
+        <span className={`italic ${size === 'sm' ? 'text-xs' : 'text-base'}`}>
           Última actualización
         </span>
       ) : (

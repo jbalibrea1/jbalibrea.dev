@@ -14,11 +14,11 @@ const allPostInfo = posts.map(
   ({ data: { title }, slug }): InfoPost => ({
     slug,
     title,
-  })
+  }),
 );
 
 const currentPostIndex = allPostInfo.findIndex(
-  (a: InfoPost) => a.title === post.title
+  (a: InfoPost) => a.title === post.title,
 );
 
 const prevPost =
@@ -171,7 +171,7 @@ const nextPost =
      *  allowing sharing of sections easily */
     function addHeadingLinks() {
       const headings = Array.from(
-        document.querySelectorAll('h2, h3, h4, h5, h6')
+        document.querySelectorAll('h2, h3, h4, h5, h6'),
       );
       for (const heading of headings) {
         heading.classList.add('group');
