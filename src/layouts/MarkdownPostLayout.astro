@@ -14,11 +14,11 @@ const allPostInfo = posts.map(
   ({ data: { title }, slug }): InfoPost => ({
     slug,
     title,
-  }),
+  })
 );
 
 const currentPostIndex = allPostInfo.findIndex(
-  (a: InfoPost) => a.title === post.title,
+  (a: InfoPost) => a.title === post.title
 );
 
 const prevPost =
@@ -50,11 +50,11 @@ const nextPost =
         />
       </p>
       <div transition:animate={fade({ duration: '1s' })}>
-        <p transition:name={`desc-${description}`}>
-          <em>{description}</em>
+        <p class="text-xs text italic" transition:name={`desc-${description}`}>
+          {description}
         </p>
       </div>
-      <hr class="my-8" />
+      <hr class="my-2" />
       <article>
         <slot />
       </article>
@@ -171,7 +171,7 @@ const nextPost =
      *  allowing sharing of sections easily */
     function addHeadingLinks() {
       const headings = Array.from(
-        document.querySelectorAll('h2, h3, h4, h5, h6'),
+        document.querySelectorAll('h2, h3, h4, h5, h6')
       );
       for (const heading of headings) {
         heading.classList.add('group');
@@ -227,7 +227,7 @@ const nextPost =
 
         setTimeout(() => {
           button.innerText = copyButtonLabel;
-        }, 700);
+        }, 1200);
       }
     }
     attachCopyButtons();
