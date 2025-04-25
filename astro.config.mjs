@@ -1,17 +1,17 @@
-import mdx from "@astrojs/mdx";
-import partytown from "@astrojs/partytown";
-import react from "@astrojs/react";
-import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
-import { defineConfig } from "astro/config";
+import mdx from '@astrojs/mdx';
+import partytown from '@astrojs/partytown';
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
+import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://jbalibrea.dev",
+  site: 'https://jbalibrea.dev',
   markdown: {
-    syntaxHighlight: "shiki",
+    syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: "catppuccin-mocha",
+      theme: 'catppuccin-mocha',
       defaultColor: false,
     },
   },
@@ -21,12 +21,13 @@ export default defineConfig({
     sitemap(),
     partytown({
       config: {
-        forward: ["dataLayer.push"],
+        forward: ['dataLayer.push'],
       },
     }),
     mdx({
       // `gfm` overridden to `false`
       shikiConfig: {
+        theme: 'catppuccin-mocha',
         defaultColor: false,
       },
       gfm: true,
