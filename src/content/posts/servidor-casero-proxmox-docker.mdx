@@ -1,0 +1,267 @@
+---
+title: 'Servidor casero con Proxmox y Docker'
+pubDateTime: 2025-04-25T14:22:00Z
+description: 'Pequeña guía para montar tu propio servidor en casa utilizando Proxmox para la virtualización y Docker para la gestión de contenedores.'
+author: 'Jorge Balibrea'
+image:
+  url: '/blog/servidor-casero-proxmox-docker/proxmox.png'
+  alt: 'Servidor casero con Proxmox y Docker'
+tags: ['proxmox', 'docker', 'portainer', 'servidor']
+---
+
+Después de un tiempo sin escribir nada, he decidido retomar el blog y contar un poco sobre mi experiencia montando un servidor en casa. La idea es tener un servidor que me permita hacer pruebas y aprender sobre Docker, Proxmox y otras tecnologías.
+
+_Te puede servir cualquier pc antiguo que no uses o como en mi caso un mini pc que compré para este propósito._
+
+**Tabla de contenidos:**
+
+- [Qué es Proxmox](#qué-es-proxmox)
+- [Qué es Docker](#qué-es-docker)
+- [Qué es Portainer](#qué-es-portainer)
+- [Conclusión](#conclusión)
+
+## Qué es Proxmox
+
+<img
+  src="https://www.proxmox.com/images/proxmox/logos/mediakit-proxmox-server-solutions-logos-light.svg"
+  alt="Proxmox"
+  class="dark:hidden float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
+/>
+
+<img
+  src="https://www.proxmox.com/images/proxmox/logos/mediakit-proxmox-server-solutions-logos-dark.svg"
+  alt="Proxmox"
+  class="hidden dark:block float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
+/>
+
+Proxmox es una plataforma de virtualización de código abierto que permite crear y gestionar máquinas virtuales y contenedores. Se entra a traves de la dirección IP del servidor y se gestiona desde un navegador web, no vas a necesitar un monitor conectado al "servidor" o un teclado.
+
+En mi caso tengo un mini-pc y un HDD conectado, en Proxmox tengo varios contenedores LXC, estos contenedores tienen que tener un SO de base, en mi caso uso tanto Ubuntu como Debian.
+
+Así es como se vería Proxmox al entrar a nuestro servidor `http://<ip_servidor>` con el navegador:
+
+<img src="/blog/servidor-casero-proxmox-docker/proxmox.png" alt="Proxmox" />
+
+Tenemos el server/root llamado **pve**, dentro de este tenemos varios **contenedores LXC**. En uno de estos contenedores tengo instalado **Docker** y lo administro junto a **Portainer**. Además, es importante mencionar que cada contenedor tiene su propia configuración y recursos asignados, lo que permite una gran flexibilidad en la gestión de servicios. Cada contenedor se administra a traves de Proxmox entrando en la consola o a traves de SSH.
+
+_En este caso tenemos 4 ip's diferentes, cada una apuntando a su respectivo contenedor + la ip del servidor. Todas las ip's de Proxmox las tengo configuradas como **estáticas** en el router, de esta forma siempre apuntarán a la misma ip y no tendré problemas al reiniciar el servidor o el contenedor._
+
+[Más info sobre Proxmox](https://www.proxmox.com/en/proxmox-ve)
+
+## Qué es docker
+
+<img
+  src="https://www.docker.com/app/uploads/2023/08/logo-guide-logos-1.svg"
+  alt="Docker"
+  class="dark:hidden float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
+/>
+
+**Docker** es una _plataforma de virtualización de aplicaciones que permite crear, desplegar y gestionar aplicaciones en contenedores_. Los contenedores son entornos ligeros y aislados que permiten ejecutar aplicaciones de manera eficiente y escalable. Docker es muy popular en el desarrollo de software y la implementación de microservicios.
+
+Imagina que quieres instalar un servidor web. Con Docker, puedes hacerlo en un **contenedor sin tocar el sistema operativo principal**. Esto te permite tener varias aplicaciones en el mismo servidor sin que interfieran entre ellas.**_Aunque usen el mismo puerto internamente, puedes asignarles puertos diferentes en el host para evitar conflictos._**
+
+Un caso muy útil es Nginx Proxy Manager, un proxy inverso que te permite gestionar dominios y certificados SSL de forma sencilla. Es ideal cuando tienes varios servicios corriendo y quieres acceder a cada uno con su propio dominio.
+
+Aquí tienes un ejemplo de cómo se vería el archivo docker-compose.yml para desplegar Nginx Proxy Manager:
+
+```yaml
+services:
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: 'nginx-proxy-manager-container'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - /docker/appdata/nginx-proxy-manager/data:/data
+      - /docker/appdata/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt
+```
+
+En mi caso ejecuto todo a traves de portainer (no es algo imprescindible), en caso de no usar portainer también puedes levantar los contenedores con `docker compose up -d` en la carpeta donde tenemos el docker-compose.yml, se creará un contenedor y tendríamos nuestro nginx proxy manger corriendo.
+
+#### Algunos de los servicios que tengo corriendo son:
+
+<details>
+    <summary>Lista</summary>
+
+- **Portainer**: para gestionar los contenedores de Docker.
+- ~**Traefik**: otro proxy inverso que me permite gestionar dominios y certificados SSL (actualmente no lo uso)~.
+- **Wireguard**: para acceder a la red local de forma segura desde fuera de casa.
+- **Adguard**: para gestionar los DNS y bloquear publicidad.
+- ~**Pi-hole**: para gestionar los DNS y bloquear publicidad (actualmente no lo uso)~.
+- **Grafana**: para visualizar métricas y datos de forma interactiva.
+- **Prometheus**: para monitorizar y recopilar métricas de los servicios.
+- **PostgreSQL**: para gestionar bases de datos SQL.
+- **MongoDB**: para gestionar bases de datos NoSQL.
+- **Redis**: para gestionar caché y datos temporales.
+
+</details>
+
+---
+
+### Datos a tener en cuenta en el fichero `docker-compose.yml`
+
+Vamos a usar de ejemplo el fichero `docker-compose.yml` de Nginx Proxy Manager, pero la mayoría de los contenedores tienen una estructura similar.
+
+1. **image**: la imagen que vamos a usar, en este caso `jc21/nginx-proxy-manager:latest` es la imagen oficial de Nginx Proxy Manager.
+
+2. **container_name**: el nombre que le vamos a dar al contenedor, en este caso `nginx-proxy-manager-container`.
+
+3. **restart**: la política de reinicio del contenedor, en este caso `unless-stopped` significa que el contenedor se reiniciará a menos que se detenga manualmente.
+
+4. **ports**: los puertos que vamos a exponer, en este caso:
+
+   - `80:80`
+   - `81:81`
+   - `443:443`
+
+> El puerto 80 es el puerto HTTP por defecto, el 81 es el puerto de administración de Nginx Proxy Manager y el 443 es el puerto HTTPS por defecto.
+
+5. **volumes**: los volúmenes que vamos a usar, en este caso:
+
+<div class="break-words">
+
+    - `/docker/appdata/nginx-proxy-manager/data:/data`
+    - `/docker/appdata/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt`
+
+</div>
+   Estos volúmenes almacenarán los datos y certificados, asegurando que no se pierdan al eliminar o reiniciar el contenedor.
+
+#### Configuración de Puertos
+
+```yaml
+ports:
+  - 'PUERTO_HOST:PUERTO_CONTENEDOR'
+```
+
+Hay que tener en cuenta los **puertos que se exponen**, en el caso de Nginx Proxy Manager los puertos 80, 81 y 443.
+
+Si, por ejemplo, cambiamos '81:81' por '84:81', significa que el puerto 84 del host se redirige al puerto 81 del contenedor. Ahora, al acceder a `http://<ip_servidor>:84`, serías redirigido al puerto 81 del contenedor, mostrando la interfaz de administración de Nginx Proxy Manager.
+
+#### Configuración de Volúmenes en el Host
+
+```yaml
+volumes:
+  - <ruta_host_a_compartir>:<ruta_dentro_del_contenedor>
+```
+
+Al especificar los volúmenes, indicamos las carpetas del host que se compartirán con el contenedor. En este caso, los volúmenes utilizados son:
+
+<div class="break-words">
+
+- /docker/appdata/nginx-proxy-manager/data:/data
+
+- /docker/appdata/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt
+
+</div>
+Esto es útil para garantizar que los datos de configuración y los certificados no se pierdan si el contenedor se elimina o reinicia.
+
+#### Volúmenes en el contenedor
+
+```yaml
+volumes:
+  - <nombre_volumen>:<ruta_dentro_del_contenedor>
+```
+
+En lugar de usar rutas del sistema (como hacemos con carpetas del host), también puedes utilizar volúmenes nombrados que gestiona Docker automáticamente.
+Este tipo de volumen no necesita rutas absolutas o relativas, ya que Docker se encarga de crear y mantener el volumen en su directorio interno (/var/lib/docker/volumes por defecto).
+Es una buena opción cuando no necesitas controlar exactamente dónde se almacenan los datos en el host.
+
+---
+
+### Instalación de Docker
+
+Para la instalación de **Docker en Proxmox** en un contenedor LXC puedes usar el siguiente script ejecutándolo en la consola del servidor:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/docker.sh)"
+```
+
+Este script instala Docker en un contenedor LXC de Proxmox y configura el entorno para que puedas usar Docker sin problemas. Puedes encontrar más información sobre este script u otros en [community-scripts](https://community-scripts.github.io/ProxmoxVE/).
+
+Para instalar Docker en Ubuntu o en otro sistema operativo puedes seguir la [documentación oficial de Docker](https://docs.docker.com/engine/install/).
+
+Algunos comandos útiles de docker:
+
+<details>
+    <summary>Lista de comandos útiles</summary>
+```bash
+# Listar contenedores
+docker ps
+# Listar logs de un contenedor
+docker logs <nombre_contenedor> 
+# Entrar en un contenedor
+docker exec -it <nombre_contenedor> bash
+# Parar un contenedor
+docker stop <nombre_contenedor>
+# Matar un contenedor
+docker kill <nombre_contenedor>
+# Reiniciar un contenedor
+docker restart <nombre_contenedor>
+# Listar imágenes
+docker images
+# Listar volúmenes
+docker volume ls
+# Listar redes
+docker network ls
+# Eliminar un contenedor
+docker rm <nombre_contenedor>
+# Eliminar una imagen
+docker rmi <nombre_imagen>
+# Eliminar un volumen
+docker volume rm <nombre_volumen>
+# Eliminar una red
+docker network rm <nombre_red>
+# Crear una imagen a partir de un Dockerfile
+docker build -t <nombre_imagen> .
+# Limpiar imágenes
+docker image prune
+# Limpiar contenedores
+docker container prune
+# Limpiar volúmenes
+docker volume prune
+# Limpiar redes
+docker network prune
+# Limpiar todo
+docker system prune
+```
+</details>
+
+_**Docker** es una herramienta muy versátil que permite hacer todo tipo de cosas, como **crear tus propias imágenes personalizadas**. Por ejemplo, puedes generar una imagen que incluya tanto el frontend de tu proyecto en React como el backend, todo en uno. Así, cualquier persona podrá ejecutar tu proyecto directamente desde esa imagen, sin necesidad de instalar dependencias ni preocuparse por versiones incompatibles de Node u otros entornos. Todo estará contenido y listo para funcionar._
+
+## Qué es portainer
+
+<img
+  src="https://raw.githubusercontent.com/portainer/portainer/8cc28761d74f68eaf397a5b475aad2c27ad1dae8/app/assets/images/logo_alt.svg"
+  alt="Portainer"
+  class="float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
+/>
+
+**Portainer** es una herramienta de gestión de contenedores Docker que proporciona una interfaz web para **gestionar y monitorizar tus contenedores**. Te permite crear, detener, eliminar y gestionar contenedores de manera sencilla. También puedes ver los logs de los contenedores y gestionar las imágenes de Docker.
+
+Portainer es muy útil para aquellos que no están familiarizados con la línea de comandos de Docker, ya que proporciona una interfaz gráfica intuitiva. Además, puedes gestionar múltiples entornos Docker desde una sola instancia de Portainer.
+
+<img
+  src="/blog/servidor-casero-proxmox-docker/servicios.png"
+  alt="Servicios corriendo en docker"
+/>
+
+Estos son algunos de los servicios que tengo corriendo en mi servidor.
+
+Para instalar Portainer, se instala a traves de docker con el siguiente comando:
+
+```bash
+docker volume create portainer_data
+
+docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:lts
+```
+
+(info: [Portainer](https://docs.portainer.io/start/install-ce/server/docker/linux))
+
+Una vez instalado, puedes acceder a Portainer a través de `http://<ip_servidor>:9443` y gestionar tus contenedores de manera sencilla.
+
+## Conclusión
+
+En resumen, tener un servidor en casa es una buena forma de aprender y experimentar con nuevas tecnologías. Proxmox y Docker son herramientas muy potentes que te permiten gestionar y desplegar aplicaciones de manera eficiente. Espero que este artículo te haya servido de ayuda y te animes a montar tu propio servidor en casa.
