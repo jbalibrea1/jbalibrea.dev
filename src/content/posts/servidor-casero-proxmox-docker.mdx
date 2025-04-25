@@ -34,7 +34,7 @@ _Te puede servir cualquier pc antiguo que no uses o como en mi caso un mini pc q
   class="hidden dark:block float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
 
-Proxmox es una plataforma de virtualización de código abierto que permite crear y gestionar máquinas virtuales y contenedores. Se entra a traves de la dirección IP del servidor y se gestiona desde un navegador web, no vas a necesitar un monitor conectado al "servidor" o un teclado.
+Proxmox es una plataforma de virtualización de código abierto que permite crear y gestionar máquinas virtuales y contenedores. Se entra a través de la dirección IP del servidor y se gestiona desde un navegador web, no vas a necesitar un monitor conectado al "servidor" o un teclado.
 
 En mi caso tengo un mini-pc y un HDD conectado, en Proxmox tengo varios contenedores LXC, estos contenedores tienen que tener un SO de base, en mi caso uso tanto Ubuntu como Debian.
 
@@ -42,7 +42,7 @@ Así es como se vería Proxmox al entrar a nuestro servidor `http://<ip_servidor
 
 <img src="/blog/servidor-casero-proxmox-docker/proxmox.png" alt="Proxmox" />
 
-Tenemos el server/root llamado **pve**, dentro de este tenemos varios **contenedores LXC**. En uno de estos contenedores tengo instalado **Docker** y lo administro junto a **Portainer**. Además, es importante mencionar que cada contenedor tiene su propia configuración y recursos asignados, lo que permite una gran flexibilidad en la gestión de servicios. Cada contenedor se administra a traves de Proxmox entrando en la consola o a traves de SSH.
+Tenemos el server/root llamado **pve**, dentro de este tenemos varios **contenedores LXC**. En uno de estos contenedores tengo instalado **Docker** y lo administro junto a **Portainer**. Además, es importante mencionar que cada contenedor tiene su propia configuración y recursos asignados, lo que permite una gran flexibilidad en la gestión de servicios. Cada contenedor se administra a través de Proxmox entrando en la consola o a través de SSH.
 
 _En este caso tenemos 4 ip's diferentes, cada una apuntando a su respectivo contenedor + la ip del servidor. Todas las ip's de Proxmox las tengo configuradas como **estáticas** en el router, de esta forma siempre apuntarán a la misma ip y no tendré problemas al reiniciar el servidor o el contenedor._
 
@@ -79,9 +79,9 @@ services:
       - /docker/appdata/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt
 ```
 
-En mi caso ejecuto todo a traves de portainer (no es algo imprescindible), en caso de no usar portainer también puedes levantar los contenedores con `docker compose up -d` en la carpeta donde tenemos el docker-compose.yml, se creará un contenedor y tendríamos nuestro nginx proxy manger corriendo.
+En mi caso ejecuto todo a través de Portainer (no es algo imprescindible), en caso de no usar Portainer también puedes levantar los contenedores con `docker compose up -d` en la carpeta donde tenemos el docker-compose.yml, se creará un contenedor y tendríamos nuestro Nginx Proxy Manger corriendo.
 
-#### Algunos de los servicios que tengo corriendo son:
+#### Algunos servicios interesantes que puedes montar en tu servidor:
 
 <details>
     <summary>Lista</summary>
@@ -96,6 +96,11 @@ En mi caso ejecuto todo a traves de portainer (no es algo imprescindible), en ca
 - **PostgreSQL**: para gestionar bases de datos SQL.
 - **MongoDB**: para gestionar bases de datos NoSQL.
 - **Redis**: para gestionar caché y datos temporales.
+- **Nextcloud**: para gestionar archivos y documentos en la nube.
+- **Jellyfin**: para gestionar y reproducir contenido multimedia.
+- **Home Assistant**: para gestionar dispositivos IoT y automatización del hogar.
+- **Nginx Proxy Manager**: para gestionar dominios y certificados SSL de forma sencilla.
+- **Wireguard**: para crear una red privada virtual (VPN) y acceder a la red local de forma segura desde fuera de casa.
 
 </details>
 
@@ -250,7 +255,7 @@ Portainer es muy útil para aquellos que no están familiarizados con la línea 
 
 Estos son algunos de los servicios que tengo corriendo en mi servidor.
 
-Para instalar Portainer, se instala a traves de docker con el siguiente comando:
+Para instalar Portainer, se instala a través de docker con el siguiente comando:
 
 ```bash
 docker volume create portainer_data
