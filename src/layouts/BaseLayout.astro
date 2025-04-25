@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
 import '@/styles/global.css';
@@ -114,7 +114,7 @@ const { title, description = descriptionDefault, sticky } = Astro.props;
       {title} by jbalibrea | Desarrollador Full Stack
     </title>
     <slot name="head" />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
 
   <body>
