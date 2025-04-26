@@ -48,6 +48,33 @@
   .disabled {
     @apply pointer-events-none select-none opacity-50 hover:text-base group-hover:fill-accent;
   }
+
+  /* Custom blog heading styles */
+  .heading-link {
+    @apply ml-2 !opacity-0 group-hover:!opacity-100 focus:opacity-100 transition-opacity duration-200 ease-in-out;
+  }
+
+  /* Custom single backtick style */
+  .prose
+    :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    color: var(--tw-prose-code);
+    /* background-color: rgb(29 31 38 / 0.8);
+    color: #f4f4f4 !important; */
+    @apply rounded-md px-1 py-0.5 bg-bgColor-2 text-textColor;
+  }
+  .prose
+    :where(code):not(
+      :where([class~='not-prose'], [class~='not-prose'] *)
+    )::before {
+    content: '' !important;
+  }
+
+  .prose
+    :where(code):not(
+      :where([class~='not-prose'], [class~='not-prose'] *)
+    )::after {
+    content: '' !important;
+  }
 }
 
 /* @font-face {
