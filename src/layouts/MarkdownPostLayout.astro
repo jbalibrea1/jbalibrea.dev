@@ -2,6 +2,8 @@
 import Prose from '@/components/Prose.astro';
 import { fade } from 'astro:transitions';
 import BaseLayout from './BaseLayout.astro';
+import PostComment from '@/components/PostComment.tsx';
+import BlogNavigation from '@/components/BlogNavigation.astro';
 import { FormattedDatetime } from '@/components/DateTime';
 import type { InfoPost } from '@/interfaces/InfoPost';
 const { post, posts } = Astro.props;
@@ -59,73 +61,10 @@ const nextPost =
         <slot />
       </article>
     </Prose>
-    <div class="flex flex-col justify-between md:flex-row">
-      {
-        prevPost && (
-          <a
-            href={`/blog/posts/${prevPost.slug}`}
-            class="flex items-center gap-1 opacity-80 hover:opacity-100 text-2xl tracking-tight transition duration-75 ease-in-out"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left flex-none text-link"
-            >
-              <>
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M15 6l-6 6l6 6" />
-              </>
-            </svg>
-            <div>
-              <span>Post Anterior</span>
-              <div class="text-sm text-accent-2 tracking-wide">
-                {prevPost.title}
-              </div>
-            </div>
-          </a>
-        )
-      }
-      {
-        nextPost && (
-          <a
-            href={`/blog/posts/${nextPost.slug}`}
-            class={`flex justify-end items-center gap-1 text-right opacity-80 hover:opacity-100 text-2xl tracking-tight transition duration-75 ease-in-out ${!prevPost ? 'ml-auto' : ''}`}
-          >
-            <div>
-              <span>Post Siguiente</span>
-              <div class="text-sm text-accent-2 tracking-wide">
-                {nextPost.title}
-              </div>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right flex-none text-accent"
-            >
-              <>
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M9 6l6 6l-6 6" />
-              </>
-            </svg>
-          </a>
-        )
-      }
-    </div>
+    <PostComment client:only="react" />
+    <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
   </main>
+
   <script is:inline data-astro-rerun>
     /** Create a progress indicator
      *  at the top */
