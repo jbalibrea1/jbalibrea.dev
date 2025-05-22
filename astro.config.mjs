@@ -4,10 +4,12 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://jbalibrea.dev',
+
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
@@ -15,6 +17,7 @@ export default defineConfig({
       defaultColor: false,
     },
   },
+
   integrations: [
     tailwind(),
     react(),
@@ -33,4 +36,9 @@ export default defineConfig({
       gfm: true,
     }),
   ],
+
+  adapter: node({
+    mode: 'standalone',
+  }),
 });
+
