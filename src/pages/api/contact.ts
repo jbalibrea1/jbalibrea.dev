@@ -95,7 +95,7 @@ export const POST: APIRoute = async ({ request }) => {
               target="_blank" 
               rel="noopener noreferrer">
                 jbalibrea.dev
-            </a>.
+            </a>
           </p>
           <p style="font-size: 12px; color: #aaa;">
             Puedes responder directamente a este correo para ponerte en contacto.
