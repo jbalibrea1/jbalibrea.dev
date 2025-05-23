@@ -37,6 +37,15 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            source ~/.bashrc
+            
+            # Verificar PNPM
+            if ! command -v pnpm &> /dev/null; then
+              echo "PNPM no encontrado, instalando..."
+              curl -fsSL https://get.pnpm.io/install.sh | sh -
+              source ~/.bashrc
+            fi
+
             # Limpieza y preparación
             cd ${{ steps.target.outputs.TARGET }}
             git fetch
