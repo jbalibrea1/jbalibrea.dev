@@ -37,24 +37,48 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            source ~/.bashrc
-            
-            # Verificar PNPM
-            if ! command -v pnpm &> /dev/null; then
-              echo "PNPM no encontrado, instalando..."
-              curl -fsSL https://get.pnpm.io/install.sh | sh -
-              source ~/.bashrc
-            fi
-
-            # Limpieza y preparación
-            cd ${{ steps.target.outputs.TARGET }}
-            git fetch
-            git checkout ${{ github.ref_name }}
-            git pull origin ${{ github.ref_name }}
-            
-            # Instalación y build (genera rutas correctas en el VPS)
-            pnpm install
-            pnpm run build
-            
-            # Configuración PM2
-            pm2 restart ${{ steps.target.outputs.PM2_APP }}
+            # 1. Configuración inicial del entorno
+              set -e
+              export PATH="$HOME/.local/share/pnpm:$PATH"
+              source "$HOME/.bashrc" || true
+              
+              # 2. Gestión de PNPM con fallback a NPM
+              if ! command -v pnpm &> /dev/null; then
+                echo "=== PNPM no encontrado, intentando instalar ==="
+                curl -fsSL https://get.pnpm.io/install.sh | sh - || {
+                  echo "=== Falló la instalación de PNPM, usando NPM ==="
+                  # Crea alias temporal para usar npm como pnpm
+                  alias pnpm=npm
+                  alias pnpx=npx
+                }
+                source "$HOME/.bashrc" || true
+              fi
+              
+              # 3. Verificación del package manager
+              echo "=== Package Manager ==="
+              echo "Usando: $(which pnpm)"
+              echo "Versión: $(pnpm --version || npm --version)"
+              
+              # 4. Despliegue
+              cd "${{ steps.target.outputs.TARGET }}" || exit 1
+              git fetch
+              git checkout "${{ github.ref_name }}"
+              git pull origin "${{ github.ref_name }}"
+              
+              # Instalación con reintentos
+              pnpm install || {
+                echo "=== Falló pnpm install, intentando con npm ==="
+                npm install
+              }
+              
+              pnpm run build || {
+                echo "=== Falló pnpm build, intentando con npm ==="
+                npm run build
+              }
+              
+              # PM2 (con reintento si falla)
+              pm2 restart "${{ steps.target.outputs.PM2_APP }}" || \
+                pm2 start "pnpm run start" --name "${{ steps.target.outputs.PM2_APP }}" || \
+                pm2 start "npm run start" --name "${{ steps.target.outputs.PM2_APP }}"
+              
+              echo "✅ Despliegue completado"
