@@ -1,30 +1,51 @@
-name: Deploy to VPS
+# temporary
+name: Deploy based on branch
 
 on:
   push:
     branches:
       - main
+      - feat/*
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ contains(github.ref, 'main') && 'production' || 'staging' }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install pnpm, Dependencies and Build
+      - name: Determine Target
+        id: target
         run: |
-          npm install -g pnpm
-          pnpm install
-          pnpm build
+          if [[ $GITHUB_REF == refs/heads/main ]]; then
+            echo "TARGET=/var/www/jbalibrea.dev" >> $GITHUB_OUTPUT
+            echo "PM2_APP=production-app" >> $GITHUB_OUTPUT
+            echo "ENV_FILE=.env.production" >> $GITHUB_OUTPUT
+          else
+            echo "TARGET=/var/www/pre.jbalibrea.dev" >> $GITHUB_OUTPUT
+            echo "PM2_APP=staging-app" >> $GITHUB_OUTPUT
+            echo "ENV_FILE=.env.staging" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Deploy to VPS
-        uses: easingthemes/ssh-deploy@main
+      - name: Deploy Code and Build on VPS
+        uses: appleboy/ssh-action@master
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.SERVER_IP }}
-          REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
-          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
-          SOURCE: "./dist/*"
-          TARGET: "/var/www/jbalibrea.dev"
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            # Limpieza y preparación
+            cd ${{ steps.target.outputs.TARGET }}
+            git fetch
+            git checkout ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }}
+            
+            # Instalación y build (genera rutas correctas en el VPS)
+            pnpm install
+            pnpm run build
+            
+            # Configuración PM2
+            pm2 restart ${{ steps.target.outputs.PM2_APP }}

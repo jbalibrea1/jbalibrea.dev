@@ -12,28 +12,25 @@ export default function Contact({ siteKey }: ContactProps) {
     isError: false,
   });
   const [loading, setLoading] = useState(false);
+  const [formEvent, setFormEvent] = useState<HTMLFormElement | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    setLoading(true);
-    e.preventDefault();
-
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      message: formData.get('message') as string,
-      token: recaptchaRef.current?.getValue(),
-    };
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-
+  const onReCAPTCHAChange = async (token: string | null) => {
     try {
-      if (!data.token) {
-        throw new Error('NoCaptcha');
-      }
+      if (!token || !formEvent) throw new Error('NoCaptcha');
+
+      const form = formEvent;
+      const formData = new FormData(form);
+
+      const data = {
+        name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        message: formData.get('message') as string,
+        token,
+      };
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -51,35 +48,49 @@ export default function Contact({ siteKey }: ContactProps) {
       setResponseMessage({ text: res.message, isError: false });
       form.reset();
       recaptchaRef.current?.reset();
+
+      setTimeout(() => {
+        setResponseMessage({ text: '', isError: false });
+      }, 10000);
     } catch (err) {
-      if (err.name === 'AbortError') {
+      handleSubmissionError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmissionError = (error: unknown) => {
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
         setResponseMessage({
           text: 'Tiempo de espera agotado. Intenta de nuevo.',
           isError: true,
         });
-      } else if (err.message === 'NoCaptcha') {
+      } else if (error.message === 'NoCaptcha') {
         setResponseMessage({
           text: 'Por favor, completa el reCAPTCHA.',
           isError: true,
         });
       } else {
         setResponseMessage({
-          text: 'Error al enviar el mensaje',
+          text: error.message || 'Error al enviar el mensaje',
           isError: true,
         });
       }
-    } finally {
-      setLoading(false);
-      if (!responseMessage.isError) {
-        setTimeout(() => {
-          setResponseMessage({ text: '', isError: false });
-        }, 10000);
-      }
     }
-  }
+  };
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const form = e.target as HTMLFormElement;
+    setFormEvent(form);
+
+    recaptchaRef.current?.execute();
+  };
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-4">
+    <form onSubmit={submit} className="flex flex-col gap-4" id="contact-form">
       <label htmlFor="name" className="text-lg">
         Nombre:
       </label>
@@ -98,7 +109,12 @@ export default function Contact({ siteKey }: ContactProps) {
         required
         className="min-h-[150px] max-h-[250px] h-min p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
-      <ReCAPTCHA sitekey={siteKey} ref={recaptchaRef} />
+      <ReCAPTCHA
+        sitekey={siteKey}
+        ref={recaptchaRef}
+        size="invisible"
+        onChange={onReCAPTCHAChange}
+      />
       <button
         type="submit"
         disabled={loading}
@@ -113,8 +129,8 @@ export default function Contact({ siteKey }: ContactProps) {
           >
             <path
               fill="#758CA3"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M9.5 2c0-2 3-2 3 0v5c0 2-3 2-3 0V2zm0 15c0-2 3-2 3 0v5c0 2-3 2-3 0v-5zm9.41-11.299c1.732-1 3.232 1.598 1.5 2.598l-4.33 2.5c-1.732 1-3.232-1.598-1.5-2.598l4.33-2.5zm-12.99 7.5c1.732-1 3.232 1.598 1.5 2.598l-4.33 2.5c-1.732 1-3.232-1.598-1.5-2.598l4.33-2.5zM1.59 8.299c-1.732-1-.232-3.598 1.5-2.598l4.33 2.5c1.732 1 .232 3.598-1.5 2.598l-4.33-2.5zm12.99 7.5c-1.732-1-.232-3.598 1.5-2.598l4.33 2.5c1.732 1 .232 3.598-1.5 2.598l-4.33-2.5z"
             />
           </svg>
