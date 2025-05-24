@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Contact from '@components/Contact.tsx';
+
+const RECAPTCHA_KEY = import.meta.env.PUBLIC_RECAPTCHA_KEY;
+---
+
+<BaseLayout title="Contacto">
+  <main transition:name={'pages'}>
+    <h1 class="text-4xl text-current uppercase inline-block">
+      Formulario de <span class="font-extrabold tracking-tight dark:text-white"
+        >contacto</span
+      >
+    </h1>
+    <p>
+      Para cualquier duda o consulta, no dudes en ponerte en contacto conmigo.
+      Puedes hacerlo a través de este formulario o directamente por correo
+      electrónico a
+      <a class="text-accent opacity-80" href="mailto:contact@jbalibrea.dev"
+        >contact@jbalibrea.dev</a
+      >.
+    </p>
+    <Contact client:only="react" siteKey={RECAPTCHA_KEY} />
+  </main>
+</BaseLayout>

@@ -19,10 +19,11 @@ const { title, description = descriptionDefault, sticky } = Astro.props;
 <html lang="es">
   <head>
     <script
+      is:inline
       type="text/partytown"
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-3R2C9ZBRFV"></script>
-    <script type="text/partytown">
+    <script is:inline type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
