@@ -76,9 +76,10 @@ jobs:
                 npm run build
               }
               
-              # PM2 (con reintento si falla)
-              pm2 restart "${{ steps.target.outputs.PM2_APP }}" || \
-                pm2 start "pnpm run start" --name "${{ steps.target.outputs.PM2_APP }}" || \
-                pm2 start "npm run start" --name "${{ steps.target.outputs.PM2_APP }}"
+              if pm2 restart ${{ steps.target.outputs.PM2_APP }} --silent >/dev/null 2>&1; then
+                echo "🔄 Aplicación reiniciada correctamente"
+              else
+                echo "⚠️ Falló el reinicio de la app en PM2"
+              fi
               
               echo "✅ Despliegue completado"
