@@ -8,7 +8,7 @@ import { FormattedDatetime } from '@/components/DateTime';
 import type { InfoPost } from '@/interfaces/InfoPost';
 const { post, posts } = Astro.props;
 
-const { title, description, author, pubDateTime, modDateTime } = post;
+const { title, description, author, pubDateTime, modDateTime, image } = post;
 const titleSlug = title.split(' ').join('-').toLowerCase();
 
 /* ========== Prev/Next Posts ========== */
@@ -33,8 +33,9 @@ const nextPost =
 
 <BaseLayout
   title={`${title}`}
-  description=`${description} - Artículo de Jorge Balibrea`
+  description=`${description} - Por Jorge Balibrea · Desarrollador Full Stack en Murcia`
   sticky={false}
+  image={image}
 >
   <main>
     <Prose>
