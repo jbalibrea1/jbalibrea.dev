@@ -6,10 +6,11 @@ import PostComment from '@/components/PostComment.tsx';
 import BlogNavigation from '@/components/BlogNavigation.astro';
 import { FormattedDatetime } from '@/components/DateTime';
 import type { InfoPost } from '@/interfaces/InfoPost';
+import unifiedText from '@utils/unifiedText';
 const { post, posts } = Astro.props;
 
 const { title, description, author, pubDateTime, modDateTime, image } = post;
-const titleSlug = title.split(' ').join('-').toLowerCase();
+const titleSlug = unifiedText(title);
 
 /* ========== Prev/Next Posts ========== */
 const allPostInfo = posts.map(

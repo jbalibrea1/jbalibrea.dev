@@ -4,6 +4,7 @@ import type { PageProps as Props } from '@/interfaces/PageProps';
 import Pagination from '@components/Pagination.astro';
 import { SITE } from '@config';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCanonicalURL } from '@utils/getCanonicalURL';
 import getShortedPosts from '@utils/getSorterPosts';
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
@@ -11,16 +12,23 @@ import { getCollection } from 'astro:content';
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection('posts');
   const sortedPosts = getShortedPosts(posts);
-  return paginate(sortedPosts, { pageSize: SITE.postPerPage });
+  return paginate(sortedPosts, {
+    pageSize: SITE.postsPerPage,
+  });
 }) satisfies GetStaticPaths;
 
 const { page }: Props = Astro.props;
 const title = 'Blog';
 const description =
   'Artículos sobre Desarrollo de Software Full Stack y Tecnología. Recursos, tutoriales y reflexiones sobre el apasionante mundo del software y su práctica.';
+
+const canonicalURL = getCanonicalURL({
+  pathname: Astro.url.pathname,
+  site: Astro.site,
+});
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} canonicalURL={canonicalURL}>
   <main>
     <div class="pb-4">
       <h1 class="text-4xl text-current uppercase inline-block">
@@ -56,7 +64,7 @@ const description =
         page.data.map(({ data, slug }) => (
           <li class="mb-10">
             <article>
-              <PostCard href={`/blog/posts/${slug}`} post={data} />
+              <PostCard href={`/blog/${slug}`} post={data} />
             </article>
           </li>
         ))

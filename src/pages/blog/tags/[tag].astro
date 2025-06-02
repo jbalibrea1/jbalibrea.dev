@@ -26,9 +26,11 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
+const pageTitle = `Posts con el tag #${tag}`;
+const description = `Artículos del blog filtrados por el tag #${tag}`;
 ---
 
-<BaseLayout title={`Artículos # ${tag}`}>
+<BaseLayout title={pageTitle} description={description}>
   <main>
     <div class="flex flex-row justify-between">
       <h1
@@ -47,7 +49,7 @@ const { posts } = Astro.props;
     <ul>
       {
         posts.map(({ data, slug }) => (
-          <PostCard href={`/blog/posts/${slug}`} post={data} />
+          <PostCard href={`/blog/${slug}`} post={data} />
         ))
       }
     </ul>

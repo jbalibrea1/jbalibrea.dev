@@ -1,0 +1,33 @@
+---
+import type { PageProps as Props } from '@/interfaces/PageProps';
+import Pagination from '@components/Pagination.astro';
+import PostList from '@components/PostList.astro';
+import { SITE } from '@config';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCanonicalURL } from '@utils/getCanonicalURL';
+import getShortedPosts from '@utils/getSorterPosts';
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getCollection('posts');
+  const sortedPosts = getShortedPosts(posts);
+  return paginate(sortedPosts, {
+    pageSize: SITE.archivePostsPerPage,
+  });
+}) satisfies GetStaticPaths;
+
+const { page }: Props = Astro.props;
+const title = 'Blog';
+const description = "Blog's archivados del blog de jbalibrea.dev";
+const canonicalURL = getCanonicalURL({
+  pathname: Astro.url.pathname,
+  site: Astro.site,
+});
+---
+
+<BaseLayout title={title} description={description} canonicalURL={canonicalURL}>
+  <PostList page={page.data}>
+    <Pagination page={page} />
+  </PostList>
+</BaseLayout>
