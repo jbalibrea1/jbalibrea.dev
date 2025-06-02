@@ -12,8 +12,9 @@ const tags = allPosts
     return acc;
   }, {});
 
-const pageTitle = 'Tags #';
-const description = 'Índice de tags';
+const pageTitle = 'Tags del Blog | jbalibrea.dev';
+const description =
+  'Explora todos los tags y categorías de los artículos del blog. Encuentra contenido organizado por temas de desarrollo de software, tecnología y más.';
 ---
 
 <BaseLayout title={pageTitle} description={description}>
@@ -21,7 +22,7 @@ const description = 'Índice de tags';
     <h1
       class="text-4xl text-current font-extrabold tracking-tight dark:text-white uppercase"
     >
-      # Índice de Tags y contador
+      # Tags
     </h1>
     <div class="flex flex-col flex-wrap gap-4 mt-5">
       {

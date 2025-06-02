@@ -1,20 +1,14 @@
 ---
 import PostCard from '@/components/PostCard.astro';
-import type { PageProps as Props } from '@/interfaces/PageProps';
-import Pagination from '@components/Pagination.astro';
 import { SITE } from '@config';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import getShortedPosts from '@utils/getSorterPosts';
-import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 
-export const getStaticPaths = (async ({ paginate }) => {
-  const posts = await getCollection('posts');
-  const sortedPosts = getShortedPosts(posts);
-  return paginate(sortedPosts, { pageSize: SITE.postPerPage });
-}) satisfies GetStaticPaths;
+const posts = await getCollection('posts');
+const sortedPosts = getShortedPosts(posts);
+const page1Posts = sortedPosts.slice(0, SITE.postsPerPage);
 
-const { page }: Props = Astro.props;
 const title = 'Blog';
 const description =
   'Artículos sobre Desarrollo de Software Full Stack y Tecnología. Recursos, tutoriales y reflexiones sobre el apasionante mundo del software y su práctica.';
@@ -53,15 +47,36 @@ const description =
     </div>
     <ul>
       {
-        page.data.map(({ data, slug }) => (
+        page1Posts.map(({ data, slug }) => (
           <li class="mb-10">
             <article>
-              <PostCard href={`/blog/posts/${slug}`} post={data} />
+              <PostCard href={`/blog/${slug}`} post={data} />
             </article>
           </li>
         ))
       }
     </ul>
-    <Pagination page={page} />
+    <div class="mt-8 space-y-4">
+      {
+        sortedPosts.length > SITE.postsPerPage && (
+          <div>
+            <a
+              href="/blog/page/2"
+              class="text-accent hover:text-accent-2 transition-colors"
+            >
+              Ver más posts →
+            </a>
+          </div>
+        )
+      }
+      <div>
+        <a
+          href="/blog/archive"
+          class="text-accent hover:text-accent-2 transition-colors"
+        >
+          Ver todos los posts archivados →
+        </a>
+      </div>
+    </div>
   </main>
 </BaseLayout>

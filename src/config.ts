@@ -1,4 +1,4 @@
 export const SITE = {
-  allPostsPerPage: 10,
-  postPerPage: 4,
+  archivePostsPerPage: 20,
+  postsPerPage: 4,
 };

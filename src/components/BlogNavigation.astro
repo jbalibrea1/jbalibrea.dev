@@ -6,7 +6,7 @@ const { prevPost, nextPost } = Astro.props;
   {
     prevPost && (
       <a
-        href={`/blog/posts/${prevPost.slug}`}
+        href={`/blog/${prevPost.slug}`}
         class="flex items-center gap-1 opacity-80 hover:opacity-100 text-2xl tracking-tight transition duration-75 ease-in-out"
       >
         <svg
@@ -38,7 +38,7 @@ const { prevPost, nextPost } = Astro.props;
   {
     nextPost && (
       <a
-        href={`/blog/posts/${nextPost.slug}`}
+        href={`/blog/${nextPost.slug}`}
         class={`flex justify-end items-center gap-1 text-right opacity-80 hover:opacity-100 text-2xl tracking-tight transition duration-75 ease-in-out ${!prevPost ? 'ml-auto' : ''}`}
       >
         <div>
