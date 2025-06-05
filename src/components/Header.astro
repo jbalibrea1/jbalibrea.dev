@@ -1,27 +1,56 @@
 ---
 import ThemeIcon from './ThemeIcon.astro';
 const { sticky = true } = Astro.props;
+import { detectRoute } from '@/utils/page';
+const { isBlog, isContact } = detectRoute(Astro.url.pathname);
+
+function getNavItemClass(isActive: boolean) {
+  const baseClasses =
+    'hover-underline-animation opacity-80 hover:opacity-100 transition-all';
+  const stateClasses = isActive
+    ? 'underline-active font-bold opacity-90'
+    : 'hover-underline-animation hover:font-bold';
+
+  return `${baseClasses} ${stateClasses}`;
+}
+
+const navigatorItems = [
+  {
+    href: '/blog',
+    label: 'Blog',
+    className: getNavItemClass(isBlog),
+  },
+  {
+    href: '/contact',
+    label: 'Contact',
+    className: getNavItemClass(isContact),
+  },
+];
 ---
 
 <header
-  class={`top-0 backdrop-blur-md bg-bgColor/60 z-50 w-full px-8 ${sticky ? 'sticky' : ''}`}
+  class={`top-0 backdrop-blur-md bg-bgColor/60 z-50 w-full px-4 sm:px-8 ${sticky ? 'sticky' : ''}`}
 >
   <nav
-    class="flex py-3 justify-between items-center max-w-4xl text-lg font-bold tracking-tight"
+    class="flex py-3 justify-between items-center max-w-4xl text-sm sm:text-base md:text-lg tracking-tight"
+    aria-label="Main Navigation"
   >
     <a
       href="/"
-      class="opacity-90 hover:opacity-100 transition-opacity bg-clip-text bg-gradient-to-r from-header-2 to-header text-transparent"
+      class=`${getNavItemClass(false)} font-bold hover-underline-animation transition-opacity bg-clip-text bg-gradient-to-r from-header-2 to-header text-transparent`
       >jbalibrea.dev</a
     >
-    <div class="flex gap-4 items-center">
-      <div class="uppercase opacity-80 hover:opacity-100 transition-opacity">
-        <a href="/blog">Blog</a>
-      </div>
-      <div class="uppercase opacity-80 hover:opacity-100 transition-opacity">
-        <a href="/contact">Contact</a>
-      </div>
+    <ul class="flex gap-2 items-center uppercase">
+      {
+        navigatorItems.map((item) => (
+          <li>
+            <a href={item.href} class={item.className}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
       <ThemeIcon />
-    </div>
+    </ul>
   </nav>
 </header>

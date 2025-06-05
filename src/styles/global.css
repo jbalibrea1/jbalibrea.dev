@@ -49,9 +49,21 @@
     @apply pointer-events-none select-none opacity-50 hover:text-base group-hover:fill-accent;
   }
 
-  /* Custom blog heading styles */
-  .heading-link {
-    @apply ml-2 !opacity-0 group-hover:!opacity-100 focus:opacity-100 transition-opacity duration-200 ease-in-out;
+  /* Hover underline animation */
+  .hover-underline-animation {
+    @apply inline-block relative;
+  }
+
+  .underline-active::before,
+  .hover-underline-animation::after {
+    @apply bg-accent-2/80 content-[''] absolute w-full h-[3px] inset-5 left-0 -z-10;
+  }
+
+  .hover-underline-animation::after {
+    @apply scale-x-[0] origin-left transition-all ease-in-out;
+  }
+  .hover-underline-animation:hover::after {
+    @apply scale-x-100 opacity-100;
   }
 
   /* Custom single backtick style */
