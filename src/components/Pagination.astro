@@ -1,22 +1,25 @@
 ---
 import type { PageProps as Props } from '@/interfaces/PageProps';
+import { cn } from '@/lib/utils';
 import LinkButton from './LinkButton.astro';
 
 const { page }: Props = Astro.props;
+const baseSvgClass =
+  'inline-block h-6 w-6 fill-current group-hover:fill-accent-2 hover:fill-accent-2';
 ---
 
 {
   page.lastPage > 1 && (
-    <nav class="pagination-wrapper" aria-label="Pagination">
+    <nav class="mb-8 mt-auto flex justify-center" aria-label="Pagination">
       <LinkButton
         disabled={!page.url.prev}
         href={page.url.prev as string}
-        className={`mr-4 select-none ${page.url.prev ? '' : 'disabled'}`}
+        className={cn('mr-4 select-none', !page.url.prev && 'disabled')}
         ariaLabel="Anterior"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class:list={[{ 'disabled-svg': !page.url.prev }]}
+          class={cn(baseSvgClass, !page.url.prev && 'group-hover:!fill-accent')}
         >
           <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
         </svg>
@@ -26,13 +29,13 @@ const { page }: Props = Astro.props;
       <LinkButton
         disabled={!page.url.next}
         href={page.url.next as string}
-        className={`mx-4 select-none ${page.url.next ? '' : 'disabled'}`}
+        className={cn('mx-4 select-none', !page.url.next && 'disabled')}
         ariaLabel="Siguiente"
       >
         Siguiente
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class:list={[{ 'disabled-svg': !page.url.next }]}
+          class={cn(baseSvgClass, !page.url.next && 'group-hover:!fill-accent')}
         >
           <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
         </svg>
@@ -40,18 +43,3 @@ const { page }: Props = Astro.props;
     </nav>
   )
 }
-
-<style>
-  .pagination-wrapper {
-    @apply mb-8 mt-auto flex justify-center;
-  }
-  /* .disabled {
-    @apply pointer-events-none select-none opacity-10 hover:text-base group-hover:fill-accent;
-  } */
-  .disabled-svg {
-    @apply group-hover:!fill-accent;
-  }
-  svg {
-    @apply inline-block h-6 w-6 group-hover:fill-accent-2 hover:fill-accent-2 fill-current;
-  }
-</style>
