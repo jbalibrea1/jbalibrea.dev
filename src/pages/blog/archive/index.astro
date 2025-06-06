@@ -13,7 +13,7 @@ const description = "Blog's archivados del blog de jbalibrea.dev";
 ---
 
 <BaseLayout title={title} description={description}>
-  <PostList page={page1Posts}>
+  <PostList pagePosts={page1Posts}>
     {
       sortedPosts.length > SITE.archivePostsPerPage && (
         <div class="mt-8">

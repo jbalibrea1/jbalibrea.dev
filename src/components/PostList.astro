@@ -1,7 +1,8 @@
 ---
+import type { PageDataProps } from '@/interfaces/PageProps';
 import PostItem from './PostItem.astro';
 
-const { page } = Astro.props;
+const { pagePosts } = Astro.props;
 ---
 
 <main>
@@ -36,7 +37,7 @@ const { page } = Astro.props;
   </div>
   <ul>
     {
-      page.map((data) => (
+      pagePosts.map((data: PageDataProps) => (
         <li class="mb-2">
           <article>
             <PostItem post={data} />
