@@ -107,7 +107,7 @@ export default function Contact({ siteKey }: ContactProps) {
         id="message"
         autoComplete="off"
         required
-        className="min-h-[150px] max-h-[250px] h-min p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="min-h-[150px] max-h-[250px] h-min p-3 border rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-400"
       />
       <ReCAPTCHA
         sitekey={siteKey}

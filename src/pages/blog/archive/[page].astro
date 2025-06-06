@@ -27,7 +27,7 @@ const canonicalURL = getCanonicalURL({
 ---
 
 <BaseLayout title={title} description={description} canonicalURL={canonicalURL}>
-  <PostList page={page.data}>
+  <PostList pagePosts={page.data}>
     <Pagination page={page} />
   </PostList>
 </BaseLayout>
