@@ -5,11 +5,11 @@ import { Image } from 'astro:assets';
 ---
 
 <section
-  class="relative isolate overflow-hidden bg-slate-100/40 dark:bg-bgColor-2 px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0 rounded-lg shadow-sm"
+  class="relative isolate overflow-hidden bg-slate-100/40 dark:bg-bg-color-2 px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0 rounded-lg shadow-xs"
 >
   <div class="absolute inset-0 -z-10 overflow-hidden">
     <svg
-      class="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 dark:stroke-neutral-800 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
+      class="absolute left-[max(50%,25rem)] top-0 h-256 w-512 -translate-x-1/2 stroke-gray-200 dark:stroke-neutral-800 mask-[radial-gradient(64rem_64rem_at_top,white,transparent)]"
       aria-hidden="true"
     >
       <defs>
@@ -27,7 +27,7 @@ import { Image } from 'astro:assets';
       <svg
         x="50%"
         y="-1"
-        class="overflow-visible fill-slate-200 dark:fill-bgColor/40"
+        class="overflow-visible fill-slate-200 dark:fill-bg-color/40"
       >
         <path
           d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
@@ -81,13 +81,13 @@ import { Image } from 'astro:assets';
       class="-ml-12 -mt-12 p-12 lg:sticky lg:top-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden"
     >
       <Image
-        class="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 hidden dark:block"
+        class="w-3xl max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 hidden dark:block"
         src={idealDark}
         alt="idealistaWatch"
         loading="eager"
       />
       <Image
-        class="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 dark:hidden"
+        class="w-3xl max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 dark:hidden"
         src={idealWhite}
         alt="idealistaWatch"
         loading="eager"

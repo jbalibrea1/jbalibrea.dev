@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@config '../../tailwind.config.mjs';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 @layer base {
   html {
@@ -30,7 +48,7 @@
   }
 
   body {
-    @apply container flex min-h-svh flex-col items-center relative max-w-4xl mx-auto lg:px-0 text-textColor bg-bgColor antialiased;
+    @apply container flex min-h-svh flex-col items-center relative max-w-4xl mx-auto lg:px-0 text-text-color bg-bg-color antialiased;
   }
 
   main {
@@ -72,7 +90,7 @@
     color: var(--tw-prose-code);
     /* background-color: rgb(29 31 38 / 0.8);
     color: #f4f4f4 !important; */
-    @apply rounded-md px-1 py-0.5 bg-bgColor-2 text-textColor;
+    @apply rounded-md px-1 py-0.5 bg-bg-color-2 text-text-color;
   }
   .prose
     :where(code):not(
@@ -92,10 +110,10 @@
 
   input,
   textarea {
-    @apply text-black border-2 border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none;
+    @apply text-black border-2 border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-hidden;
   }
 
   form button {
-    @apply bg-link text-bgColor-2 font-extrabold tracking-tighter text-xl p-2 rounded-md  transition duration-200 opacity-80 hover:opacity-100;
+    @apply bg-link text-bg-color-2 font-extrabold tracking-tighter text-xl p-2 rounded-md  transition duration-200 opacity-80 hover:opacity-100;
   }
 }

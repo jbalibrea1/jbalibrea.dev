@@ -37,9 +37,9 @@ export function GitCard({ latest = false }) {
             mouseX.set(e.clientX - left);
             mouseY.set(e.clientY - top);
           }}
-          className="group relative rounded-xl bg-bgColor-2 border-accent-2/20 border shadow-sm"
+          className="group relative rounded-xl bg-bg-color-2 border-accent-2/20 border shadow-xs"
         >
-          <div className="absolute right-5 top-0 h-px w-80 bg-gradient-to-l from-transparent via-accent/50 via-10% to-transparent" />
+          <div className="absolute right-5 top-0 h-px w-80 bg-linear-to-l from-transparent via-accent/50 via-10% to-transparent" />
           <motion.div
             className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100"
             style={{
@@ -96,7 +96,7 @@ export function GitCard({ latest = false }) {
                   key={tag}
                 >
                   <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#c2c2c2_0%,#505050_50%,#bebebe_100%)] bg-[conic-gradient(from_90deg_at_50%_50%,#c2c2c2_0%,#505050_50%,#bebebe_100%)]" />
-                  <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-bgColor px-3 py-1 text-xs font-medium backdrop-blur-3xl">
+                  <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-bg-color px-3 py-1 text-xs font-medium backdrop-blur-3xl">
                     {tag}
                   </span>
                 </div>
