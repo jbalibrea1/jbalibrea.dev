@@ -21,14 +21,52 @@
 */
 
 @layer base {
+  #sidebar::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px !important;
+    height: 6px !important;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #sidebar::-webkit-scrollbar-thumb {
+    background-color: #374151;
+    border-radius: 999px;
+    opacity: 0.5;
+  }
+  .astro-code::-webkit-scrollbar-thumb {
+    background-color: #2d2d2d;
+    border-radius: 999px;
+    border: 2px solid #333;
+    opacity: 0.5;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--theme-accent-2));
+    border-radius: 999px;
+    border: 2px solid rgb(var(--theme-bg-2));
+    opacity: 0.5;
+  }
+
   html {
-    @apply scroll-smooth [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-300;
+    @apply scroll-smooth  [&::-webkit-scrollbar-thumb]:bg-neutral-300;
     --theme-bg: 250 250 250;
     --theme-bg-2: 255 255 255;
     --theme-link: 179 61 120;
     --theme-text: 34 39 42;
     --theme-accent: 210 55 107;
-    --theme-accent-2: 0 118 98;
+    --theme-accent-2: 30 118 98;
     --theme-quote: 203 42 66;
     --theme-header: 245 102 157;
     --theme-header-2: 107 52 147;
@@ -47,29 +85,27 @@
     --theme-header-2: 193 184 255;
   }
 
-  button:not(:disabled),
-  [role='button']:not(:disabled) {
-    cursor: pointer;
+  body {
+    @apply container min-h-svh mx-auto lg:px-0 text-text-color bg-bg-color antialiased flex items-center flex-col;
   }
 
-  body {
-    @apply container flex min-h-svh flex-col items-center relative max-w-4xl mx-auto lg:px-0 text-text-color bg-bg-color antialiased;
+  body,
+  nav {
+    @apply max-w-5xl;
   }
 
   main {
-    @apply flex-1 flex flex-col gap-8 pt-8 px-8 w-full;
-  }
-
-  .prose a {
-    @apply text-accent opacity-80;
-  }
-
-  .prose a:hover {
-    @apply opacity-100;
+    @apply flex-1 flex flex-col gap-4 pt-8 px-8 w-full relative;
   }
 
   .disabled {
     @apply pointer-events-none select-none opacity-50 hover:text-base group-hover:fill-accent;
+  }
+
+  /* btn cursor like tailwind v3 */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
 
   /* Hover underline animation */
@@ -92,10 +128,8 @@
   /* Custom single backtick style */
   .prose
     :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    color: var(--tw-prose-code);
-    /* background-color: rgb(29 31 38 / 0.8);
-    color: #f4f4f4 !important; */
-    @apply rounded-md px-1 py-0.5 bg-bg-color-2 text-text-color;
+    color: rgb(51 230 200) !important;
+    @apply rounded-md py-1 px-2 bg-slate-900/80 !font-thin;
   }
   .prose
     :where(code):not(
@@ -109,6 +143,28 @@
       :where([class~='not-prose'], [class~='not-prose'] *)
     )::after {
     content: '' !important;
+  }
+
+  .prose a {
+    @apply text-accent opacity-80;
+  }
+
+  .prose a:hover {
+    @apply opacity-100;
+  }
+
+  /* TODO: */
+  .highlight {
+    @apply font-medium text-accent;
+  }
+  .highlight-bg-translucent {
+    @apply bg-bg-color-2;
+  }
+  .readed {
+    @apply text-text-color;
+  }
+  .highlight-bg {
+    @apply bg-accent;
   }
 
   /* FORM */

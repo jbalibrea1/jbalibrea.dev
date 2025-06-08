@@ -1,5 +1,6 @@
 ---
 import MarkdownPostLayout from '@/layouts/MarkdownPostLayout.astro';
+import TOC from '@components/TOC/TOC.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -13,9 +14,10 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const posts = await getCollection('posts');
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 ---
 
-<MarkdownPostLayout post={post.data} posts={posts}>
+<MarkdownPostLayout post={post.data} posts={posts} headings={headings}>
+  {!!headings.length && <TOC {headings} slot="sidebar" />}
   <Content />
 </MarkdownPostLayout>

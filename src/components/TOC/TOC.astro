@@ -1,0 +1,130 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+import { generateToc } from './toc';
+import TOCHeading from './TOCHeading.astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  class?: string;
+  id?: string;
+}
+
+const { headings, class: className, ...props } = Astro.props;
+
+const toc = generateToc(headings);
+---
+
+<toc-heading class={className} {...props}>
+  <h2 class="font-semibold">TABLE OF CONTENTS</h2>
+  <ul class="mt-4 text-card-foreground">
+    {toc.map((heading) => <TOCHeading heading={heading} />)}
+  </ul>
+</toc-heading>
+
+<script>
+  // This script tag is useful only if you want to display the TOC alongside the blog post...
+  // ... and highlight the section that the user is currently reading through.
+  // Feel free to remove this tag if you don't need this type of functionality.
+
+  interface TOCLink {
+    element: HTMLAnchorElement;
+    progressBar: HTMLElement;
+    slug: string;
+  }
+
+  interface HeadingProgress {
+    inView: boolean;
+    progress: number;
+  }
+
+  class TOC extends HTMLElement {
+    headings: HTMLElement[] = [];
+    tocLinks: TOCLink[] = [];
+    headingProgress: Record<string, HeadingProgress> = {};
+
+    constructor() {
+      super();
+
+      // Initialize the headings and tocLinks
+      this.headings = Array.from(
+        document.querySelectorAll(
+          'article h2, article h3, article h4, article h5, article h6',
+        ),
+      );
+      this.tocLinks = Array.from(this.querySelectorAll('a[href^="#"]'))
+        .map((link) => {
+          const href = link.getAttribute('href') || '';
+          const slug = href.substring(1);
+          const progressBar = link.previousElementSibling as HTMLElement | null;
+          if (!slug || !progressBar) return null;
+          return {
+            element: link as HTMLAnchorElement,
+            progressBar,
+            slug,
+          };
+        })
+        .filter((link): link is TOCLink => link !== null);
+    }
+
+    updatePositionAndStyle = () => {
+      const windowHeight = window.innerHeight;
+      const pageOffset =
+        window.scrollY -
+        ((document.querySelector('#content') as HTMLElement)?.offsetTop || 0);
+      const postOffset =
+        ((document.querySelector('#content') as HTMLElement)?.offsetHeight ||
+          0) + 127;
+
+      this.headings.forEach((el, index) => {
+        const nextHeadingTop =
+          this.headings[index + 1]?.offsetTop || postOffset;
+        const range = [
+          el.offsetTop - pageOffset,
+          nextHeadingTop - pageOffset - el.offsetHeight,
+        ];
+        const progress = (windowHeight - range[0]) / (range[1] - range[0]);
+
+        this.headingProgress[el.id] = {
+          inView: range[0] < windowHeight && range[1] > 0,
+          progress: Math.max(0, Math.min(1, progress)),
+        };
+      });
+
+      this.tocLinks.forEach(({ element: el, progressBar: bar, slug }, i) => {
+        if (!this.headingProgress[slug]) {
+          console.warn(`No se encontró headingProgress para slug: ${slug}`);
+          return; // Salta este enlace
+        }
+        const { inView, progress } = this.headingProgress[slug];
+        if (this.headingProgress[slug]) {
+          el.classList.toggle('highlight', inView);
+          el.classList.toggle('highlight-bg-translucent', inView);
+          el.classList.toggle(
+            'rounded-t-2xl',
+            inView &&
+              (i == 0 ||
+                !this.headingProgress[this.tocLinks[i - 1]?.slug].inView),
+          );
+          el.classList.toggle(
+            'rounded-b-2xl',
+            inView &&
+              (i == this.tocLinks.length - 1 ||
+                !this.headingProgress[this.tocLinks[i + 1]?.slug].inView),
+          );
+          bar.classList.toggle('readed', !inView && progress == 1);
+          bar.classList.toggle('highlight-bg', inView);
+          bar.style.setProperty('height', `${progress * 90}%`);
+        }
+      });
+    };
+
+    connectedCallback() {
+      // Initial first and listen to scroll event
+      setInterval(this.updatePositionAndStyle, 500);
+      window.addEventListener('scroll', this.updatePositionAndStyle);
+    }
+  }
+
+  customElements.define('toc-heading', TOC);
+</script>

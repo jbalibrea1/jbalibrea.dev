@@ -1,16 +1,14 @@
 ---
 import Prose from '@/components/Prose.astro';
-import { fade } from 'astro:transitions';
 import BaseLayout from './BaseLayout.astro';
 import PostComment from '@/components/PostComment.tsx';
 import BlogNavigation from '@/components/BlogNavigation.astro';
-import { FormattedDatetime } from '@/components/DateTime';
 import type { InfoPost } from '@/interfaces/InfoPost';
-import unifiedText from '@utils/unifiedText';
 const { post, posts } = Astro.props;
+import MediumZoom from '@components/MediumZoom.astro';
+import ProgressBarBlog from '@components/ProgressBarBlog.astro';
 
-const { title, description, author, pubDateTime, modDateTime, image } = post;
-const titleSlug = unifiedText(title);
+const { title, description, image } = post;
 
 /* ========== Prev/Next Posts ========== */
 const allPostInfo = posts.map(
@@ -39,143 +37,26 @@ const nextPost =
   image={image}
 >
   <main>
-    <Prose>
-      <h1
-        class="mb-1 antialiased hover:subpixel-antialiased"
-        transition:name={titleSlug}
+    <div class="flex gap-7 max-w-full">
+      <!-- side bar-->
+      <aside
+        class="top-20 min-w-48 basis-60 md:sticky md:order-2 lg:shrink-0 hidden md:block"
+        style="height:calc(85vh - 5rem);"
       >
-        {title}
-      </h1>
-      <p class="m-0 text-sm">
-        <strong class="font-semibold tracking-tight">{author} </strong>
-        <FormattedDatetime
-          pubDateTime={pubDateTime}
-          modDateTime={modDateTime}
-        />
-      </p>
-      <div transition:animate={fade({ duration: '1s' })}>
-        <p class="text-xs text italic" transition:name={`desc-${description}`}>
-          {description}
-        </p>
+        <div class="h-full overflow-y-auto" id="sidebar">
+          <slot name="sidebar" />
+        </div>
+      </aside>
+      <!-- end side bar-->
+      <div class="flex-1 min-w-0">
+        <Prose post={post}>
+          <slot />
+        </Prose>
       </div>
-      <hr class="my-2" />
-      <article>
-        <slot />
-      </article>
-    </Prose>
+    </div>
     <PostComment client:only="react" />
     <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
   </main>
-
-  <script is:inline data-astro-rerun>
-    /** Create a progress indicator
-     *  at the top */
-    function createProgressBar() {
-      // Create the main container div
-      const progressContainer = document.createElement('div');
-      progressContainer.className = 'fixed top-0 z-10 h-1 w-full';
-
-      // Create the progress bar div
-      const progressBar = document.createElement('div');
-      progressBar.className = 'h-1 w-0 bg-accent';
-      progressBar.id = 'myBar';
-
-      // Append the progress bar to the progress container
-      progressContainer.appendChild(progressBar);
-
-      // Append the progress container to the document body or any other desired parent element
-      document.body.appendChild(progressContainer);
-    }
-    createProgressBar();
-
-    /** Update the progress bar
-     *  when user scrolls */
-    function updateScrollProgress() {
-      document.addEventListener('scroll', () => {
-        const winScroll =
-          document.body.scrollTop || document.documentElement.scrollTop;
-        const height =
-          document.documentElement.scrollHeight -
-          document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        if (document) {
-          const myBar = document.getElementById('myBar');
-          if (myBar) {
-            myBar.style.width = scrolled + '%';
-          }
-        }
-      });
-    }
-    updateScrollProgress();
-
-    /** Attaches links to headings in the document,
-     *  allowing sharing of sections easily */
-    function addHeadingLinks() {
-      const headings = Array.from(
-        document.querySelectorAll('h2, h3, h4, h5, h6'),
-      );
-      for (const heading of headings) {
-        heading.classList.add('group');
-        const link = document.createElement('a');
-        link.className =
-          'heading-link ml-2 opacity-0 group-hover:opacity-100 focus:opacity-100';
-        link.ariaLabel = `Enlace a ${heading.innerText}`;
-        link.href = '#' + heading.id;
-
-        const span = document.createElement('span');
-        span.ariaHidden = 'true';
-        span.innerText = '#';
-        link.appendChild(span);
-        heading.appendChild(link);
-      }
-    }
-    addHeadingLinks();
-
-    /** Attaches copy buttons to code blocks in the document,
-     * allowing users to copy code easily. */
-    function attachCopyButtons() {
-      const copyButtonLabel = 'Copy';
-      const codeBlocks = Array.from(document.querySelectorAll('pre'));
-
-      for (const codeBlock of codeBlocks) {
-        const wrapper = document.createElement('div');
-        wrapper.style.position = 'relative';
-
-        const copyButton = document.createElement('button');
-        copyButton.className =
-          'copy-code absolute right-3 -top-3 rounded-sm  px-2 py-1 text-xs leading-4 font-medium bg-gray-700 text-white ';
-        copyButton.innerHTML = copyButtonLabel;
-        codeBlock.setAttribute('tabindex', '0');
-        codeBlock.appendChild(copyButton);
-
-        // wrap codebock with relative parent element
-        codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
-        wrapper.appendChild(codeBlock);
-
-        copyButton.addEventListener('click', async () => {
-          await copyCode(codeBlock, copyButton);
-        });
-      }
-
-      async function copyCode(block, button) {
-        const code = block.querySelector('code');
-        const text = code?.innerText;
-
-        await navigator.clipboard.writeText(text ?? '');
-
-        // visual feedback that task is completed
-        button.innerText = 'Copied';
-
-        setTimeout(() => {
-          button.innerText = copyButtonLabel;
-        }, 1200);
-      }
-    }
-    attachCopyButtons();
-
-    /* Go to page start after page swap */
-    // document.addEventListener('astro:after-swap', () =>
-    //   window.scrollTo({ left: 0, top: 0, behavior: 'instant' })
-    // );
-  </script>
+  <MediumZoom />
+  <ProgressBarBlog />
 </BaseLayout>
