@@ -18,7 +18,12 @@ function diveChildren(item: TocItem, depth: number): TocItem[] {
 
 export function generateToc(headings: readonly MarkdownHeading[]) {
   // this ignores/filters out h1 element(s)
-  const bodyHeadings = [...headings.filter(({ depth }) => depth > 1)];
+  const bodyHeadings = [
+    ...headings.filter(
+      ({ depth, text }) =>
+        depth > 1 && text.toLowerCase().trim() !== 'tabla de contenidos',
+    ),
+  ];
   const toc: TocItem[] = [];
 
   bodyHeadings.forEach((h) => {

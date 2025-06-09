@@ -9,8 +9,9 @@ import { fade } from 'astro:transitions';
 ---
 
 <div
-  class="prose dark:prose-invert
-  prose-h1:font-extrabold prose-h1:text-5xl md:prose-h1:text-7xl prose-h1:tracking-tighter prose-h2:text-3xl prose-h3:text-base prose-h4:text-sm prose-p:text-text-color! prose-p:font-normal m-auto font-poppins prose-headings:font-sans w-full"
+  class="prose lg:prose-lg dark:prose-invert
+  prose-h1:font-extrabold prose-h1:text-5xl sm:prose-h1:text-6xl md:prose-h1:text-7xl prose-h1:tracking-tighter prose-h1:text-accent prose-h2:text-3xl prose-h3:text-base prose-h4:text-sm prose-p:text-text-color! prose-p:font-normal m-auto font-poppins prose-headings:font-sans w-full prose-img:rounded-md prose-headings:text-accent"
+  id="content"
 >
   <h1
     class="mb-1 antialiased hover:subpixel-antialiased"
@@ -23,12 +24,14 @@ import { fade } from 'astro:transitions';
     <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} />
   </p>
   <div transition:animate={fade({ duration: '1s' })}>
-    <p class="text-xs text italic" transition:name={`desc-${description}`}>
+    <p class="text-sm text italic" transition:name={`desc-${description}`}>
       {description}
     </p>
   </div>
   <hr class="my-2" />
-  <article>
+  <article
+    class="prose-headings:underline prose-a:text-accent/80 prose-a:hover:text-accent"
+  >
     <slot />
   </article>
 </div>
