@@ -21,6 +21,7 @@
 */
 
 @layer base {
+  /*TODO: cambiar en firefox color?*/
   #sidebar::-webkit-scrollbar {
     width: 6px !important;
     height: 6px !important;
@@ -65,7 +66,7 @@
     --theme-bg-2: 255 255 255;
     --theme-link: 179 61 120;
     --theme-text: 34 39 42;
-    --theme-accent: 210 55 107;
+    --theme-accent: 236 54 73;
     --theme-accent-2: 30 118 98;
     --theme-quote: 203 42 66;
     --theme-header: 245 102 157;
@@ -74,8 +75,8 @@
 
   html.dark {
     @apply scroll-smooth [&::-webkit-scrollbar-thumb]:bg-neutral-600;
-    --theme-bg: 39 43 52;
-    --theme-bg-2: 29 31 38;
+    --theme-bg: 24 24 27;
+    --theme-bg-2: 16 16 16;
     --theme-link: 212 130 171;
     --theme-text: 224 224 224;
     --theme-accent: 255 168 197;
@@ -100,6 +101,10 @@
 
   .disabled {
     @apply pointer-events-none select-none opacity-50 hover:text-base group-hover:fill-accent;
+  }
+
+  button {
+    @apply border border-2;
   }
 
   /* btn cursor like tailwind v3 */
@@ -128,29 +133,18 @@
   /* Custom single backtick style */
   .prose
     :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    color: rgb(51 230 200) !important;
-    @apply rounded-md py-1 px-2 bg-slate-900/80 !font-thin;
+    @apply rounded-md py-[0.2em] px-[0.5em] dark:bg-bg-color-2 bg-gray-200 !font-thin tracking-normal;
   }
   .prose
     :where(code):not(
       :where([class~='not-prose'], [class~='not-prose'] *)
-    )::before {
-    content: '' !important;
-  }
-
+    )::before,
   .prose
     :where(code):not(
       :where([class~='not-prose'], [class~='not-prose'] *)
     )::after {
     content: '' !important;
-  }
-
-  .prose a {
-    @apply text-accent opacity-80;
-  }
-
-  .prose a:hover {
-    @apply opacity-100;
+    display: none;
   }
 
   /* TODO: */

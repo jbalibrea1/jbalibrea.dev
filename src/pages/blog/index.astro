@@ -1,5 +1,4 @@
 ---
-import MediumZoom from '@components/MediumZoom.astro';
 import { SITE } from '@config';
 import BlogLayout from '@layouts/BlogLayout.astro';
 import getShortedPosts from '@utils/getSorterPosts';
@@ -34,5 +33,3 @@ const page1Posts = sortedPosts.slice(0, SITE.postsPerPage);
     </div>
   </div>
 </BlogLayout>
-
-<MediumZoom />

@@ -4,6 +4,8 @@ import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import remarkToc from 'remark-toc';
+import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -14,9 +16,13 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'catppuccin-mocha',
+      theme: 'vesper',
       defaultColor: false,
     },
+    remarkPlugins: [
+      [remarkToc, { heading: 'Tabla de contenidos', maxDepth: 3 }],
+    ],
+    rehypePlugins: [rehypeAccessibleEmojis],
   },
 
   integrations: [
@@ -28,12 +34,7 @@ export default defineConfig({
       },
     }),
     mdx({
-      // `gfm` overridden to `false`
-      shikiConfig: {
-        theme: 'catppuccin-mocha',
-        defaultColor: false,
-      },
-      gfm: true,
+      extendMarkdownConfig: true,
     }),
   ],
 
