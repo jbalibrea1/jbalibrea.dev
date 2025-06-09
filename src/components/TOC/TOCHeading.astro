@@ -21,7 +21,7 @@ const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText;
     <a
       aria-label={`Scroll to section: ${text}`}
       class={cn(
-        'line-clamp-2 px-3 py-1 ms-2 flex-1 font-light text-text-color/70 transition-all hover:text-text-color highlight:font-medium highlight:text-accent highlight-bg-translucent:bg-bg-color-2',
+        'line-clamp-2 px-3 py-1 ms-2 flex-1 text-text-color/50 transition-all hover:text-accent-2 highlight:font-medium highlight:text-accent highlight-bg-translucent:bg-bg-color-2',
         depth > 2 && 'ps-7',
       )}
       href={`#${slug}`}>{text}</a

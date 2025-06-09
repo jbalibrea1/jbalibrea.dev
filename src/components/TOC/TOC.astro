@@ -93,8 +93,8 @@ const toc = generateToc(headings);
 
       this.tocLinks.forEach(({ element: el, progressBar: bar, slug }, i) => {
         if (!this.headingProgress[slug]) {
-          console.warn(`No se encontró headingProgress para slug: ${slug}`);
-          return; // Salta este enlace
+          // console.warn(`No se encontró headingProgress para slug: ${slug}`);
+          return;
         }
         const { inView, progress } = this.headingProgress[slug];
         if (this.headingProgress[slug]) {

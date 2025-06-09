@@ -21,13 +21,23 @@
 */
 
 @layer base {
-  /*TODO: cambiar en firefox color?*/
-  #sidebar::-webkit-scrollbar {
-    width: 6px !important;
-    height: 6px !important;
-    background: transparent;
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: rgb(var(--theme-accent-2)) transparent;
   }
 
+  #sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #374151 transparent;
+  }
+
+  .astro-code {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--theme-accent-2)) #333;
+  }
+
+  /* webkit */
   ::-webkit-scrollbar {
     width: 12px !important;
     height: 6px !important;
@@ -42,21 +52,29 @@
     background: transparent;
   }
 
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--theme-accent-2));
+    border-radius: 999px;
+    border: 2px solid rgb(var(--theme-bg-2));
+    opacity: 0.5;
+  }
+
+  #sidebar::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+    background: transparent;
+  }
+
   #sidebar::-webkit-scrollbar-thumb {
     background-color: #374151;
     border-radius: 999px;
     opacity: 0.5;
   }
+
   .astro-code::-webkit-scrollbar-thumb {
     background-color: #2d2d2d;
     border-radius: 999px;
     border: 2px solid #333;
-    opacity: 0.5;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--theme-accent-2));
-    border-radius: 999px;
-    border: 2px solid rgb(var(--theme-bg-2));
     opacity: 0.5;
   }
 
@@ -101,10 +119,6 @@
 
   .disabled {
     @apply pointer-events-none select-none opacity-50 hover:text-base group-hover:fill-accent;
-  }
-
-  button {
-    @apply border border-2;
   }
 
   /* btn cursor like tailwind v3 */
@@ -170,5 +184,11 @@
 
   form button {
     @apply bg-link text-bg-color-2 font-extrabold tracking-tighter text-xl p-2 rounded-md  transition duration-200 opacity-80 hover:opacity-100;
+  }
+
+  /* copy code */
+  .copy-code {
+    @apply absolute right-3 -top-3 rounded-md  px-2 py-1 text-xs leading-4 font-medium bg-black text-white border border-1 hover:scale-[1.05]
+    transition-transform duration-150 ease-in-out;
   }
 }

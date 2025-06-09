@@ -17,7 +17,7 @@ const posts = await getCollection('posts');
 const { Content, headings } = await post.render();
 ---
 
-<MarkdownPostLayout post={post.data} posts={posts} headings={headings}>
+<MarkdownPostLayout post={post.data} posts={posts}>
   {!!headings.length && <TOC {headings} slot="sidebar" />}
   <Content />
 </MarkdownPostLayout>

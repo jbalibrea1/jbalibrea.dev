@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
 import '@/styles/global.css';
+import BackToTop from '@components/BackToTop.astro';
 
 interface Props {
   title: string;
@@ -10,6 +11,7 @@ interface Props {
   sticky?: boolean;
   image?: Image;
   canonicalURL?: string;
+  postTitle?: boolean;
 }
 
 interface Image {
@@ -31,6 +33,7 @@ const {
   sticky,
   image = imageDefault,
   canonicalURL = canonicalURLdefault,
+  postTitle = false,
 } = Astro.props;
 
 const fullImageURL = `${import.meta.env.SITE}${image.url}`;
@@ -65,16 +68,11 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <meta name="author" content="Jorge Balibrea" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
-    <meta
-      name="keywords"
-      content="jbalibrea, jorge balibrea, Murcia, web developer, software developer, full stack developer, Desarrollador, React, Node.js, Astro"
-    />
 
-    <!-- Open Graph (Facebook/LinkedIn) - Corregido -->
+    <!-- Open Graph -->
     <meta property="og:title" content={`${title} | jbalibrea.dev`} />
     <meta property="og:description" content={description} />
-    <!-- TODO: <meta property="og:type" content={postTitle ? 'article' : 'website'} /> -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={postTitle ? 'article' : 'website'} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="jbalibrea.dev" />
@@ -149,67 +147,7 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
   <body>
     <Header sticky={sticky} />
     <slot />
-    <!-- TODO: move to a componente  -->
-    <button
-      aria-label="Back to Top"
-      class="z-90 fixed bottom-8 end-4 flex h-10 w-10 translate-y-28 items-center justify-center rounded-full border-2 border-transparent bg-bg-color-2 text-3xl opacity-0 transition-all duration-300 hover:border-accent-2 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12"
-      data-show="false"
-      id="to-top-btn"
-      ><svg
-        aria-hidden="true"
-        class="h-6 w-6 text-accent-2"
-        fill="none"
-        focusable="false"
-        stroke="currentColor"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M4.5 15.75l7.5-7.5 7.5 7.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path>
-      </svg>
-    </button>
+    <BackToTop />
     <Footer />
-    <script is:inline data-astro-rerun>
-      (function () {
-        /** Scrolls the document to the top when
-         * the "Back to Top" button is clicked. */
-        function backToTop() {
-          document
-            .querySelector('#to-top-btn')
-            ?.addEventListener('click', () => {
-              document.body.scrollTop = 0; // For Safari
-              document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-            });
-        }
-        backToTop();
-
-        /** Show or hide the "Back to Top" button
-         * based on the scroll position. */
-        let lastScrollTop = 0;
-
-        function showBackToTop() {
-          const toTopBtn = document.querySelector('#to-top-btn');
-          if (toTopBtn) {
-            const currentScrollTop =
-              document.body.scrollTop || document.documentElement.scrollTop;
-
-            if (currentScrollTop < lastScrollTop && currentScrollTop > 20) {
-              toTopBtn.dataset.show = 'true';
-            } else if (currentScrollTop < 20) {
-              toTopBtn.dataset.show = 'false';
-            } else {
-              toTopBtn.dataset.show = 'false';
-            }
-
-            lastScrollTop = currentScrollTop;
-          }
-        }
-
-        document.addEventListener('scroll', showBackToTop);
-      })();
-    </script>
   </body>
 </html>
