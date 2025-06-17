@@ -1,0 +1,30 @@
+services:
+  app:
+    image: jbalibrea-web-dev
+    build: 
+      context: .
+      dockerfile: dev.Dockerfile
+    environment:
+      CONTACT_PASSWORD: ${CONTACT_PASSWORD}
+      CONTACT_EMAIL: ${CONTACT_EMAIL}
+      CONTACT_TO_SEND: ${CONTACT_TO_SEND}
+
+      PUBLIC_RECAPTCHA_KEY: ${PUBLIC_RECAPTCHA_KEY}
+      RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
+    expose:
+      - "4321"
+    ports:
+      - "4321:4321"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jbalibrea-web-dev.rule=Host(`pre.local.jbalibrea.dev`)
+      - traefik.http.routers.jbalibrea-web-dev.tls=true
+      - traefik.http.routers.jbalibrea-web-dev.tls.certresolver=cloudflare
+      - traefik.http.services.jbalibrea-web-dev.loadbalancer.server.port=4321
+      - traefik.http.routers.jbalibrea-web-dev.middlewares=hetzAuth@file
+#     networks:
+#       - web
+#
+# networks:
+#   web:
+#     external: true

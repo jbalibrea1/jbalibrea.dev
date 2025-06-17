@@ -1,0 +1,32 @@
+services:
+  web:
+    build: .
+    environment:
+      CONTACT_PASSWORD: ${CONTACT_PASSWORD}
+      CONTACT_EMAIL: ${CONTACT_EMAIL}
+      CONTACT_TO_SEND: ${CONTACT_TO_SEND}
+
+      PUBLIC_RECAPTCHA_KEY: ${PUBLIC_RECAPTCHA_KEY}
+      RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
+    expose:
+      - "4321"
+    ports:
+      - "4321:4321"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+#     labels:
+#       - traefik.enable=true
+#       - traefik.http.routers.jbalibrea-web.rule=Host(`${DOMAIN}`)
+#       - traefik.http.routers.jbalibrea-web.tls=true
+#       - traefik.http.routers.jbalibrea-web.tls.certresolver=cloudflare
+#       - traefik.http.services.jbalibrea-web.loadbalancer.server.port=4321
+#       - traefik.http.routers.jbalibrea-web.middlewares=hetzAuth@file
+#     networks:
+#       - web
+#
+# networks:
+#   web:
+#     external: true

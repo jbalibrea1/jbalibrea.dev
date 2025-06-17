@@ -17,70 +17,29 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Determine Target
-        id: target
-        run: |
-          if [[ $GITHUB_REF == refs/heads/main ]]; then
-            echo "TARGET=/var/www/jbalibrea.dev" >> $GITHUB_OUTPUT
-            echo "PM2_APP=production-app" >> $GITHUB_OUTPUT
-            echo "ENV_FILE=.env.production" >> $GITHUB_OUTPUT
-          else
-            echo "TARGET=/var/www/pre.jbalibrea.dev" >> $GITHUB_OUTPUT
-            echo "PM2_APP=staging-app" >> $GITHUB_OUTPUT
-            echo "ENV_FILE=.env.staging" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Deploy Code and Build on VPS
-        uses: appleboy/ssh-action@master
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/jbalibrea1/jbalibrea-web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            # 1. Configuración inicial del entorno
-              set -e
-              export PATH="$HOME/.local/share/pnpm:$PATH"
-              source "$HOME/.bashrc" || true
-              
-              # 2. Gestión de PNPM con fallback a NPM
-              if ! command -v pnpm &> /dev/null; then
-                echo "=== PNPM no encontrado, intentando instalar ==="
-                curl -fsSL https://get.pnpm.io/install.sh | sh - || {
-                  echo "=== Falló la instalación de PNPM, usando NPM ==="
-                  # Crea alias temporal para usar npm como pnpm
-                  alias pnpm=npm
-                  alias pnpx=npx
-                }
-                source "$HOME/.bashrc" || true
-              fi
-              
-              # 3. Verificación del package manager
-              echo "=== Package Manager ==="
-              echo "Usando: $(which pnpm)"
-              echo "Versión: $(pnpm --version || npm --version)"
-              
-              # 4. Despliegue
-              cd "${{ steps.target.outputs.TARGET }}" || exit 1
-              git fetch
-              git checkout "${{ github.ref_name }}"
-              git pull origin "${{ github.ref_name }}"
-              
-              # Instalación con reintentos
-              pnpm install || {
-                echo "=== Falló pnpm install, intentando con npm ==="
-                npm install
-              }
-              
-              pnpm run build || {
-                echo "=== Falló pnpm build, intentando con npm ==="
-                npm run build
-              }
-              
-              if pm2 restart ${{ steps.target.outputs.PM2_APP }} --silent >/dev/null 2>&1; then
-                echo "🔄 Aplicación reiniciada correctamente"
-              else
-                echo "⚠️ Falló el reinicio de la app en PM2"
-              fi
-              
-              echo "✅ Despliegue completado"
+            cd /home/jbalibrea/docker/projects/jbalibrea.dev
+            docker compose pull
+            docker compose up -d --no-deps jbalibrea-web
