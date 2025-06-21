@@ -25,11 +25,15 @@
     "astro": "^5.8.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.16.0",
+    "hastscript": "^9.0.1",
+    "mdast-util-to-string": "^4.0.0",
     "nodemailer": "^7.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-google-recaptcha": "^3.1.0",
+    "reading-time": "^1.5.0",
     "rehype-accessible-emojis": "^0.3.2",
+    "rehype-external-links": "^3.0.0",
     "remark-toc": "^9.0.0",
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.3.0",
@@ -37,6 +41,7 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "@shikijs/transformers": "^3.6.0",
     "@tailwindcss/typography": "^0.5.16",
     "@types/nodemailer": "^6.4.17",
     "@types/react-google-recaptcha": "^2.1.9",

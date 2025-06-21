@@ -15,16 +15,3 @@ services:
       - "4321"
     ports:
       - "4321:4321"
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.jbalibrea-web-dev.rule=Host(`pre.local.jbalibrea.dev`)
-      - traefik.http.routers.jbalibrea-web-dev.tls=true
-      - traefik.http.routers.jbalibrea-web-dev.tls.certresolver=cloudflare
-      - traefik.http.services.jbalibrea-web-dev.loadbalancer.server.port=4321
-      - traefik.http.routers.jbalibrea-web-dev.middlewares=hetzAuth@file
-#     networks:
-#       - web
-#
-# networks:
-#   web:
-#     external: true

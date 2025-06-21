@@ -12,6 +12,7 @@ This site serves as a portfolio and a blog where I share articles about web deve
 - **TypeScript**: For type safety and improved developer experience.
 - **Tailwind**: Utility-first CSS framework for rapid UI development.
 - **React**: For building interactive user interfaces.
+- **Docker**: For containerization and easy deployment.
 
 ## 📦 Installation
 
@@ -20,8 +21,8 @@ To run this project locally, clone the repository and install the dependencies:
 ```bash
 git clone https://github.com/jbalibrea1/jbalibrea.dev.git
 cd jbalibrea.dev
-pnpm install
-pnpm run dev
+pnpm i
+pnpm dev
 ```
 
 Feel free to explore and contribute!

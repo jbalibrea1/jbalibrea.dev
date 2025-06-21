@@ -24,6 +24,8 @@ RUN pnpm run build
 
 FROM base AS runner
 
+ENV NODE_ENV=production
+
 RUN addgroup --system --gid 1001 appgroup
 RUN adduser --system --uid 1001 appuser
 

@@ -1,33 +1,35 @@
 ---
-import Prose from '@/components/Prose.astro';
-import BaseLayout from './BaseLayout.astro';
-import PostComment from '@/components/PostComment.tsx';
 import BlogNavigation from '@/components/BlogNavigation.astro';
+import PostComment from '@/components/PostComment.tsx';
+import Prose from '@/components/Prose.astro';
 import type { InfoPost } from '@/interfaces/InfoPost';
-const { post, posts } = Astro.props;
 import MediumZoom from '@components/MediumZoom.astro';
 import ProgressBarBlog from '@components/ProgressBarBlog.astro';
+import BaseLayout from './BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import getShortedPosts from '@utils/getSorterPosts';
 
-const { title, description, image } = post;
+const { post, remarkPluginFrontmatter } = Astro.props;
+const { title, description, image } = post.data;
 
 /* ========== Prev/Next Posts ========== */
-const allPostInfo = posts.map(
-  ({ data: { title }, slug }): InfoPost => ({
-    slug,
-    title,
-  }),
-);
+const posts = await getCollection('posts');
+// obetnemos los posts ordenados por fecha
+const sortedPosts = getShortedPosts(posts);
+// obtenemos la info de los posts
+const dataPosts = sortedPosts.map(({ data: { title }, slug }) => ({
+  slug,
+  title,
+}));
 
-const currentPostIndex = allPostInfo.findIndex(
-  (a: InfoPost) => a.title === post.title,
-);
+// normalizmos el slug
+const currSlug = post.slug.split('/')[0];
+const currPostIdx = dataPosts.findIndex((a) => a.slug === currSlug);
 
 const prevPost =
-  currentPostIndex !== 0 ? allPostInfo[currentPostIndex - 1] : null;
-const nextPost =
-  currentPostIndex !== allPostInfo.length
-    ? allPostInfo[currentPostIndex + 1]
-    : null;
+  currPostIdx < dataPosts.length - 1 ? dataPosts[currPostIdx + 1] : null;
+
+const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
 ---
 
 <BaseLayout
@@ -38,7 +40,7 @@ const nextPost =
   postTitle={true}
 >
   <main>
-    <div class="flex gap-7 max-w-full">
+    <div class="flex gap-12 max-w-full">
       <!-- side bar-->
       <aside
         class="top-20 min-w-48 basis-60 md:sticky md:order-2 lg:shrink-0 hidden md:block"
@@ -50,7 +52,10 @@ const nextPost =
       </aside>
       <!-- end side bar-->
       <div class="flex-1 min-w-0">
-        <Prose post={post}>
+        <Prose
+          post={post.data}
+          minutesRead={remarkPluginFrontmatter.minutesRead}
+        >
           <slot />
         </Prose>
       </div>

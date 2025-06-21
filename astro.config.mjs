@@ -3,11 +3,23 @@ import node from '@astrojs/node';
 import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
-import remarkToc from 'remark-toc';
-import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
-
+import {
+  transformerMetaHighlight,
+  transformerMetaWordHighlight,
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+  transformerRenderWhitespace,
+} from '@shikijs/transformers';
 import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'astro/config';
+import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
+import remarkToc from 'remark-toc';
+import { remarkReadingTime } from './plugins/remark-reading-time.mjs';
+import { addCopyButton, updateStyle } from './plugins/shiki-trans.ts';
+import rehypeExternalLinks from 'rehype-external-links';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,13 +28,32 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'vesper',
+      theme: 'github-dark', // github-dark-high-contrast, poimandres, tokyo-night, vesper
       defaultColor: false,
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
+        transformerNotationFocus(),
+        transformerNotationErrorLevel(),
+        transformerMetaHighlight(),
+        transformerMetaWordHighlight(),
+        transformerRenderWhitespace(),
+        addCopyButton(),
+        updateStyle(),
+      ],
     },
     remarkPlugins: [
       [remarkToc, { heading: 'Tabla de contenidos', maxDepth: 3 }],
+      remarkReadingTime,
     ],
-    rehypePlugins: [rehypeAccessibleEmojis],
+    rehypePlugins: [
+      rehypeAccessibleEmojis,
+      [
+        rehypeExternalLinks,
+        { target: '_blank', rel: ['noopener', 'noreferrer'] },
+      ],
+    ],
   },
 
   integrations: [
