@@ -23,7 +23,7 @@
 @layer base {
   /* Firefox */
   * {
-    scrollbar-width: auto;
+    scrollbar-width: thin;
     scrollbar-color: rgb(var(--theme-accent-2)) transparent;
   }
 
@@ -39,7 +39,7 @@
 
   /* webkit */
   ::-webkit-scrollbar {
-    width: 12px !important;
+    width: 8px !important;
     height: 6px !important;
     background: transparent;
   }
