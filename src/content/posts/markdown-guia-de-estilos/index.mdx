@@ -1,16 +1,16 @@
 ---
-title: 'Markdown Guía de Estilos'
+title: 'Markdown: guía de estilos, sintaxis y resaltado con Shiki en Astro'
 pubDateTime: 2025-06-19
-description: 'Markdown guía de estilos básicos y ejemplos de sintaxis.'
+description: 'Explora una guía práctica de Markdown que incluye estilos y sintaxis, con código resaltado usando Shiki para mejorar la visualización.'
 author: 'Jorge Balibrea'
 image:
-  url: '/blog/instalacion-java-jdk/java.png'
-  alt: 'Java'
-tags: ['markdown', guía']
+  url: '/blog/markdown-guia-de-estilos/thumbnail.webp'
+  alt: 'markdown guía de estilos'
+tags: ['markdown', 'guía']
 ---
 
 En este post, vamos a explorar sintaxis básica de Markdown y algunos ejemplos de resaltado de sintaxis.
-En esta web el resaltado de sintaxis se renderiza gracias a [shiki](https://shiki.style/).
+En [jbalibrea.dev](https://jbalibrea.dev) el resaltado de sintaxis se renderiza gracias a [shiki](https://shiki.style/).
 
 ## Encabezados
 
@@ -41,9 +41,21 @@ Para crear encabezados, agregue el signo numeral de `#` delante de una palabra o
 
 ###### Encabezado 6
 
+## Texto en Negrita, Cursiva y Tachado
+
+### Sintaxis
+
+```
+**texto en negrita**, _texto en cursiva_, ~~texto tachado~~ `texto código` **_texto cursiva en negrita_** ~~_texto cursiva tachado_~~
+```
+
+### Resultado
+
+**texto en negrita**, _texto en cursiva_, ~~texto tachado~~ `texto código` **_texto cursiva en negrita_** ~~_texto cursiva tachado_~~
+
 ## Párrafos
 
-Para crear párrafos, use una línea en blanco para separar una o más líneas de texto.
+Para crear párrafos, separa las líneas de texto con una línea en blanco.
 
 ### Sintaxis
 
@@ -103,7 +115,7 @@ Para destacar citas, crea una cita en bloque, agregando un `>` delante de un pá
 #### Sintaxis
 
 ```markdown
-> Simplicity is the ultimate sophistication. >
+> Simplicity is the ultimate sophistication.
 >
 > — <cite>Steve Jobs[^1]</cite>
 
@@ -114,7 +126,7 @@ Para destacar citas, crea una cita en bloque, agregando un `>` delante de un pá
 
 #### Resultado
 
-> Simplicity is the ultimate sophistication. >
+> Simplicity is the ultimate sophistication.
 >
 > — <cite>Steve Jobs[^1]</cite>
 
@@ -167,7 +179,9 @@ for (let i = 0; i < n; i++) {
 ```
 ````
 
-_Añado `\` delante del comentario para insertar el efecto en el ejemplo, en el resultado quitare el backslash._
+> Nota:
+> He añadido una barra invertida (\\) delante del comentario [!code ++:4] para mejorar la legibilidad y evitar que se muestre un fondo de color en el ejemplo.
+> En la versión final, eliminaré ese backslash.
 
 ### Resultado
 
@@ -267,7 +281,7 @@ for (let i = 0; i < n; i++) {
 
 > TIP
 >
-> Si necesitas usar simbolos como _\# \_ \*_ y no quieres que tengan efecto puedes hacer que "escapen" mediante la barra
+> Si necesitas usar símbolos como _\# \_ \*_ y no quieres que tengan efecto puedes hacer que "escapen" mediante la barra
 > invertida `\# \_ \*`
 
 ```markdown
@@ -291,11 +305,12 @@ Incluyendo superíndice `<sup>`, subíndice `<sub>`, abreviatura `<abbr>`, tacha
 <p>H<sub>2</sub>SO<sub>4</sub> es la fórmula del ácido sulfúrico</p>
 <p>E=mc<sup>2</sup> representa la famosa ecuación de Einstein</p>
 
-Los atajos como <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> aceleran el
-trabajo. Recuerda la filosofía <u title="Keep It Simple, Stupid">KISS</u>, a
-veces cuanto más <del>complejo</del> simple mejor. Los elementos
-<mark>destacados</mark> ayudan a enfatizar información importante. Para separar
-secciones, usa la etiqueta `
+Los atajos como <kbd>Cmd</kbd> + <kbd>C</kbd> y <kbd>Cmd</kbd>
+<kbd>V</kbd> aceleran el trabajo y <kbd>CTRL</kbd> <kbd>ALT</kbd>
+<kbd>SUPR</kbd> puede cerrar procesos. Recuerda la filosofía
+<u title="Keep It Simple, Stupid">KISS</u>, a veces cuanto más
+<del>complejo</del> simple mejor. Los elementos <mark>destacados</mark> ayudan a
+enfatizar información importante. Para separar secciones, usa la etiqueta `
 <hr />
 ` o tres guiones `---` para crear una línea horizontal como la siguiente:
 ```
@@ -314,11 +329,14 @@ secciones, usa la etiqueta `
   E=mc<sup>2</sup> representa la famosa ecuación de Einstein
 </p>
 
-Los atajos como <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> aceleran el
-trabajo. Recuerda la filosofía <u title="Keep It Simple, Stupid">KISS</u>, a
+Los atajos como <kbd>Cmd</kbd> + <kbd>C</kbd> y <kbd>Cmd</kbd> <kbd>V</kbd> aceleran el
+trabajo y <kbd>CTRL</kbd> <kbd>ALT</kbd> <kbd>SUPR</kbd> puede cerrar procesos.
+Recuerda la filosofía <u title="Keep It Simple, Stupid">KISS</u>, a
 veces cuanto más <del>complejo</del> simple mejor. Los elementos <mark>destacados</mark>
 ayudan a enfatizar información importante. Para separar
 secciones, usa la etiqueta `<hr />` o tres guiones `---` para crear una línea
 horizontal como la siguiente:
 
 ---
+
+axaxa
