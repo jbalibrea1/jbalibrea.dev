@@ -1,4 +1,4 @@
-name: Deploy based on branch
+name: CI/CD - Build, Push, Deploy 🐳
 
 on:
   push:
@@ -9,37 +9,46 @@ on:
       - refactor/*
 
 jobs:
-  deploy:
+  build-push-deploy:
     runs-on: ubuntu-latest
-    environment: ${{ contains(github.ref, 'main') && 'production' || 'staging' }}
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
-      - name: Login to GHCR
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "🔐 Successfully logged in to GitHub Container Registry."
 
-      - name: Build and Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/jbalibrea1/jbalibrea-web:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Build Docker image
+        run: |
+          docker build --build-arg PUBLIC_RECAPTCHA_KEY=${{ secrets.PUBLIC_RECAPTCHA_KEY }} -t ghcr.io/${{ github.repository_owner }}/jbalibreadev-web:latest .
+          echo "🐳 Docker image built successfully."
 
-      - name: Deploy via SSH
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/jbalibreadev-web:latest
+          echo "🚀 Docker image pushed to GitHub Container Registry."
+
+      - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.VPS_IP }}
+          host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /home/jbalibrea/docker/projects/jbalibrea.dev
-            docker compose pull
-            docker compose up -d --no-deps jbalibrea-web
+            cd ${{ secrets.VPS_PROJECT_PATH }}
+            docker-compose pull
+            docker-compose up -d --force-recreate
+            echo "✅ Deployment completed successfully on the VPS."

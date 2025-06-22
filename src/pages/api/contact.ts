@@ -3,10 +3,10 @@ import type { APIRoute } from 'astro';
 import nodemailer, { type TransportOptions } from 'nodemailer';
 import escapeHtml from '@utils/escapeHtml';
 
-const CONTACT_EMAIL = import.meta.env.CONTACT_EMAIL;
-const CONTACT_PASSWORD = import.meta.env.CONTACT_PASSWORD;
-const CONTACT_TO_SEND = import.meta.env.CONTACT_TO_SEND;
-const RECAPTCHA_SECRET_KEY = import.meta.env.RECAPTCHA_SECRET_KEY;
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL;
+const CONTACT_PASSWORD = process.env.CONTACT_PASSWORD;
+const CONTACT_TO_SEND = process.env.CONTACT_TO_SEND;
+const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 
 export const POST: APIRoute = async ({ request }) => {
   try {

@@ -17,10 +17,12 @@ const posts = await getCollection('posts');
 // obetnemos los posts ordenados por fecha
 const sortedPosts = getShortedPosts(posts);
 // obtenemos la info de los posts
-const dataPosts = sortedPosts.map(({ data: { title }, slug }) => ({
-  slug,
-  title,
-}));
+const dataPosts = sortedPosts.map(
+  ({ data: { title }, slug }): InfoPost => ({
+    slug,
+    title,
+  }),
+);
 
 // normalizmos el slug
 const currSlug = post.slug.split('/')[0];

@@ -1,4 +1,6 @@
+// @ts-nocheck
 import { h } from 'hastscript';
+
 // Nest a div in the outer layer
 export const updateStyle = () => {
   return {

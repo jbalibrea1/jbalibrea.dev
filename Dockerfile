@@ -17,6 +17,10 @@ FROM base AS build-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM build-deps AS build
+
+ARG PUBLIC_RECAPTCHA_KEY
+ENV PUBLIC_RECAPTCHA_KEY=$PUBLIC_RECAPTCHA_KEY
+
 COPY . .
 RUN pnpm run build
 
