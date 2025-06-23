@@ -1,27 +1,42 @@
 ---
+import { FormattedDatetime } from '@/components/DateTime';
 import unifiedText from '@utils/unifiedText';
+import { fade } from 'astro:transitions';
 
-const { post } = Astro.props;
+const { post, minutesRead } = Astro.props;
 const { title, description, author, pubDateTime, modDateTime } = post;
 const titleSlug = unifiedText(title);
-import { FormattedDatetime } from '@/components/DateTime';
-import { fade } from 'astro:transitions';
 ---
 
 <div
-  class="prose lg:prose-lg dark:prose-invert
-  prose-h1:font-extrabold prose-h1:text-5xl sm:prose-h1:text-6xl md:prose-h1:text-7xl prose-h1:tracking-tighter prose-h1:text-accent prose-h2:text-3xl prose-h3:text-base prose-h4:text-sm prose-p:text-text-color! prose-p:font-normal m-auto font-poppins prose-headings:font-sans w-full prose-img:rounded-md prose-headings:text-accent"
+  class="prose dark:prose-invert max-w-none
+  prose-h1:font-extrabold prose-h1:tracking-tighter prose-p:font-normal m-auto font-poppins prose-headings:font-sans w-full prose-img:rounded-md"
   id="content"
 >
   <h1
-    class="mb-1 antialiased hover:subpixel-antialiased"
+    class="mb-1 antialiased hover:subpixel-antialiased text-5xl sm:text-6xl md:text-7xl text-accent"
     transition:name={titleSlug}
   >
     {title}
   </h1>
   <p class="m-0 text-sm">
+    <p class="flex items-center gap-2 text-sm text-gray-600">
     <strong class="font-semibold tracking-tight">{author} </strong>
-    <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} />
+    <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} /> |
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v6l4 2m6-4a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      {minutesRead}
+    </p>
   </p>
   <div transition:animate={fade({ duration: '1s' })}>
     <p class="text-sm text italic" transition:name={`desc-${description}`}>
@@ -29,9 +44,7 @@ import { fade } from 'astro:transitions';
     </p>
   </div>
   <hr class="my-2" />
-  <article
-    class="prose-headings:underline prose-a:text-accent/80 prose-a:hover:text-accent"
-  >
+  <article class="prose-a:hover:text-accent prose-a:text-accent-2">
     <slot />
   </article>
 </div>

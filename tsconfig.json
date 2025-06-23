@@ -11,6 +11,6 @@
       "#*": ["./public/*"]
     }
   },
-  "include": [".astro/types.d.ts", "src/**/*", "public/**/*"],
+  "include": [".astro/types.d.ts", "src/**/*", "public/**/*", "plugins"],
   "exclude": ["dist"]
 }

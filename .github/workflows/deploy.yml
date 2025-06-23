@@ -1,5 +1,5 @@
-name: Deploy based on branch
-
+name: CI/CD - Build, Push, Deploy 🐳
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
     branches:
@@ -9,78 +9,83 @@ on:
       - refactor/*
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-    environment: ${{ contains(github.ref, 'main') && 'production' || 'staging' }}
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
-      - name: Determine Target
-        id: target
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - run: echo "🔐 Successfully logged in to GitHub Container Registry."
+
+      - id: build-image  
+        name: 🐳 Build and tag Docker image
         run: |
-          if [[ $GITHUB_REF == refs/heads/main ]]; then
-            echo "TARGET=/var/www/jbalibrea.dev" >> $GITHUB_OUTPUT
-            echo "PM2_APP=production-app" >> $GITHUB_OUTPUT
-            echo "ENV_FILE=.env.production" >> $GITHUB_OUTPUT
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/jbalibreadev-web
+          BRANCH_NAME="${{ github.ref_name }}"
+
+          if [[ "$BRANCH_NAME" == "main" ]]; then
+            TAG="latest"
           else
-            echo "TARGET=/var/www/pre.jbalibrea.dev" >> $GITHUB_OUTPUT
-            echo "PM2_APP=staging-app" >> $GITHUB_OUTPUT
-            echo "ENV_FILE=.env.staging" >> $GITHUB_OUTPUT
+            TAG="pre"
           fi
 
-      - name: Deploy Code and Build on VPS
-        uses: appleboy/ssh-action@master
+          echo "🔧 Building image with tag: $TAG"
+
+          docker build --build-arg PUBLIC_RECAPTCHA_KEY=${{ secrets.PUBLIC_RECAPTCHA_KEY }} \
+            -t $IMAGE_NAME:$TAG .
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
+
+      - name: 🚀 Push Docker image
+        run: |
+          docker push ${{ steps.build-image.outputs.IMAGE_NAME }}:${{ steps.build-image.outputs.TAG }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧠 Determine compose file to use
+        id: branch-check
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "COMPOSE_FILE=docker-compose.yml" >> $GITHUB_OUTPUT
+          else
+            echo "COMPOSE_FILE=docker-compose.pre.yml" >> $GITHUB_OUTPUT
+          fi
+
+      - name:  Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
-            # 1. Configuración inicial del entorno
-              set -e
-              export PATH="$HOME/.local/share/pnpm:$PATH"
-              source "$HOME/.bashrc" || true
-              
-              # 2. Gestión de PNPM con fallback a NPM
-              if ! command -v pnpm &> /dev/null; then
-                echo "=== PNPM no encontrado, intentando instalar ==="
-                curl -fsSL https://get.pnpm.io/install.sh | sh - || {
-                  echo "=== Falló la instalación de PNPM, usando NPM ==="
-                  # Crea alias temporal para usar npm como pnpm
-                  alias pnpm=npm
-                  alias pnpx=npx
-                }
-                source "$HOME/.bashrc" || true
-              fi
-              
-              # 3. Verificación del package manager
-              echo "=== Package Manager ==="
-              echo "Usando: $(which pnpm)"
-              echo "Versión: $(pnpm --version || npm --version)"
-              
-              # 4. Despliegue
-              cd "${{ steps.target.outputs.TARGET }}" || exit 1
-              git fetch
-              git checkout "${{ github.ref_name }}"
-              git pull origin "${{ github.ref_name }}"
-              
-              # Instalación con reintentos
-              pnpm install || {
-                echo "=== Falló pnpm install, intentando con npm ==="
-                npm install
-              }
-              
-              pnpm run build || {
-                echo "=== Falló pnpm build, intentando con npm ==="
-                npm run build
-              }
-              
-              if pm2 restart ${{ steps.target.outputs.PM2_APP }} --silent >/dev/null 2>&1; then
-                echo "🔄 Aplicación reiniciada correctamente"
-              else
-                echo "⚠️ Falló el reinicio de la app en PM2"
-              fi
-              
-              echo "✅ Despliegue completado"
+            cd ${{ secrets.VPS_PROJECT_PATH }}
+            ls -l
+            echo "🔧 Starting deployment on the VPS..."
+
+            if [[ "${{ github.ref_name }}" == "main" ]]; then
+              echo "🚀 Deploying production image using docker-compose.yml"
+            else
+              echo "⚙️ Deploying pre-production image using docker-compose.pre.yml"
+            fi
+
+            docker compose -f ${{ steps.branch-check.outputs.COMPOSE_FILE }} pull
+            echo "📦 Pulled the latest Docker image from GitHub Container Registry."
+
+            docker compose -f ${{ steps.branch-check.outputs.COMPOSE_FILE }} up -d --force-recreate
+            echo "✅ Deployment completed successfully on the VPS."

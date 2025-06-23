@@ -1,12 +1,12 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
-import nodemailer from 'nodemailer';
+import nodemailer, { type TransportOptions } from 'nodemailer';
 import escapeHtml from '@utils/escapeHtml';
 
-const CONTACT_EMAIl = import.meta.env.CONTACT_EMAIL;
-const CONTACT_PASSWORD = import.meta.env.CONTACT_PASSWORD;
-const CONTACT_TO_SEND = import.meta.env.CONTACT_TO_SEND;
-const RECAPTCHA_SECRET_KEY = import.meta.env.RECAPTCHA_SECRET_KEY;
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL;
+const CONTACT_PASSWORD = process.env.CONTACT_PASSWORD;
+const CONTACT_TO_SEND = process.env.CONTACT_TO_SEND;
+const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -62,15 +62,20 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
       host: 'smtp.gmail.com',
       port: 587,
-      secure: false,
+      secure: false, // true para 465, false para otros puertos
       auth: {
-        user: CONTACT_EMAIl,
+        user: CONTACT_EMAIL,
         pass: CONTACT_PASSWORD,
       },
-    });
+      connectionTimeout: 15000,
+      greetingTimeout: 10000,
+      socketTimeout: 30000,
+      family: 4, // importante para ipv4
+      debug: false,
+      logging: false,
+    } as TransportOptions);
 
     const mailOptions = {
       from: `"${safeName}" <${CONTACT_TO_SEND}>`,
