@@ -90,5 +90,9 @@ jobs:
             docker compose -f ${{ steps.branch-check.outputs.COMPOSE_FILE }} up -d --force-recreate
             echo "✅ Deployment completed successfully on the VPS."
 
-            docker-clean
-            echo "🧹 Cleaned up old Docker images and containers."
+            export PATH="$HOME/.local/bin:$PATH"
+            if command -v docker-clean > /dev/null; then
+              docker-clean
+            else
+              echo "⚠️ docker-clean no está instalado o no está en PATH"
+            fi
