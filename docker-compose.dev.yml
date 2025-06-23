@@ -1,5 +1,5 @@
 services:
-  app:
+  web-dev:
     image: jbalibrea-web-dev
     build: 
       context: .
