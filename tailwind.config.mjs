@@ -16,6 +16,8 @@ export default {
         textColor: 'rgb(var(--theme-text))',
         header: 'rgb(var(--theme-header))',
         'header-2': 'rgb(var(--theme-header-2))',
+        muted: 'rgb(var(--theme-muted))',
+        mutedfg: 'rgb(var(--theme-mutedfg))',
       },
       animation: {
         flip: 'flip 6s infinite steps(2, end)',
@@ -44,14 +46,66 @@ export default {
       },
       scale: ['group-a-hover'],
       fontFamily: {
-        sans: ['"Montserrat"', '"Poppins"', ...defaultTheme.fontFamily.sans],
-        poppins: ["'Poppins'", ...defaultTheme.fontFamily.serif],
+        // Satoshi, Inter, Montserrat
+        sans: ['"Satoshi"', '"Inter"', ...defaultTheme.fontFamily.sans],
+        //Funnel display, Montserrat, parkinsans
+        title: [
+          '"Funnel Display"',
+          '"Parkinsans"',
+          ...defaultTheme.fontFamily.serif,
+        ],
       },
     },
   },
   plugins: [
     require('@tailwindcss/typography'),
-    function ({ addVariant }) {
+    function ({ addVariant, addBase, theme }) {
+      addBase({
+        'h2,h3,h4,h5,h6': {
+          scrollMarginTop: '3rem',
+          fontWeight: '500',
+        },
+        'h1>a,h2>a,h3>a,h4>a,h5>a,h6>a': {
+          marginInlineStart: '0.75rem',
+          transition: 'opacity 0.2s ease',
+          opacity: '1',
+        },
+        'h1>a:focus,h2>a:focus,h3>a:focus,h4>a:focus,h5>a:focus,h6>a:focus': {
+          opacity: '1',
+        },
+        'h1:hover>a,h2:hover>a,h3:hover>a,h4:hover>a,h5:hover>a,h6:hover>a': {
+          opacity: '1',
+        },
+        'h1:target>a,h2:target>a,h3:target>a,h4:target>a,h5:target>a,h6:target>a':
+          {
+            opacity: '1',
+          },
+
+        'blockquote:not([class*="admonition-"])': {
+          position: 'relative',
+          overflow: 'hidden',
+          'border-width': '1px',
+          'border-left': 'inherit',
+          'border-radius': '10px',
+          'padding-inline': '1.6rem',
+          'border-color': theme('colors.muted'),
+          'box-shadow': '0 5px 0 ' + theme('colors.muted'),
+        },
+        'blockquote:not([class*="admonition-"])::after': {
+          color: theme('colors.mutedfg'),
+          position: 'absolute',
+          content: '"”"',
+          top: '-4rem',
+          right: '-1.2rem',
+          'font-size': '10rem',
+          transform: 'rotate(-15deg)',
+          opacity: '0.1',
+        },
+        'code:not(pre code)': {
+          'white-space': 'pre-wrap!important',
+          'overflow-wrap': 'anywhere!important',
+        },
+      });
       addVariant('group-a-hover', '.group-a:hover &');
       addVariant('readed', '&.readed'); // Habilita `readed:text-input`
       addVariant('highlight', '&.highlight'); // Para `highlight:text-primary`

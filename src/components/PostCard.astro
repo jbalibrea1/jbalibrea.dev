@@ -13,7 +13,7 @@ const titleSlug = unifiedText(title);
   <div>
     <a href={href} class="group block transition duration-300 ease-in-out">
       <h2
-        class="decoration-dashed underline-offset-2 focus-visible:no-underline focus-visible:underline-offset-0 text-accent opacity-80 text-3xl md:text-4xl font-extrabold tracking-tighter box-decoration-slice group-hover:underline group-hover:opacity-100 group-hover:decoration-2 group-hover:decoration-accent-2 group-hover:scale-[1.005] transition duration-300 ease-in-out"
+        class="font-title decoration-dashed underline-offset-2 focus-visible:no-underline focus-visible:underline-offset-0 text-accent opacity-80 text-3xl md:text-4xl font-extrabold tracking-tighter box-decoration-slice group-hover:underline group-hover:opacity-100 group-hover:decoration-2 group-hover:decoration-accent-2 group-hover:scale-[1.005] transition duration-300 ease-in-out font-blogheadings"
         transition:name={titleSlug}
       >
         {title}
@@ -27,7 +27,9 @@ const titleSlug = unifiedText(title);
     </a>
   </div>
   <div>
-    <div class="flex flex-wrap gap-2 md:max-w-40">
+    <div
+      class="flex flex-wrap gap-2 md:max-w-40 justify-start md:justify-end mb-4"
+    >
       {tags.map((tag: String) => <Tag tag={tag} />)}
     </div>
     <Datetime pubDateTime={pubDateTime} modDateTime={modDateTime} />

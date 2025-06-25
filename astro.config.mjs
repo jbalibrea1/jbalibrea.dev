@@ -13,6 +13,7 @@ import {
   transformerNotationWordHighlight,
   transformerRenderWhitespace,
 } from '@shikijs/transformers';
+import remarkDirective from 'remark-directive';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
@@ -20,6 +21,7 @@ import remarkToc from 'remark-toc';
 import { remarkReadingTime } from './plugins/remark-reading-time.mjs';
 import { addCopyButton, updateStyle } from './plugins/shiki-trans.ts';
 import rehypeExternalLinks from 'rehype-external-links';
+import { remarkAdmonitions } from './plugins/remark-admonitions.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,8 +30,10 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'github-dark', // github-dark-high-contrast, poimandres, tokyo-night, vesper
-      defaultColor: false,
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
       transformers: [
         transformerNotationDiff(),
         transformerNotationHighlight(),
@@ -46,6 +50,8 @@ export default defineConfig({
     remarkPlugins: [
       [remarkToc, { heading: 'Tabla de contenidos', maxDepth: 3 }],
       remarkReadingTime,
+      remarkDirective,
+      remarkAdmonitions,
     ],
     rehypePlugins: [
       rehypeAccessibleEmojis,

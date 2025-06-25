@@ -9,20 +9,20 @@ const titleSlug = unifiedText(title);
 ---
 
 <div
-  class="prose dark:prose-invert max-w-none
-  prose-h1:font-extrabold prose-h1:tracking-tighter prose-p:font-normal m-auto font-poppins prose-headings:font-sans w-full prose-img:rounded-md"
+  class="prose prose-base dark:prose-invert max-w-none
+  prose-h1:font-extrabold prose-h1:tracking-tighter prose-p:font-normal m-auto w-full prose-img:rounded-md"
   id="content"
 >
   <h1
-    class="mb-1 antialiased hover:subpixel-antialiased text-5xl sm:text-6xl md:text-7xl text-accent"
+    class="font-title mb-1 antialiased hover:subpixel-antialiased text-5xl md:text-6xl lg:text-7xl text-accent font-light"
     transition:name={titleSlug}
   >
     {title}
   </h1>
   <p class="m-0 text-sm">
-    <p class="flex items-center gap-2 text-sm text-gray-600">
-    <strong class="font-semibold tracking-tight">{author} </strong>
-    <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} /> |
+    <p class="flex items-center gap-2 text-xs text-mutedfg/80">
+      <strong class="font-semibold tracking-tight">{author} </strong>
+      <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} /> |
       <svg
         class="w-4 h-4"
         fill="none"
@@ -39,12 +39,12 @@ const titleSlug = unifiedText(title);
     </p>
   </p>
   <div transition:animate={fade({ duration: '1s' })}>
-    <p class="text-sm text italic" transition:name={`desc-${description}`}>
+    <p class="text-xs text italic" transition:name={`desc-${description}`}>
       {description}
     </p>
   </div>
-  <hr class="my-2" />
-  <article class="prose-a:hover:text-accent prose-a:text-accent-2">
+  <hr class="!my-1" />
+  <article class="prose-a:hover:text-accent-2">
     <slot />
   </article>
 </div>
