@@ -1,17 +1,30 @@
 ---
-const { href, class: className = '' } = Astro.props;
+import { cn } from '@/lib/utils.ts';
+
+interface Props {
+  href: string;
+  class?: string;
+  arrow?: boolean;
+}
+
+const { href, class: className = '', arrow = true } = Astro.props as Props;
+
 const isFootnote =
   className.includes('data-footnote-backref') ||
   href.startsWith('#user-content');
+const disabledSvg = !arrow || isFootnote;
 ---
 
 <a
   href={href}
-  class="group inline-flex items-center gap-1 transition-all underline hover:no-underline"
+  class={cn(
+    'group inline-flex items-center gap-1 transition-all underline hover:no-underline',
+    className,
+  )}
 >
   <slot />
   {
-    !isFootnote && (
+    !disabledSvg && (
       <svg
         class="w-3 h-3 -rotate-45 transition-transform group-hover:scale-110"
         xmlns="http://www.w3.org/2000/svg"

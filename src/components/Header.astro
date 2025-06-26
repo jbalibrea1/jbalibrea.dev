@@ -32,15 +32,15 @@ const navigatorItems = [
   class={`top-0 backdrop-blur-md bg-bg-color/60 z-50 w-full px-4 sm:px-8 ${sticky ? 'sticky' : ''}`}
 >
   <nav
-    class="flex py-3 justify-between items-center text-sm sm:text-base md:text-lg tracking-tight"
+    class="flex py-3 justify-between items-center sm:text-base md:text-lg tracking-tight"
     aria-label="Main Navigation"
   >
     <a
       href="/"
-      class=`${getNavItemClass(false)} opacity-100 font-bold hover-underline-animation transition-opacity bg-clip-text bg-linear-to-r from-header-2 to-header text-transparent`
+      class=`${getNavItemClass(false)} opacity-100 font-bold hover-underline-animation transition-opacity bg-clip-text bg-linear-to-r from-header to-accent text-transparent`
       >jbalibrea.dev</a
     >
-    <ul class="flex gap-4 items-center uppercase">
+    <ul class="flex gap-2 md:gap-4 items-center uppercase">
       {
         navigatorItems.map((item) => (
           <li>

@@ -41,7 +41,7 @@
   /* Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--theme-accent-2)) transparent;
+    scrollbar-color: oklch(var(--theme-accent-2)) transparent;
   }
 
   #sidebar {
@@ -51,7 +51,7 @@
 
   .astro-code {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--theme-accent-2)) #333;
+    scrollbar-color: oklch(var(--theme-accent-2)) #333;
   }
 
   /* webkit */
@@ -70,9 +70,9 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--theme-accent-2));
+    background-color: oklch(var(--theme-accent-2));
     border-radius: 999px;
-    border: 2px solid rgb(var(--theme-bg-2));
+    border: 2px solid oklch(var(--theme-bg-2));
     opacity: 0.5;
   }
 
@@ -95,34 +95,66 @@
     opacity: 0.5;
   }
 
+  /* html { */
+  /*   @apply scroll-smooth  [&::-webkit-scrollbar-thumb]:bg-neutral-300; */
+  /*   --theme-bg: 250 250 250; */
+  /*   --theme-bg-2: 255 255 255; */
+  /*   --theme-link: 179 61 120; */
+  /*   --theme-text: 34 39 42; */
+  /*   --theme-accent: 192 58 101; */
+  /*   --theme-accent-2: 22 178 152; */
+  /*   --theme-quote: 203 42 66; */
+  /*   --theme-header: 245 102 157; */
+  /*   --theme-header-2: 107 52 147; */
+  /*   --theme-muted: 239 239 239; */
+  /*   --theme-mutedfg: 34 39 42; */
+  /* } */
+  /**/
+  /* html.dark { */
+  /*   @apply scroll-smooth [&::-webkit-scrollbar-thumb]:bg-neutral-600; */
+  /*   --theme-bg: 24 24 27; */
+  /*   --theme-bg-2: 16 16 16; */
+  /*   --theme-link: 212 130 171; */
+  /*   --theme-text: 224 224 224; */
+  /*   --theme-accent: 255 168 197; */
+  /*   --theme-accent-2: 51 230 200; */
+  /*   --theme-quote: 205 255 184; */
+  /*   --theme-header: 254 180 214; */
+  /*   --theme-header-2: 193 184 255; */
+  /*   --theme-muted: 36 41 46; */
+  /*   --theme-mutedfg: 234 234 234; */
+  /* } */
+  /*TODO: add to var en removed comment*/
   html {
     @apply scroll-smooth  [&::-webkit-scrollbar-thumb]:bg-neutral-300;
-    --theme-bg: 250 250 250;
-    --theme-bg-2: 255 255 255;
-    --theme-link: 179 61 120;
-    --theme-text: 34 39 42;
-    --theme-accent: 192 58 101;
-    --theme-accent-2: 22 178 152;
-    --theme-quote: 203 42 66;
-    --theme-header: 245 102 157;
-    --theme-header-2: 107 52 147;
-    --theme-muted: 239 239 239;
-    --theme-mutedfg: 34 39 42;
+    --theme-bg: 1 0 0;
+    --theme-bg-2: 100% 0 0;
+    --theme-link: 47.7% 0.156 342.56;
+    --theme-text: 11.3% 0.019 268.4;
+    --theme-accent: 58.6% 0.253 17.585;
+    --theme-accent-bg: 58.6% 0.253 17.585;
+    --theme-accent-2: 68.4% 0.1236 176.93;
+    --theme-quote: 38.3% 0.252 345.98;
+    --theme-header: 58.9% 0.258 341.56;
+    --theme-header-2: 26.4% 0.198 293.87;
+    --theme-muted: 0.967 0.001 286.375;
+    --theme-mutedfg: 11.3% 0.019 268.4;
   }
 
   html.dark {
     @apply scroll-smooth [&::-webkit-scrollbar-thumb]:bg-neutral-600;
-    --theme-bg: 24 24 27;
-    --theme-bg-2: 16 16 16;
-    --theme-link: 212 130 171;
-    --theme-text: 224 224 224;
-    --theme-accent: 255 168 197;
-    --theme-accent-2: 51 230 200;
-    --theme-quote: 205 255 184;
-    --theme-header: 254 180 214;
-    --theme-header-2: 193 184 255;
-    --theme-muted: 36 41 46;
-    --theme-mutedfg: 234 234 234;
+    --theme-bg: 0.141 0.005 285.823;
+    --theme-bg-2: 6.6% 0 0;
+    --theme-link: 55.9% 0.162 336.74;
+    --theme-text: 88.5% 0.004 264.36;
+    --theme-accent: 82.4% 0.1079 358.16;
+    --theme-accent-bg: 64.5% 0.246 16.439;
+    --theme-accent-2: 83.22% 0.1438 178.01;
+    --theme-quote: 90% 0.173 140.13;
+    --theme-header: 78.6% 0.23 342.87;
+    --theme-header-2: 81.5% 0.099369 289.8129;
+    --theme-muted: 27.8% 0.0117 248.25;
+    --theme-mutedfg: 91.9% 0.004 264.37;
   }
 
   body {
@@ -192,12 +224,12 @@
     display: none;
   }
 
-  /* TODO: */
+  /* TODO: toc */
   .highlight {
     @apply font-medium text-accent;
   }
   .highlight-bg-translucent {
-    @apply bg-bg-color-2;
+    @apply bg-muted/60;
   }
   .readed {
     @apply text-text-color;
@@ -206,26 +238,25 @@
     @apply bg-accent;
   }
 
-  /* FORM */
+  #tabla-de-contenidos a {
+    @apply hover:text-current;
+  }
+
+  /* FORM contact */
 
   input,
   textarea {
-    @apply text-black border-2 border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-hidden bg-white;
+    @apply border-b-1 p-2 focus:border-accent-bg focus:outline-hidden !bg-transparent;
   }
 
   form button {
-    @apply bg-link text-bg-color-2 font-extrabold tracking-tighter text-xl p-2 rounded-md  transition duration-200 opacity-80 hover:opacity-100;
+    @apply bg-accent-bg text-white  shadow-2xl  font-extrabold  tracking-tighter p-2 rounded-md transition duration-200  hover:bg-accent-bg/90;
   }
 
   /* copy code */
   .copy-code {
     @apply absolute right-3 -top-3 rounded-md  px-2 py-1 text-xs leading-4 font-medium bg-black text-white border border-1 hover:scale-[1.05]
     transition-transform duration-150 ease-in-out;
-  }
-
-  /* TOC */
-  #tabla-de-contenidos a {
-    @apply hover:text-current;
   }
 
   /* shiki */
@@ -240,7 +271,7 @@
     border-radius: 0.5rem;
     margin: 0;
     padding-inline: 0 !important;
-    background-color: rgb(var(--theme-muted)) !important;
+    background-color: oklch(var(--theme-muted)) !important;
     & pre {
       margin: 0 !important;
       padding-inline: 0 !important;
@@ -263,7 +294,7 @@
           content: '';
           display: block;
           z-index: 1;
-          background-color: rgb(var(--theme-muted)) !important;
+          background-color: oklch(var(--theme-muted)) !important;
         }
         & .line {
           padding-inline-end: 2rem;
@@ -275,13 +306,13 @@
             counter-increment: step;
             inset-inline-start: 0;
             justify-content: end;
-            background-color: rgb(var(--theme-muted));
+            background-color: oklch(var(--theme-muted));
             display: inline-flex;
             width: 2rem;
             padding-inline-end: 0.75rem;
             box-sizing: content-box;
             z-index: 2;
-            color: rgb(255 168 197);
+            color: oklch(255 168 197);
             @apply backdrop-blur-xs text-accent;
           }
           &:last-child:empty,
