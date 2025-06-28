@@ -5,9 +5,9 @@ import Prose from '@/components/Prose.astro';
 import type { InfoPost } from '@/interfaces/InfoPost';
 import MediumZoom from '@components/MediumZoom.astro';
 import ProgressBarBlog from '@components/ProgressBarBlog.astro';
-import BaseLayout from './BaseLayout.astro';
-import { getCollection } from 'astro:content';
 import getShortedPosts from '@utils/getSorterPosts';
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
 
 const { post, remarkPluginFrontmatter } = Astro.props;
 const { title, description, image } = post.data;
@@ -43,16 +43,6 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
 >
   <main>
     <div class="flex gap-12 max-w-full">
-      <!-- side bar-->
-      <aside
-        class="top-20 min-w-48 basis-60 md:sticky md:order-2 lg:shrink-0 hidden md:block"
-        style="height:calc(85vh - 5rem);"
-      >
-        <div class="h-full overflow-y-auto" id="sidebar">
-          <slot name="sidebar" />
-        </div>
-      </aside>
-      <!-- end side bar-->
       <div class="flex-1 min-w-0">
         <Prose
           post={post.data}
@@ -61,10 +51,59 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
           <slot />
         </Prose>
       </div>
+
+      <!-- side bar-->
+      <aside
+        class="fixed top-0 left-0 w-3/4 sm:w-2/3 md:w-2/4 lg:w-64 bg-bg-color-2 z-50 h-svh overflow-y-auto transform -translate-x-full transition-transform duration-300
+       lg:sticky lg:top-20 lg:translate-x-0 lg:block lg:h-[calc(95vh-5rem)] lg:bg-transparent lg:shrink-0 py-4 px-2"
+        id="sidebar"
+      >
+        <div class="h-full overflow-y-auto" id="sidebar">
+          <slot name="sidebar" />
+        </div>
+      </aside>
+      <div
+        id="sidebar-shade"
+        class="fixed top-0 start-0 w-full h-full"
+        style="display:none;background-color:#00000091;z-index:31"
+      >
+      </div>
+      <!-- end side bar-->
     </div>
     <PostComment client:only="react" />
     <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
+    <button id="sidebar-btn" class="lg:hidden helpers fixed bottom-22"
+      >☰</button
+    >
   </main>
   <MediumZoom />
   <ProgressBarBlog />
 </BaseLayout>
+
+<script is:inline>
+  function initSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBtn = document.getElementById('sidebar-btn');
+    const sidebarShade = document.getElementById('sidebar-shade');
+
+    function toggleSidebar() {
+      const isOpen = !sidebar.classList.contains('-translate-x-full');
+      if (isOpen) {
+        sidebar.classList.add('-translate-x-full');
+        document.body.classList.remove('no-scroll');
+        sidebarShade.style.display = 'none';
+      } else {
+        sidebar.classList.remove('-translate-x-full');
+        document.body.classList.add('no-scroll');
+        sidebarShade.style.display = 'block';
+      }
+    }
+
+    sidebarBtn?.addEventListener('click', toggleSidebar);
+    sidebarShade?.addEventListener('click', toggleSidebar);
+  }
+
+  initSidebar();
+
+  document.addEventListener('astro:after-swap', scrollSetup);
+</script>

@@ -4,12 +4,12 @@
 
 <button
   aria-label="Back to Top"
-  class="z-90 fixed bottom-8 end-4 flex h-10 w-10 translate-y-28 items-center justify-center rounded-full border border-transparent bg-muted/70 text-3xl opacity-0 transition-all duration-300 hover:border-accent-2 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12 outline outline-accent-2/70 shadow-2xl"
+  class="helpers fixed bottom-4 flex translate-y-28 items-center justify-center text-3xl opacity-0 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 text-xs"
   data-show="false"
   id="to-top-btn"
   ><svg
     aria-hidden="true"
-    class="h-6 w-6 text-accent-2"
+    class="h-6 w-6"
     fill="none"
     focusable="false"
     stroke="currentColor"
@@ -23,42 +23,35 @@
       stroke-linejoin="round"></path>
   </svg>
 </button>
+<script is:inline>
+  function scrollSetup() {
+    const toTopBtn = document.getElementById('to-top-btn');
+    const nav = document.getElementById('scrollable-nav');
+    if (!toTopBtn || !nav) return;
 
-<script is:inline data-astro-rerun>
-  (function () {
-    /** Scrolls the document to the top when
-     * the "Back to Top" button is clicked. */
-    function backToTop() {
-      document.querySelector('#to-top-btn')?.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-      });
-    }
-    backToTop();
+    const showToTop = document.documentElement.scrollHeight > 1000;
 
-    /** Show or hide the "Back to Top" button
-     * based on the scroll position. */
+    toTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     let lastScrollTop = 0;
 
-    function showBackToTop() {
-      const toTopBtn = document.querySelector('#to-top-btn');
-      if (toTopBtn) {
-        const currentScrollTop =
-          document.body.scrollTop || document.documentElement.scrollTop;
+    window.addEventListener('scroll', () => {
+      const curr = window.scrollY;
+      const atTop = curr <= 20;
+      const goingUp = curr < lastScrollTop;
+      const showBtn = showToTop && curr > 20 && goingUp && curr > 300;
+      const showNav = curr < 300 || goingUp || atTop || !showToTop;
 
-        if (currentScrollTop < lastScrollTop && currentScrollTop > 20) {
-          toTopBtn.dataset.show = 'true';
-        } else if (currentScrollTop < 20) {
-          toTopBtn.dataset.show = 'false';
-        } else {
-          toTopBtn.dataset.show = 'false';
-        }
+      toTopBtn.dataset.show = showBtn ? 'true' : 'false';
+      nav.dataset.show = showNav ? 'true' : 'false';
+      nav.classList.toggle('not-top', !atTop);
 
-        lastScrollTop = currentScrollTop;
-      }
-    }
+      lastScrollTop = curr;
+    });
+  }
+  scrollSetup();
 
-    document.addEventListener('scroll', showBackToTop);
-  })();
+  document.addEventListener('astro:after-swap', scrollSetup);
 </script>
