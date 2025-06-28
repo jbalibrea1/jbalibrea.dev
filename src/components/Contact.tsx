@@ -91,23 +91,25 @@ export default function Contact({ siteKey }: ContactProps) {
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4" id="contact-form">
-      <label htmlFor="name" className="text-lg">
-        Nombre:
-      </label>
-      <input type="text" name="name" id="name" required />
-      <label htmlFor="email" className="text-lg">
-        Email:
-      </label>
-      <input type="email" name="email" id="email" required />
-      <label htmlFor="message" className="text-lg">
-        Mensaje:
-      </label>
-      <textarea
-        name="message"
-        id="message"
+      <input
+        placeholder="Tu nombre"
+        type="text"
+        name="name"
         autoComplete="off"
         required
-        className="min-h-[150px] max-h-[250px] h-min p-3 border rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-400"
+      />
+      <input
+        placeholder="Tu email"
+        type="email"
+        name="email"
+        autoComplete="email"
+        required
+      />
+      <textarea
+        placeholder="Redacta tu mensaje aquí"
+        name="message"
+        required
+        className="min-h-[150px] max-h-[250px] h-min "
       />
       <ReCAPTCHA
         sitekey={siteKey}
@@ -118,7 +120,7 @@ export default function Contact({ siteKey }: ContactProps) {
       <button
         type="submit"
         disabled={loading}
-        className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-60"
+        className="flex items-center justify-center gap-2 px-4"
       >
         {loading && (
           <svg

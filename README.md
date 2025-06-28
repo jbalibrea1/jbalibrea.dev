@@ -25,4 +25,12 @@ pnpm i
 pnpm dev
 ```
 
+Or run it via docker:
+
+```bash
+git clone https://github.com/jbalibrea1/jbalibrea.dev.git
+cd jbalibrea.dev
+docker compose -f docker-compose.dev.yml up
+```
+
 Feel free to explore and contribute!

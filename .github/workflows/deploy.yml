@@ -66,7 +66,7 @@ jobs:
             echo "COMPOSE_FILE=docker-compose.pre.yml" >> $GITHUB_OUTPUT
           fi
 
-      - name:  Deploy to VPS via SSH
+      - name: 🔐 Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -89,3 +89,10 @@ jobs:
 
             docker compose -f ${{ steps.branch-check.outputs.COMPOSE_FILE }} up -d --force-recreate
             echo "✅ Deployment completed successfully on the VPS."
+
+            export PATH="$HOME/.local/bin:$PATH"
+            if command -v docker-clean > /dev/null; then
+              docker-clean
+            else
+              echo "⚠️ docker-clean no está instalado o no está en PATH"
+            fi

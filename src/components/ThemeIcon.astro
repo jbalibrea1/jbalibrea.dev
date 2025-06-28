@@ -63,7 +63,11 @@
         meta.id = 'theme-color';
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', isDark ? '#272B34' : '#fafafa');
+
+      const root = document.documentElement;
+      const styles = getComputedStyle(root);
+      const bg = styles.getPropertyValue('--theme-bg').trim();
+      meta.setAttribute('content', `oklch(${bg})`);
 
       localStorage.setItem('theme', theme);
     };

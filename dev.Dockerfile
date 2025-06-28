@@ -5,6 +5,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 WORKDIR /app
 
+#TODO: better node_modules?
+
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 COPY . .

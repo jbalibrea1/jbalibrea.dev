@@ -1,30 +1,44 @@
 @import 'tailwindcss';
-
+@import './markdown.css';
+@import './fonts.css';
 @config '../../tailwind.config.mjs';
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
+:root {
+  --radius: 0.65rem;
+  --theme-bg: 1 0 0;
+  --theme-bg-2: 100% 0 0;
+  --theme-link: 47.7% 0.156 342.56;
+  --theme-text: 11.3% 0.019 268.4;
+  --theme-accent: 58.6% 0.253 17.585;
+  --theme-accent-bg: 58.6% 0.253 17.585;
+  --theme-accent-2: 68.4% 0.1236 176.93;
+  --theme-quote: 38.3% 0.252 345.98;
+  --theme-header: 58.9% 0.258 341.56;
+  --theme-header-2: 26.4% 0.198 293.87;
+  --theme-muted: 0.967 0.001 286.375;
+  --theme-mutedfg: 11.3% 0.019 268.4;
 }
-*/
+
+.dark {
+  --theme-bg: 0.141 0.005 285.823;
+  --theme-bg-2: 6.6% 0 0;
+  --theme-link: 55.9% 0.162 336.74;
+  --theme-text: 88.5% 0.004 264.36;
+  --theme-accent: 82.4% 0.1079 358.16;
+  --theme-accent-bg: 64.5% 0.246 16.439;
+  --theme-accent-2: 83.22% 0.1438 178.01;
+  --theme-quote: 90% 0.173 140.13;
+  --theme-header: 78.6% 0.23 342.87;
+  --theme-header-2: 81.5% 0.099369 289.8129;
+  --theme-muted: 0.21 0.006 285.885;
+  --theme-mutedfg: 91.9% 0.004 264.37;
+}
 
 @layer base {
   /* Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--theme-accent-2)) transparent;
+    scrollbar-color: oklch(var(--theme-accent-2)) transparent;
   }
 
   #sidebar {
@@ -34,7 +48,7 @@
 
   .astro-code {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--theme-accent-2)) #333;
+    scrollbar-color: oklch(var(--theme-accent-2)) #333;
   }
 
   /* webkit */
@@ -53,9 +67,9 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--theme-accent-2));
+    background-color: oklch(var(--theme-accent-2));
     border-radius: 999px;
-    border: 2px solid rgb(var(--theme-bg-2));
+    border: 2px solid oklch(var(--theme-bg-2));
     opacity: 0.5;
   }
 
@@ -79,33 +93,16 @@
   }
 
   html {
-    @apply scroll-smooth  [&::-webkit-scrollbar-thumb]:bg-neutral-300;
-    --theme-bg: 250 250 250;
-    --theme-bg-2: 255 255 255;
-    --theme-link: 179 61 120;
-    --theme-text: 34 39 42;
-    --theme-accent: 192 58 101;
-    --theme-accent-2: 30 118 98;
-    --theme-quote: 203 42 66;
-    --theme-header: 245 102 157;
-    --theme-header-2: 107 52 147;
-  }
-
-  html.dark {
-    @apply scroll-smooth [&::-webkit-scrollbar-thumb]:bg-neutral-600;
-    --theme-bg: 24 24 27;
-    --theme-bg-2: 16 16 16;
-    --theme-link: 212 130 171;
-    --theme-text: 224 224 224;
-    --theme-accent: 255 168 197;
-    --theme-accent-2: 51 230 200;
-    --theme-quote: 205 255 184;
-    --theme-header: 254 180 214;
-    --theme-header-2: 193 184 255;
+    @apply scroll-smooth;
   }
 
   body {
     @apply container min-h-svh mx-auto lg:px-0 text-text-color bg-bg-color antialiased flex items-center flex-col;
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+    touch-action: none;
   }
 
   body,
@@ -115,6 +112,13 @@
 
   main {
     @apply flex-1 flex flex-col gap-4 pt-8 px-4 md:px-8 w-full relative;
+  }
+
+  .title {
+    @apply font-title text-4xl text-current uppercase inline-block;
+  }
+  .title-bold {
+    @apply font-extrabold tracking-tight dark:text-white;
   }
 
   .disabled {
@@ -144,229 +148,36 @@
     @apply scale-x-100 opacity-100;
   }
 
-  /* Custom single backtick style */
-  .prose
-    :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    @apply rounded-md py-[0.2em] px-[0.5em] dark:bg-bg-color-2 bg-gray-200 !font-thin tracking-normal shadow-xl;
-  }
-  .prose
-    :where(code):not(
-      :where([class~='not-prose'], [class~='not-prose'] *)
-    )::before,
-  .prose
-    :where(code):not(
-      :where([class~='not-prose'], [class~='not-prose'] *)
-    )::after {
-    content: '' !important;
-    display: none;
-  }
-
-  /* TODO: */
-  .highlight {
-    @apply font-medium text-accent;
-  }
-  .highlight-bg-translucent {
-    @apply bg-bg-color-2;
-  }
-  .readed {
-    @apply text-text-color;
-  }
-  .highlight-bg {
-    @apply bg-accent;
-  }
-
-  /* FORM */
-
+  /* FORM contact */
   input,
   textarea {
-    @apply text-black border-2 border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-hidden bg-white;
+    @apply border-b-1 p-2 focus:border-accent-bg focus:outline-hidden !bg-transparent;
   }
 
   form button {
-    @apply bg-link text-bg-color-2 font-extrabold tracking-tighter text-xl p-2 rounded-md  transition duration-200 opacity-80 hover:opacity-100;
+    @apply bg-accent-bg text-white  shadow-2xl  font-extrabold  tracking-tighter p-2 rounded-md transition duration-200  hover:bg-accent-bg/90;
   }
 
-  /* copy code */
-  .copy-code {
-    @apply absolute right-3 -top-3 rounded-md  px-2 py-1 text-xs leading-4 font-medium bg-black text-white border border-1 hover:scale-[1.05]
-    transition-transform duration-150 ease-in-out;
+  /* navbar */
+  #scrollable-nav {
+    transition:
+      padding 0.3s,
+      transform 0.3s,
+      margin-inline 5.3s,
+      border 0.15s,
+      background-color 0.15s;
+
+    @apply ease-in-out z-50 top-0 backdrop-blur-md bg-bg-color/60 w-full px-4 sm:px-8 border-b border-transparent sticky rounded-xl;
+
+    &.not-top {
+      @apply px-8 sm:px-12 shadow-lg top-2 border border-muted bg-bg-color-2/50;
+    }
+    &[data-show='false'] {
+      transform: translateY(-5rem);
+    }
   }
 
-  /* TOC */
-  #tabla-de-contenidos a {
-    @apply !text-red-500 hover:text-current;
-  }
-
-  /* shiki */
-
-  :not(pre) > code {
-    @apply rounded-md p-1;
-  }
-
-  .astro-code {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.5rem;
-    margin: 0;
-    padding-inline: 0 !important;
-    position: relative;
-    & pre {
-      margin: 0 !important;
-      padding-inline: 0 !important;
-      background: inherit !important;
-      overflow-x: scroll;
-      & code {
-        display: block;
-        width: fit-content;
-        min-width: 100%;
-        min-height: 1.5rem;
-        counter-reset: step;
-        counter-increment: step 0;
-        /* background: inherit !important; */
-        &::before {
-          position: absolute;
-          inset-inline-start: 0;
-          width: 2.75rem;
-          top: 0.8571429em;
-          bottom: 0;
-          content: '';
-          display: block;
-          z-index: 1;
-          background-color: #24292e !important;
-        }
-        & .line {
-          padding-inline-end: 2rem;
-          &::before {
-            @apply mr-1 w-[1rem];
-            position: sticky !important;
-            content: counter(step);
-            counter-increment: step;
-            inset-inline-start: 0;
-            justify-content: end;
-            display: inline-flex;
-            width: 2rem;
-            padding-inline-end: 0.75rem;
-            box-sizing: content-box;
-            z-index: 2;
-            background-color: inherit !important;
-            color: rgb(255 168 197);
-            @apply backdrop-blur-xs;
-          }
-          &:last-child:empty,
-          &:last-child:has(> span:empty:only-child) {
-            display: none;
-          }
-        }
-      }
-    }
-
-    /* Shiki transformer */
-    &:has(code) {
-      position: relative;
-    }
-    &:has(div.title) {
-      padding-top: 2rem;
-      & code::before {
-        top: calc(2rem + 0.8571429em);
-      }
-    }
-    & .language {
-      transition: opacity 0.3s;
-      position: absolute;
-      top: 0.75rem;
-      right: 0;
-    }
-    & button.copy {
-      transition: opacity 0.3s;
-      opacity: 0;
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      user-select: none;
-      z-index: 3;
-      & .success::before {
-        content: 'Copiado!';
-        position: absolute;
-        right: 100%;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 0.75rem;
-        padding: 0.5rem;
-        margin-right: 0.5rem;
-        border-radius: 0.25rem;
-        opacity: 1;
-        @apply bg-gray-700 text-gray-300 transition-all;
-      }
-      &.copied {
-        & .success {
-          display: block !important;
-        }
-
-        & .ready {
-          display: none;
-        }
-      }
-    }
-    &:hover {
-      button.copy {
-        opacity: 1;
-      }
-      .language {
-        opacity: 0;
-      }
-    }
-
-    & .highlighted,
-    & .diff {
-      min-width: 100%;
-      display: inline-block;
-    }
-
-    &.has-focused {
-      .line {
-        filter: blur(0.07rem);
-        &.focused {
-          filter: blur(0);
-        }
-      }
-    }
-
-    &.has-highlighted {
-      & .line.highlighted {
-        background-color: rgba(149, 166, 183, 0.32) !important;
-        & ::before {
-          background-color: rgba(149, 166, 183, 0.32) !important;
-        }
-      }
-      & .line.focused {
-        filter: blur(0.095rem);
-        &.focused {
-          filter: blur(0);
-        }
-      }
-    }
-    & .diff {
-      &.remove {
-        background-color: rgba(244, 63, 94, 0.16) !important;
-        &::before {
-          content: '-';
-          background-color: rgba(244, 63, 94, 0.16) !important;
-          opacity: 1;
-        }
-      }
-      &.add {
-        background-color: rgba(16, 185, 129, 0.16) !important;
-        &::before {
-          content: '+';
-          background-color: rgba(16, 185, 129, 0.16) !important;
-        }
-      }
-    }
-    .highlighted-word {
-      @apply rounded-md border border-gray-300 bg-slate-100 p-1;
-    }
+  button.helpers {
+    @apply z-90 rounded-full border border-muted/80 bg-bg-color hover:bg-muted/80 transition-all duration-300 outline outline-muted/20 shadow-lg h-10 w-10 sm:h-12 sm:w-12 right-5  sm:right-8 lg:right-30;
   }
 }

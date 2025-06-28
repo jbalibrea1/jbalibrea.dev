@@ -4,7 +4,7 @@
   function createProgressBar() {
     // Create the main container div
     const progressContainer = document.createElement('div');
-    progressContainer.className = 'fixed top-0 z-10 h-1 w-full';
+    progressContainer.className = 'fixed top-0 z-10 h-1 w-full z-99';
 
     // Create the progress bar div
     const progressBar = document.createElement('div');
@@ -22,19 +22,32 @@
   /** Update the progress bar
    *  when user scrolls */
   function updateScrollProgress() {
+    const article = document.querySelector('article');
+    const myBar = document.getElementById('myBar');
+
+    if (!article || !myBar) return;
+
     document.addEventListener('scroll', () => {
-      const winScroll =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      const height =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      if (document) {
-        const myBar = document.getElementById('myBar');
-        if (myBar) {
-          myBar.style.width = scrolled + '%';
-        }
+      const articleRect = article.getBoundingClientRect();
+      const articleTop = articleRect.top + window.scrollY;
+      const articleHeight = article.scrollHeight;
+      const scrollTop = window.scrollY;
+
+      const scrollWithinArticle = scrollTop - articleTop;
+      const scrollableHeight = articleHeight - window.innerHeight;
+
+      // Si aún no se ha llegado al artículo o ya se ha pasado, oculta barra
+      if (scrollWithinArticle <= 0) {
+        myBar.style.width = '0%';
+        return;
       }
+      if (scrollWithinArticle >= scrollableHeight) {
+        myBar.style.width = '100%';
+        return;
+      }
+
+      const progress = (scrollWithinArticle / scrollableHeight) * 100;
+      myBar.style.width = `${progress}%`;
     });
   }
   updateScrollProgress();

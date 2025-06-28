@@ -19,11 +19,7 @@ const description =
 
 <BaseLayout title={pageTitle} description={description}>
   <main>
-    <h1
-      class="text-4xl text-current font-extrabold tracking-tight dark:text-white uppercase"
-    >
-      # Tags
-    </h1>
+    <h1 class="title title-bold"># Tags</h1>
     <div class="flex flex-col flex-wrap gap-4 mt-5">
       {
         Object.keys(tags).map((k) => (

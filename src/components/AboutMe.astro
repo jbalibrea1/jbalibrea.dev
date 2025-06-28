@@ -1,5 +1,6 @@
 ---
 import jorge from '@/assets/jorge-wo-bg.png';
+import LinkWithArrow from '@/components/LinkWithArrow.astro';
 import { Image } from 'astro:assets';
 
 const messages = ['Hey', 'Hola', 'Saludos', 'Qué tal', 'Hello', 'Hi'];
@@ -9,85 +10,58 @@ const msg = randomMessage();
 ---
 
 <div
-  class="flex flex-col-reverse sm:flex-row items-center sm:items-start gap-4 sm:gap-16 pb-8"
+  class="flex flex-col-reverse sm:flex-row items-center gap-4 sm:gap-32 pb-8 min-h-[90vh]"
 >
-  <div class="flex flex-col gap-4 justify-start items-start flex-1">
+  <div class="space-y-3 sm:space-y-6 flex-1">
     <div>
-      <p class="text-lg text-current sm:inline-block">
+      <p class="text-lg md:text-xl text-current sm:inline-block">
         <span aria-label="saludo">👋</span>
-        {msg}! Me llamo{' '}
+        {msg}!
       </p>
       <h1
-        class="font-extrabold text-3xl sm:text-4xl tracking-tight dark:text-white inline-block"
+        class="font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight dark:text-white inline-block"
       >
-        Jorge Balibrea
+        <span class="text-lg font-medium">Me llamo</span> Jorge Balibrea
       </h1>
     </div>
-    <h2 class="text-lg">
-      <strong class="dark:text-white">Desarrollador web full stack</strong> de Murcia,
-      España.
+    <h2 class="text-lg md:text-2xl">
+      <strong class="dark:text-white">Desarrollador web Full Stack</strong>
+      de Murcia, España.
     </h2>
     <p>
-      Desarrollo aplicaciones web con
-      <strong class="font-bold tracking-tight text-accent">React</strong>,
-      <strong class="font-bold tracking-tight text-accent">Next.js</strong> y
-      <strong class="font-bold tracking-tight text-accent">Node.js</strong>,
-      creando desde interfaces dinámicas hasta APIs con
-      <strong>Express</strong> y gestionando bases de datos con
-      <strong>MongoDB</strong> y <strong>SQL</strong>.
+      Desarrollo en el ecosistema de JavaScript:
+      <strong class="font-bold text-accent">React</strong>,
+      <strong class="font-bold text-accent">Node.js</strong> +
+      <strong class="font-bold text-accent">Express</strong>,
+      <strong>MongoDB</strong>, <strong>PostgreSQL</strong>, entre otras
+      tecnologías.
     </p>
-    <div class="relative overflow-hidden group inline-block">
-      <span class="invisible">Disponible para trabajarcontáctame</span>
-      <span
-        class="font-bold tracking-tight text-accent absolute top-0 left-0 group-hover:-translate-y-full transition-transform ease-in-out duration-500 hover:duration-300 underline decoration-dotted underline-offset-4"
-        >💼 Disponible para trabajar
-      </span>
-      <span
-        class="font-bold tracking-tight absolute top-0 left-0 translate-y-full group-hover:translate-y-0 transition-transform ease-in-out duration-500 hover:duration-300"
-      >
-        <a
-          href="mailto:jorge.balibrea1@gmail.com"
-          class="inline-flex items-center px-2 text-sm font-medium text-accent bg-white border border-gray-200 rounded-lg hover:bg-gray-100 focus:z-10 focus:ring-4 focus:outline-hidden focus:ring-gray-100 focus:text-purple-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-pink-100 dark:hover:text-pink-300 dark:border-gray-600 dark:focus:ring-gray-700 group transition duration-300 ease-in-out"
-          >jorge.balibrea1@gmail.com
-          <svg
-            class="w-4 ms-2 transition duration-75 ease-in group-hover:scale-125"
-            viewBox="-0.5 0 25 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            ><g stroke-width="0"></g><g stroke-linecap="round">
-              <path
-                d="M9.00977 21.39H19.0098C20.0706 21.39 21.0881 20.9685 21.8382 20.2184C22.5883 19.4682 23.0098 18.4509 23.0098 17.39V7.39001C23.0098 6.32915 22.5883 5.31167 21.8382 4.56152C21.0881 3.81138 20.0706 3.39001 19.0098 3.39001H7.00977C5.9489 3.39001 4.93148 3.81138 4.18134 4.56152C3.43119 5.31167 3.00977 6.32915 3.00977 7.39001V12.39"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-              <path
-                d="M1.00977 18.39H11.0098"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-              <path
-                d="M1.00977 15.39H5.00977"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-              <path
-                d="M22.209 5.41992C16.599 16.0599 9.39906 16.0499 3.78906 5.41992"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </g></svg
-          >
-        </a>
-      </span>
+    <p>
+      Con curiosidad constante y ganas de seguir aprendiendo, exploro frameworks
+      como <strong>Next.js</strong>, lenguajes como <strong>Go</strong> y refuerzo
+      mis conocimientos a bajo nivel con <strong>C</strong>, entre otros. En mis
+      ratos libres, comparto lo que aprendo en mi <LinkWithArrow
+        href="/blog"
+        class="text-accent-2 hover:text-accent-2">blog personal</LinkWithArrow
+      >.
+    </p>
+    <div>
+      <h2 class="text-sm">¿Tienes alguna consulta o propuesta?</h2>
+      <p class="text-sm text-text-color/80">
+        Puedes ponerte en contacto conmigo a través del
+        <LinkWithArrow
+          href="/contact"
+          class="text-accent-2 hover:text-accent-2 text-base"
+        >
+          formulario de contacto</LinkWithArrow
+        >
+        o escribirme directamente a <LinkWithArrow
+          arrow={false}
+          href="mailto:contact@jbalibrea.dev"
+          >contact@jbalibrea.dev</LinkWithArrow
+        >
+      </p>
     </div>
-    <p class="text-sm">
-      Apasionado por la tecnología y el desarrollo web, en busca de nuevos
-      retos.
-    </p>
     <div class="flex items-center gap-8 flex-wrap">
       <div class="flex gap-2 items-center">
         <a
@@ -125,7 +99,7 @@ const msg = randomMessage();
   </div>
   <Image
     src={jorge}
-    class="rounded-full w-24 aspect2-[0.67] sm:w-40 shadow-md bg-gray-200 dark:bg-zinc-800 border-accent-2 border-"
+    class="rounded-full w-24 aspect2-[0.67] sm:w-40 shadow-md bg-gray-200 dark:bg-zinc-800"
     alt="Jorge Balibrea - Imagen de perfil"
   />
 </div>

@@ -1,7 +1,7 @@
 ---
-import ThemeIcon from './ThemeIcon.astro';
-const { sticky = true } = Astro.props;
 import { detectRoute } from '@/utils/page';
+import ThemeIcon from './ThemeIcon.astro';
+const { scrollable = true } = Astro.props;
 const { isBlog, isContact } = detectRoute(Astro.url.pathname);
 
 function getNavItemClass(isActive: boolean) {
@@ -28,19 +28,18 @@ const navigatorItems = [
 ];
 ---
 
-<header
-  class={`top-0 backdrop-blur-md bg-bg-color/60 z-50 w-full px-4 sm:px-8 ${sticky ? 'sticky' : ''}`}
->
+<header id={`${scrollable ? 'scrollable-nav' : 'nav'}`} data-show="true">
   <nav
-    class="flex py-3 justify-between items-center text-sm sm:text-base md:text-lg tracking-tight"
+    class="flex py-3 justify-between items-center sm:text-base md:text-lg tracking-tight max-w-5xl w-full"
     aria-label="Main Navigation"
+    transition:name="header"
   >
     <a
       href="/"
-      class=`${getNavItemClass(false)} opacity-100 font-bold hover-underline-animation transition-opacity bg-clip-text bg-linear-to-r from-header-2 to-header text-transparent`
+      class=`${getNavItemClass(false)} opacity-100 font-bold hover-underline-animation transition-opacity bg-clip-text bg-linear-to-r from-header to-accent text-transparent`
       >jbalibrea.dev</a
     >
-    <ul class="flex gap-4 items-center uppercase">
+    <ul class="flex gap-4 md:gap-4 items-center uppercase">
       {
         navigatorItems.map((item) => (
           <li>

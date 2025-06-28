@@ -1,25 +1,36 @@
 ---
-import BaseLayout from '@layouts/BaseLayout.astro';
 import Contact from '@components/Contact.tsx';
+import LinkWithArrow from '@components/LinkWithArrow.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
 
 const RECAPTCHA_KEY = import.meta.env.PUBLIC_RECAPTCHA_KEY;
 ---
 
 <BaseLayout title="Contacto">
   <main transition:name={'pages'}>
-    <h1 class="text-4xl text-current uppercase inline-block">
-      Formulario de <span class="font-extrabold tracking-tight dark:text-white"
-        >contacto</span
-      >
+    <h1 class="title">
+      Formulario de <span class="title-bold">contacto</span>
     </h1>
-    <p>
-      Para cualquier duda o consulta, no dudes en ponerte en contacto conmigo.
-      Puedes hacerlo a través de este formulario o directamente por correo
-      electrónico a
-      <a class="text-accent opacity-80" href="mailto:contact@jbalibrea.dev"
-        >contact@jbalibrea.dev</a
-      >.
-    </p>
-    <Contact client:only="react" siteKey={RECAPTCHA_KEY} />
+    <div class="flex flex-1 items-center justify-center">
+      <div class="flex flex-wrap gap-8 max-w-6xl w-full">
+        <div class="w-full md:w-1/3">
+          <p class="max-w-prose text-sm">
+            Si has llegado hasta aquí, probablemente quieras ponerte en contacto
+            conmigo. Suelo responder lo antes posible —<i
+              >a veces incluso más rápido de lo que imaginas</i
+            >
+            <span role="img" aria-label="wink">😉</span>
+            —. Puedes escribirme directamente a través del formulario o, si lo prefieres,
+            por correo electrónico a
+            <LinkWithArrow arrow={false} href="mailto:contact@jbalibrea.dev">
+              contact@jbalibrea.dev
+            </LinkWithArrow>.
+          </p>
+        </div>
+        <div class="flex-1 w-full md:w-2/3 text-base md:text-xl">
+          <Contact client:only="react" siteKey={RECAPTCHA_KEY} />
+        </div>
+      </div>
+    </div>
   </main>
 </BaseLayout>
