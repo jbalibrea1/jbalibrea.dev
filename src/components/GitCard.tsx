@@ -83,6 +83,21 @@ export function GitCard({ latest = false }) {
                   className="group-a inline-flex items-center max-w-fit justify-start transition ease-in-out hover:scale-[1.02] hover:underline decoration-accent-2  decoration-solid underline-offset-4 opacity-90 hover:opacity-100  font-bold tracking-tight  duration-75 hover:text-accent-2 text-accent-2"
                 >
                   Visitar demo 👀
+                  <svg
+                    className="w-3 h-3 ms-2 mb-2 transition ease-in-out -rotate-45 group-a-hover:scale-110"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 14 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 5h12m0 0L9 1m4 4L9 9"
+                    ></path>
+                  </svg>
                 </a>
               )}
             </div>
