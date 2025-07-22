@@ -2,11 +2,7 @@
 import jorge from '@/assets/jorge-wo-bg.png';
 import LinkWithArrow from '@/components/LinkWithArrow.astro';
 import { Image } from 'astro:assets';
-
-const messages = ['Hey', 'Hola', 'Saludos', 'Qué tal', 'Hello', 'Hi'];
-const randomMessage = () =>
-  messages[Math.floor(Math.random() * messages.length)];
-const msg = randomMessage();
+import AboutMeMessage from './AboutMeMessage.jsx';
 ---
 
 <div
@@ -19,32 +15,8 @@ const msg = randomMessage();
         id="random-msg"
       >
         <span aria-label="saludo">👋</span>
-        <span id="msg" class="transition text-mutedfg"></span>
+        <AboutMeMessage client:load />
       </p>
-      <script>
-        const messages = [
-          'Hey!',
-          'Hola!',
-          'Saludos!',
-          'Qué tal?',
-          'Hello!',
-          'Hi!',
-          'Bienvenido!',
-        ];
-        const msg = messages[Math.floor(Math.random() * messages.length)];
-        const el = document.getElementById('msg');
-        let i = 0;
-        function type() {
-          if (i <= msg.length) {
-            if (el) {
-              el.textContent = msg.slice(0, i);
-              i++;
-              setTimeout(type, 50);
-            }
-          }
-        }
-        type();
-      </script>
       <h1
         class="font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight dark:text-white inline-block"
       >
