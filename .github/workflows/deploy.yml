@@ -9,9 +9,20 @@ on:
       - refactor/*
 
 jobs:
-  build-and-push:
+  skip-check:
     runs-on: ubuntu-latest
+    steps:
+      - name: Cancel workflow if commit contains [skip deploy]
+        run: |
+          if git log -1 --pretty=%B | grep -iq '\[skip deploy\]'; then
+            echo "🛑 Workflow cancelled by commit message."
+            exit 1
+          fi
 
+  build-and-push:
+    needs: skip-check
+    if: needs.skip-check.result == 'success'
+    runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -29,7 +40,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - run: echo "🔐 Successfully logged in to GitHub Container Registry."
 
-      - id: build-image  
+      - id: build-image
         name: 🐳 Build and tag Docker image
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/jbalibreadev-web
@@ -48,13 +59,13 @@ jobs:
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
-
       - name: 🚀 Push Docker image
         run: |
           docker push ${{ steps.build-image.outputs.IMAGE_NAME }}:${{ steps.build-image.outputs.TAG }}
 
   deploy:
     needs: build-and-push
+    if: needs.build-and-push.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: 🧠 Determine compose file to use
