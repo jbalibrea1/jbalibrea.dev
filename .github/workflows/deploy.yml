@@ -14,9 +14,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Cancel workflow if commit contains [skip deploy]
+      - name: Cancel workflow if commit contains [skip ci]
         run: |
-          if git log -1 --pretty=%B | grep -iq '\[skip deploy\]'; then
+          if git log -1 --pretty=%B | grep -iq '\[skip ci\]'; then
             echo "🛑 Workflow cancelled by commit message."
             exit 1
           fi
