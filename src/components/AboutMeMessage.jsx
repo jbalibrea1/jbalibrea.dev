@@ -1,13 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 const messages = [
-  "Hey!",
-  "Hola!",
-  "Saludos!",
-  "Qué tal?",
-  "Hello!",
-  "Hi!",
-  "Bienvenido!",
+  'Hey!',
+  'Hola!',
+  'Saludos!',
+  'Qué tal?',
+  'Hello!',
+  'Hi!',
+  'Bienvenido!',
 ];
 
 export default function AboutMeMessage() {
@@ -15,20 +15,20 @@ export default function AboutMeMessage() {
 
   useEffect(() => {
     const msg = messages[Math.floor(Math.random() * messages.length)];
-    let i = 0;
-    function type() {
-      if (i <= msg.length) {
-        if (el.current) {
-          el.current.textContent = msg.slice(0, i);
-          i++;
-          setTimeout(type, 50);
-        }
+
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function type() {
+      for (let i = 1; i <= msg.length; i++) {
+        el.current.textContent = msg.slice(0, i);
+        await sleep(50);
       }
     }
+
     type();
   }, []);
 
-  return (
-    <span id="msg" ref={el} className="transition text-mutedfg"></span>
-  );
+  return <span id="msg" ref={el} className="transition text-mutedfg"></span>;
 }
