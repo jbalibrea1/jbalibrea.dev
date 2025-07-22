@@ -12,6 +12,8 @@ jobs:
   skip-check:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
       - name: Cancel workflow if commit contains [skip deploy]
         run: |
           if git log -1 --pretty=%B | grep -iq '\[skip deploy\]'; then
