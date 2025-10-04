@@ -1,5 +1,5 @@
 ---
-import Button from './Button.astro';
+import ButtonWithArrow from './ButtonWithArrow.astro';
 import { GitCard } from './GitCard';
 import LastProject from './LastProject.astro';
 ---
@@ -12,22 +12,7 @@ import LastProject from './LastProject.astro';
       <h3 class="font-light text-4xl">Proyectos</h3>
     </div>
     <div class="flex justify-end items-center">
-      <Button href="/repositories" text="Ver más repositorios">
-        <svg
-          class="w-3 h-3 ms-2 group-hover:scale-x-125"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-        </svg>
-      </Button>
+      <ButtonWithArrow href="/repositories" text="Ver más repositorios" />
     </div>
   </div>
   <div class="flex flex-col gap-2">

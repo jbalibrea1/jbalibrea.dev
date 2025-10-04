@@ -4,7 +4,7 @@ const { tag, text = 'xs', label } = Astro.props;
 
 <a
   href={`/blog/tags/${tag}`}
-  class=`text-${text} font-medium bg-muted/50 text-accent-2/80 hover:text-accent-2 px-2 py-1 rounded-md transition duration-300 ease-in-out hover:scale-[1.05] shadow-sm shadow-accent-2/40`
+  class=`text-${text} font-medium bg-muted text-accent-2/80 hover:text-accent-2 px-2 py-1 rounded-md transition duration-300 ease-in-out hover:scale-[1.05] shadow-sm shadow-accent-2/40`
 >
   {label ? label : `#${tag}`}
 </a>

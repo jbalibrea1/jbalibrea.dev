@@ -1,7 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import Footer from '@/components/Footer.astro';
-import Header from '@/components/Header.astro';
+import MainNavigation from '@/components/MainNavigation.astro';
 import '@/styles/global.css';
 import BackToTop from '@components/BackToTop.astro';
 
@@ -156,7 +156,7 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
   </head>
 
   <body class={Astro.url.pathname.startsWith('/blog') ? 'blog' : ''}>
-    <Header sticky={sticky} />
+    <MainNavigation sticky={sticky} />
     <slot />
     <BackToTop />
     <Footer />

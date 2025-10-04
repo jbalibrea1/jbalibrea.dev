@@ -5,9 +5,15 @@ interface Props {
   href: string;
   class?: string;
   arrow?: boolean;
+  target?: string;
 }
 
-const { href, class: className = '', arrow = true } = Astro.props as Props;
+const {
+  href,
+  class: className = '',
+  arrow = true,
+  target,
+} = Astro.props as Props;
 
 const isFootnote =
   className.includes('data-footnote-backref') ||
@@ -21,6 +27,7 @@ const disabledSvg = !arrow || isFootnote;
     'group inline-flex items-center gap-1 transition-all underline hover:no-underline',
     className,
   )}
+  target={target}
 >
   <slot />
   {

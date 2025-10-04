@@ -1,150 +1,146 @@
 ---
-import Button from './Button.astro';
+import ButtonWithArrow from './ButtonWithArrow.astro';
+import { cn } from '@/lib/utils';
+import type { TimelineItem } from '@/interfaces/Timeline';
+
+const timelineData: TimelineItem[] = [
+  {
+    id: 'NTT Data',
+    period: 'Marzo 2025 - Presente',
+    title: 'SDET Junior - NTT Data/La Caixa',
+    description:
+      'Desarrollo e implementación de nuevas funcionalidades para los frameworks de automatización, utilizando Java como lenguaje principal. Integración y gestión de pipelines de CI/CD para la ejecución automática de pruebas utilizando Jenkins. Mantenimiento y mejora continua de la infraestructura de pruebas y automatización, garantizando su eficiencia y confiabilidad. Tecnologías como Docker, reglas personalizadas con ESLint, REST API y más. ',
+    technologies: ['Java', 'Jenkins', 'Docker', 'REST API', 'ESLint', 'CI/CD'],
+    isLast: true,
+  },
+  {
+    id: 'jnc',
+    period: 'Marzo 2024 - Junio 2024',
+    title: 'Desarrollador Web - JNC Informática 360',
+    description:
+      'Desarrollo de aplicaciones web centradas en empresas, utilizando React y MUI, integradas con a3erp. Implementación de buenas prácticas de programación, arquitectura limpia, mantenible y trabajo en equipo.',
+    technologies: ['React', 'MUI', 'a3erp', 'JavaScript'],
+  },
+  {
+    id: 'daw',
+    period: 'Septiembre 2022 - Marzo 2024',
+    title: 'Técnico Superior en Desarrollo de Aplicaciones Web (DAW)',
+    achievement: 'Matrícula de Honor',
+    description:
+      'Formación profesional superior en desarrollo web. Experiencia con tecnologías como React, JavaScript, SQL, Laravel, PHP, Angular y Java. Desarrollo de habilidades en administración de sistemas Linux y fundamentos de redes.',
+    technologies: [
+      'React',
+      'JavaScript',
+      'SQL',
+      'Laravel',
+      'PHP',
+      'Angular',
+      'Java',
+      'Linux',
+    ],
+  },
+  {
+    id: 'cs50',
+    period: 'Noviembre 2023',
+    title: 'CS50 Introduction to Computer Science - Harvard University',
+    description:
+      'Curso que abarca los principios fundamentales de la programación y el desarrollo de software. Trabajo con lenguajes como C, Python, y JavaScript, además de tecnologías como Flask y SQL. Desarrollo de habilidades en algoritmos y estructuras de datos, aplicando estos conceptos en diversos proyectos.',
+    technologies: ['C', 'Python', 'JavaScript', 'Flask', 'SQL', 'Algoritmos'],
+    hasButton: true,
+    buttonText: 'Ver Certificado',
+    buttonHref:
+      'https://cs50.harvard.edu/certificates/3d787326-fdb2-42c6-acaa-ba67a0bb4e3a',
+  },
+  {
+    id: 'fullstack-open',
+    period: 'Septiembre 2022',
+    title: 'Full Stack Open - University of Helsinki',
+    description:
+      'Especialización en desarrollo web full-stack, abarcando tanto frontend como backend. Experiencia práctica con tecnologías clave como React, Node.js, Express, MongoDB, GraphQL, TypeScript, React Native, Docker, aplicando estos conocimientos en proyectos completos y desafiantes.',
+    technologies: [
+      'React',
+      'Node.js',
+      'Express',
+      'MongoDB',
+      'GraphQL',
+      'JavaScript',
+      'TypeScript',
+      'React Native',
+      'Docker',
+    ],
+    hasButton: true,
+    buttonText: 'Ver Certificado',
+    buttonHref:
+      'https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/da07f9fc0b1776ed6ca619e7b88b60a0',
+  },
+  {
+    id: 'beginning',
+    period: 'Tiempo atrás...',
+    title: '"El comienzo de mi viaje - The Beginning of My Journey"',
+    description:
+      'Primeros pasos en programación tras completar el CP en Confección y Publicación de Páginas Web, aprendiendo JavaScript, HTML y CSS. Prácticas profesionales y comienzo de carrera en una empresa especializada en desarrollo con WordPress. Formándome con diferentes recursos online como freeCodeCamp, CS50, Full Stack Open, entre otros.',
+    technologies: ['JavaScript', 'HTML', 'CSS', 'WordPress'],
+  },
+];
 ---
 
 <div>
   <h2 class="font-bold tracking-tight text-accent text-3xl mt-8 mb-4">
     Experiencia y Educación
   </h2>
-  <ol class="relative border-s border-gray-300 dark:border-gray-700 max-w-xl">
-    <li class="mb-10 ms-4">
-      <div
-        class="absolute w-3 h-3 bg-accent-2 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900"
-      >
-      </div>
-      <time
-        class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300"
-        >Marzo 2024 - Junio 2024</time
-      >
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        Desarrollador Web - JNC Informática 360
-      </h3>
-      <p class="mb-4 text-base font-normal text-gray-800 dark:text-slate-200">
-        Desarrollo de aplicaciones web centradas en empresas, utilizando React y
-        MUI, integradas con a3erp. Implementación de buenas prácticas de
-        programación, arquitectura limpia, mantenible y trabajo en equipo.
-      </p>
-    </li>
-    <li class="mb-10 ms-4">
-      <div
-        class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"
-      >
-      </div>
-      <time
-        class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300"
-        >Septiembre 2022 - Marzo 2024</time
-      >
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        Técnico Superior en Desarrollo de Aplicaciones Web (DAW)
-      </h3>
-      <p class="text-base font-normal text-gray-800 dark:text-slate-200">
-        Adquirí sólidos conocimientos en desarrollo web utilizando tecnologías
-        como React, JavaScript, SQL, Laravel, PHP, Angular y Java. Además,
-        reforcé habilidades en administración de sistemas Linux y fundamentos de
-        redes.
-      </p>
-    </li>
-    <li class="mb-10 ms-4">
-      <div
-        class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"
-      >
-      </div>
-      <time
-        class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300"
-        >Noviembre 2023</time
-      >
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        CS50 Introduction to Computer Science - Harvard University
-      </h3>
-      <p class="mb-4 text-base font-normal text-gray-800 dark:text-slate-200">
-        Este curso me permitió comprender los principios fundamentales de la
-        programación y el desarrollo de software. Trabajé con lenguajes como C,
-        Python, y JavaScript, además de tecnologías como Flask y SQL. También
-        adquirí habilidades en algoritmos y estructuras de datos, aplicando
-        estos conceptos en diversos proyectos.
-      </p>
-      <Button
-        text="Ver Certificado"
-        href="https://cs50.harvard.edu/certificates/3d787326-fdb2-42c6-acaa-ba67a0bb4e3a"
-        target="_blank"
-      >
-        <svg
-          class="w-3 h-3 ms-2 group-hover:scale-x-125"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-        </svg>
-      </Button>
-    </li>
-    <li class="mb-10 ms-4">
-      <div
-        class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"
-      >
-      </div>
-      <time
-        class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300"
-        >Septiembre 2022</time
-      >
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        Full Stack Open - University of Helsinki
-      </h3>
-      <p class="mb-4 text-base font-normal text-gray-800 dark:text-slate-200">
-        Este curso me permitió especializarme en desarrollo web, abarcando tanto
-        el frontend como el backend. Adquirí experiencia en tecnologías clave
-        como React, Node.js, Express, MongoDB, GraphQL, TypeScript y React
-        Native, aplicando estos conocimientos en proyectos completos y
-        desafiantes.
-      </p>
-      <Button
-        text="Ver Certificado"
-        href="https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/da07f9fc0b1776ed6ca619e7b88b60a0"
-        target="_blank"
-      >
-        <svg
-          class="w-3 h-3 ms-2 group-hover:scale-x-125"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-        </svg>
-      </Button>
-    </li>
-    <li class="ms-4">
-      <div
-        class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"
-      >
-      </div>
-      <p
-        class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300"
-      >
-        Tiempo atrás...
-      </p>
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        "El comienzo de mi viaje - The Beginning of My Journey"
-      </h3>
-      <p class="text-base font-normal text-gray-800 dark:text-slate-200">
-        Inicié mi camino en la programación tras completar el CP en Confección y
-        Publicación de Páginas Web, donde aprendí JavaScript, HTML y CSS. Al
-        finalizarlo con éxito, realicé prácticas y comencé mi carrera
-        profesional en una empresa especializada en desarrollo con WordPress.
-        Durante este tiempo, seguí perfeccionando mis habilidades mediante
-        cursos en freeCodeCamp.
-      </p>
-    </li>
+  <ol
+    class="relative border-s border-gray-300 dark:border-gray-700 max-w-xl space-y-10"
+    aria-label="Timeline de experiencia profesional"
+  >
+    {
+      timelineData.map((item, index) => (
+        <li class="ms-4">
+          <div
+            class={cn(
+              'absolute w-3 h-3 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900',
+              item.isLast ? 'bg-accent-2' : 'bg-gray-200 dark:bg-gray-700',
+            )}
+          />
+          <time class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300">
+            {item.period}
+          </time>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
+            {item.title}
+            {item.achievement && (
+              <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-accent rounded-full border border-accent/20">
+                {item.achievement}
+              </span>
+            )}
+          </h3>
+          <p
+            class={cn(
+              'text-base font-normal text-gray-800 dark:text-slate-200',
+              (item.hasButton || item.technologies) && 'mb-4',
+            )}
+          >
+            {item.description}
+          </p>
+          {item.technologies && (
+            <div class="mb-4">
+              <div class="flex flex-wrap gap-2">
+                {item.technologies.map((tech) => (
+                  <span class="text-xs font-medium bg-muted text-accent-2/80 hover:text-accent-2 px-2 py-1 rounded-md transition duration-300 ease-in-out shadow-sm shadow-accent-2/40">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {item.hasButton && item.buttonText && item.buttonHref && (
+            <ButtonWithArrow
+              href={item.buttonHref}
+              text={item.buttonText}
+              target="_blank"
+            />
+          )}
+        </li>
+      ))
+    }
   </ol>
 </div>
