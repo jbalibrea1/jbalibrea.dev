@@ -69,6 +69,8 @@ jobs:
     needs: build-and-push
     if: needs.build-and-push.result == 'success'
     runs-on: ubuntu-latest
+    environment: ${{ contains(github.ref, 'main') && 'production' || 'staging' }}
+
     steps:
       - name: 🧠 Determine compose file to use
         id: branch-check
