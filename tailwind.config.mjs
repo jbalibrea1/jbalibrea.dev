@@ -8,13 +8,13 @@ export default {
     extend: {
       colors: {
         accent: 'oklch(var(--theme-accent) / <alpha-value>)',
-        accentBg: 'oklch(var(--theme-accent-bg) / <alpha-value>)',
+        'accent-bg': 'oklch(var(--theme-accent-bg) / <alpha-value>)',
         'accent-2': 'oklch(var(--theme-accent-2) / <alpha-value>)',
-        bgColor: 'oklch(var(--theme-bg) / <alpha-value>)',
-        'bgColor-2': 'oklch(var(--theme-bg-2) / <alpha-value>)',
+        'bg-color': 'oklch(var(--theme-bg) / <alpha-value>)',
+        'bg-color-2': 'oklch(var(--theme-bg-2) / <alpha-value>)',
         link: 'oklch(var(--theme-link) / <alpha-value>)',
         quote: 'oklch(var(--theme-quote) / <alpha-value>)',
-        textColor: 'oklch(var(--theme-text) / <alpha-value>)',
+        'text-color': 'oklch(var(--theme-text) / <alpha-value>)',
         header: 'oklch(var(--theme-header) / <alpha-value>)',
         'header-2': 'oklch(var(--theme-header-2) / <alpha-value>)',
         muted: 'oklch(var(--theme-muted) / <alpha-value>)',
