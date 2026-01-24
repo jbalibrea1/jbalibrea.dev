@@ -39,18 +39,38 @@ export const POST: APIRoute = async ({ request }) => {
     const safeEmail = escapeHtml(email);
     const safeMessage = escapeHtml(message);
 
-    // captcha verification
-    const verifyCaptcha = await fetch(
-      'https://www.google.com/recaptcha/api/siteverify',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          secret: RECAPTCHA_SECRET_KEY || '',
-          response: token,
-        }),
-      },
-    );
+    // captcha verification with timeout
+    const captchaController = new AbortController();
+    const captchaTimeout = setTimeout(() => captchaController.abort(), 10000);
+
+    let verifyCaptcha;
+    try {
+      verifyCaptcha = await fetch(
+        'https://www.google.com/recaptcha/api/siteverify',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            secret: RECAPTCHA_SECRET_KEY || '',
+            response: token,
+          }),
+          signal: captchaController.signal,
+        },
+      );
+      clearTimeout(captchaTimeout);
+    } catch (error) {
+      clearTimeout(captchaTimeout);
+      if (error instanceof Error && error.name === 'AbortError') {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            message: 'Timeout al verificar el reCAPTCHA. Intenta de nuevo.',
+          }),
+          { status: 408 },
+        );
+      }
+      throw error;
+    }
 
     const captchaResult = await verifyCaptcha.json();
 
@@ -69,9 +89,9 @@ export const POST: APIRoute = async ({ request }) => {
         user: CONTACT_EMAIL,
         pass: CONTACT_PASSWORD,
       },
-      connectionTimeout: 15000,
-      greetingTimeout: 10000,
-      socketTimeout: 30000,
+      connectionTimeout: 20000,
+      greetingTimeout: 15000,
+      socketTimeout: 40000,
       family: 4, // importante para ipv4
       debug: false,
       logging: false,
