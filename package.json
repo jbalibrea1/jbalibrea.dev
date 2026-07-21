@@ -16,7 +16,7 @@
     "@astrojs/node": "^9.5.2",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "^4.4.2",
-    "@astrojs/rss": "^4.0.15",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.0",
     "@fontsource-variable/roboto": "^5.2.9",
     "@giscus/react": "^3.1.0",
