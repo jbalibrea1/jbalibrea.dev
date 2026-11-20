@@ -31,6 +31,9 @@ server {
   listen 4321;
   server_name _;
 
+  # Detrás de Traefik: nunca generar redirecciones con host/puerto internos (:4321)
+  absolute_redirect off;
+
   root /usr/share/nginx/html;
   index index.html;
 
@@ -43,7 +46,7 @@ server {
   }
 
   location / {
-    try_files $uri $uri/ $uri.html =404;
+    try_files $uri $uri/index.html $uri.html =404;
   }
 
   error_page 404 /404.html;

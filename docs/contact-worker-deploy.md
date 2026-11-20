@@ -112,6 +112,7 @@ Con esto el flujo queda:
 
 - En el VPS no hay nginx instalado, y no hace falta: el contenedor de la web ya lleva su propio nginx **dentro de la imagen** (config en el `Dockerfile`, escucha en el puerto 4321). Traefik solo enruta hacia ese puerto, igual que antes.
 - `nginx.conf` ya no existe como fichero en el repo; su contenido está inlined en el `Dockerfile`.
+- La config usa `absolute_redirect off` y `try_files $uri $uri/index.html …`: los enlaces internos no llevan barra final (`/blog`), y con la config por defecto nginx respondía `301 → http://host:4321/blog/`, un puerto interno inalcanzable detrás de Traefik, así que la página se quedaba colgada.
 - Traefik no interviene en el formulario: el navegador llama directamente al Worker en Cloudflare (CORS limitado por `ALLOWED_ORIGINS`).
 
 ## 6. Comprobar que funciona
