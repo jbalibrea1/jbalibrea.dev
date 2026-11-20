@@ -2,14 +2,21 @@
   "name": "jbalibrea-contact-worker",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.18.0",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250101.0",
-    "typescript": "^5.6.0",
-    "wrangler": "^4.0.0"
+    "@cloudflare/workers-types": "^5.20261119.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.165.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   }
 }
