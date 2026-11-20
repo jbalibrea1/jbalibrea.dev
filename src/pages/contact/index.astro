@@ -3,7 +3,8 @@ import Contact from '@components/Contact.tsx';
 import LinkWithArrow from '@components/LinkWithArrow.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
 
-const RECAPTCHA_KEY = import.meta.env.PUBLIC_RECAPTCHA_KEY;
+const CONTACT_ENDPOINT = import.meta.env.PUBLIC_CONTACT_ENDPOINT;
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <BaseLayout title="Contacto">
@@ -28,7 +29,11 @@ const RECAPTCHA_KEY = import.meta.env.PUBLIC_RECAPTCHA_KEY;
           </p>
         </div>
         <div class="flex-1 w-full md:w-2/3 text-base md:text-xl">
-          <Contact client:only="react" siteKey={RECAPTCHA_KEY} />
+          <Contact
+            client:load
+            contactEndpoint={CONTACT_ENDPOINT}
+            turnstileSiteKey={TURNSTILE_SITE_KEY}
+          />
         </div>
       </div>
     </div>

@@ -1,0 +1,4 @@
+RESEND_API_KEY=re_xxxxxxxx
+# Secret de prueba de Turnstile (siempre pasa). En producción: la secret real (wrangler secret put)
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+CONTACT_TO=tu-email@gmail.com

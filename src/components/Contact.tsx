@@ -1,53 +1,130 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
 
-type ContactProps = {
-  siteKey: string;
+const TURNSTILE_SRC =
+  'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+
+type TurnstileApi = {
+  render: (
+    container: HTMLElement,
+    options: { sitekey: string; callback: (token: string) => void },
+  ) => string;
+  reset: (widgetId?: string) => void;
 };
 
-export default function Contact({ siteKey }: ContactProps) {
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
+type ContactProps = {
+  contactEndpoint: string;
+  turnstileSiteKey: string;
+};
+
+export default function Contact({
+  contactEndpoint,
+  turnstileSiteKey,
+}: ContactProps) {
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<string | undefined>(undefined);
+  const [token, setToken] = useState('');
   const [responseMessage, setResponseMessage] = useState({
     text: '',
     isError: false,
   });
   const [loading, setLoading] = useState(false);
-  const [formEvent, setFormEvent] = useState<HTMLFormElement | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  const onReCAPTCHAChange = async (token: string | null) => {
+  useEffect(() => {
+    const renderWidget = () => {
+      if (!window.turnstile || !turnstileRef.current || widgetId.current) return;
+      widgetId.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: turnstileSiteKey,
+        callback: setToken,
+      });
+    };
+
+    if (window.turnstile) {
+      renderWidget();
+      return;
+    }
+
+    let script = document.querySelector<HTMLScriptElement>(
+      `script[src="${TURNSTILE_SRC}"]`,
+    );
+    if (!script) {
+      script = document.createElement('script');
+      script.src = TURNSTILE_SRC;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+    script.addEventListener('load', renderWidget);
+    return () => script?.removeEventListener('load', renderWidget);
+  }, [turnstileSiteKey]);
+
+  const handleSubmissionError = (error: unknown) => {
+    if (error instanceof Error && error.name === 'AbortError') {
+      setResponseMessage({
+        text: 'Tiempo de espera agotado. Intenta de nuevo.',
+        isError: true,
+      });
+    } else {
+      setResponseMessage({
+        text:
+          error instanceof Error && error.message
+            ? error.message
+            : 'Error al enviar el mensaje',
+        isError: true,
+      });
+    }
+  };
+
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const name = formData.get('name') as string;
+
+    if (!token) {
+      setResponseMessage({
+        text: 'Completa la verificación antes de enviar.',
+        isError: true,
+      });
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
-      if (!token || !formEvent) throw new Error('NoCaptcha');
-
-      const form = formEvent;
-      const formData = new FormData(form);
-
-      const data = {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        message: formData.get('message') as string,
-        token,
-      };
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-      const response = await fetch('/api/contact', {
+      const response = await fetch(contactEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name,
+          email: formData.get('email'),
+          message: formData.get('message'),
+          botcheck: formData.get('botcheck') ? true : '',
+          token,
+        }),
         signal: controller.signal,
       });
 
-      clearTimeout(timeoutId);
-
       const res = await response.json();
 
-      if (!response.ok) throw new Error(res.message || 'Error en el envío');
+      if (!response.ok || !res.success) {
+        throw new Error(res.message || 'Error en el envío');
+      }
 
-      setResponseMessage({ text: res.message, isError: false });
+      setResponseMessage({
+        text: 'Mensaje enviado correctamente. ¡Gracias por tu mensaje! En caso de ser necesario me pondré en contacto contigo lo antes posible.',
+        isError: false,
+      });
       form.reset();
-      recaptchaRef.current?.reset();
 
       setTimeout(() => {
         setResponseMessage({ text: '', isError: false });
@@ -55,38 +132,11 @@ export default function Contact({ siteKey }: ContactProps) {
     } catch (err) {
       handleSubmissionError(err);
     } finally {
+      clearTimeout(timeoutId);
+      window.turnstile?.reset(widgetId.current);
+      setToken('');
       setLoading(false);
     }
-  };
-
-  const handleSubmissionError = (error: unknown) => {
-    if (error instanceof Error) {
-      if (error.name === 'AbortError') {
-        setResponseMessage({
-          text: 'Tiempo de espera agotado. Intenta de nuevo.',
-          isError: true,
-        });
-      } else if (error.message === 'NoCaptcha') {
-        setResponseMessage({
-          text: 'Por favor, completa el reCAPTCHA.',
-          isError: true,
-        });
-      } else {
-        setResponseMessage({
-          text: error.message || 'Error al enviar el mensaje',
-          isError: true,
-        });
-      }
-    }
-  };
-
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    const form = e.target as HTMLFormElement;
-    setFormEvent(form);
-
-    recaptchaRef.current?.execute();
   };
 
   return (
@@ -111,12 +161,15 @@ export default function Contact({ siteKey }: ContactProps) {
         required
         className="min-h-[150px] max-h-[250px] h-min "
       />
-      <ReCAPTCHA
-        sitekey={siteKey}
-        ref={recaptchaRef}
-        size="invisible"
-        onChange={onReCAPTCHAChange}
+      <input
+        type="checkbox"
+        name="botcheck"
+        className="hidden"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
       />
+      <div ref={turnstileRef} />
       <button
         type="submit"
         disabled={loading}

@@ -1,5 +1,4 @@
 import mdx from '@astrojs/mdx';
-import node from '@astrojs/node';
 import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -74,10 +73,6 @@ export default defineConfig({
       extendMarkdownConfig: true,
     }),
   ],
-
-  adapter: node({
-    mode: 'standalone',
-  }),
 
   vite: {
     plugins: [tailwindcss()],

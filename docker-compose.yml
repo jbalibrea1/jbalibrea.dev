@@ -1,14 +1,10 @@
 services:
   web:
-    build: 
+    build:
       context: .
       args:
-        PUBLIC_RECAPTCHA_KEY: ${PUBLIC_RECAPTCHA_KEY}
-    environment:
-      CONTACT_PASSWORD: ${CONTACT_PASSWORD}
-      CONTACT_EMAIL: ${CONTACT_EMAIL}
-      CONTACT_TO_SEND: ${CONTACT_TO_SEND}
-      RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
+        PUBLIC_CONTACT_ENDPOINT: ${PUBLIC_CONTACT_ENDPOINT}
+        PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
     expose:
       - "4321"
     ports:

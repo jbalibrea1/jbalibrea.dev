@@ -8,38 +8,49 @@ RUN corepack enable
 
 COPY package.json pnpm-lock.yaml ./
 
-# Prod stage, install dependencies only
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
-
-# Build stage, install all dependencies and build the project
+# Build stage, install all dependencies and build the static site
 FROM base AS build-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM build-deps AS build
 
-ARG PUBLIC_RECAPTCHA_KEY
-ENV PUBLIC_RECAPTCHA_KEY=$PUBLIC_RECAPTCHA_KEY
+ARG PUBLIC_CONTACT_ENDPOINT
+ARG PUBLIC_TURNSTILE_SITE_KEY
+ENV PUBLIC_CONTACT_ENDPOINT=$PUBLIC_CONTACT_ENDPOINT
+ENV PUBLIC_TURNSTILE_SITE_KEY=$PUBLIC_TURNSTILE_SITE_KEY
 
 COPY . .
 RUN pnpm run build
 
-# Runner stage, copy only production dependencies and built files
+# Runner stage, serve the static files with nginx
+FROM nginx:alpine AS runner
 
-FROM base AS runner
+# Config embebida (sin fichero aparte): sirve dist/ en el puerto 4321, detrás de Traefik
+COPY <<'NGINXCONF' /etc/nginx/conf.d/default.conf
+server {
+  listen 4321;
+  server_name _;
 
-ENV NODE_ENV=production
+  root /usr/share/nginx/html;
+  index index.html;
 
-RUN addgroup --system --gid 1001 appgroup
-RUN adduser --system --uid 1001 appuser
+  gzip on;
+  gzip_types text/css application/javascript application/json image/svg+xml text/xml;
 
-COPY --from=prod-deps --chown=appuser:appgroup /app/node_modules ./node_modules
-COPY --from=build --chown=appuser:appgroup /app/dist ./dist
+  location /_astro/ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    try_files $uri =404;
+  }
 
-USER appuser
+  location / {
+    try_files $uri $uri/ $uri.html =404;
+  }
 
-ENV HOST=0.0.0.0
-ENV PORT=4321
+  error_page 404 /404.html;
+}
+NGINXCONF
+COPY --from=build /app/dist /usr/share/nginx/html
+
 EXPOSE 4321
 
-CMD ["node", "./dist/server/entry.mjs"]
+CMD ["nginx", "-g", "daemon off;"]

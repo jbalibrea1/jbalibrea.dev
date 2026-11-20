@@ -33,4 +33,18 @@ cd jbalibrea.dev
 docker compose -f docker-compose.dev.yml up
 ```
 
+## ✉️ Contact form setup
+
+The contact form talks to a Cloudflare Worker (`worker/contact/`) that verifies Cloudflare Turnstile and sends the emails through Resend.
+
+```bash
+cp .env.example .env                                              # site variables
+cp worker/contact/.dev.vars.example worker/contact/.dev.vars      # worker secrets (fill in RESEND_API_KEY and CONTACT_TO)
+pnpm --dir worker/contact install
+pnpm --dir worker/contact dev                                     # worker on :8787
+pnpm dev                                                          # site on :4321
+```
+
+In production the worker secrets are set with `wrangler secret put` (`RESEND_API_KEY`, `TURNSTILE_SECRET`, `CONTACT_TO`) and deployed with `pnpm --dir worker/contact run deploy`. The site needs `PUBLIC_CONTACT_ENDPOINT` and `PUBLIC_TURNSTILE_SITE_KEY` at build time.
+
 Feel free to explore and contribute!

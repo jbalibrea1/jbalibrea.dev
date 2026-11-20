@@ -1,0 +1,13 @@
+name = "jbalibrea-contact"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Si la zona jbalibrea.dev está en Cloudflare, descomenta para servir en api.jbalibrea.dev/contact
+# routes = [{ pattern = "api.jbalibrea.dev", custom_domain = true }]
+
+[vars]
+ALLOWED_ORIGINS = "https://jbalibrea.dev,https://pre.jbalibrea.dev,http://localhost:4321"
+MAIL_FROM = "contact@alerts.jbalibrea.dev"
+REPLY_TO = "contact@jbalibrea.dev"
+
+# Secrets (wrangler secret put <NAME>): RESEND_API_KEY, TURNSTILE_SECRET, CONTACT_TO

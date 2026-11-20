@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
       - feat/*
       - chore/*
       - refactor/*
@@ -56,7 +57,9 @@ jobs:
 
           echo "🔧 Building image with tag: $TAG"
 
-          docker build --build-arg PUBLIC_RECAPTCHA_KEY=${{ secrets.PUBLIC_RECAPTCHA_KEY }} \
+          docker build \
+            --build-arg PUBLIC_CONTACT_ENDPOINT=${{ secrets.PUBLIC_CONTACT_ENDPOINT }} \
+            --build-arg PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }} \
             -t $IMAGE_NAME:$TAG .
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
           echo "TAG=$TAG" >> $GITHUB_OUTPUT

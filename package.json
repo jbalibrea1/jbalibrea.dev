@@ -13,7 +13,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/node": "^9.5.2",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.15",
@@ -28,10 +27,8 @@
     "framer-motion": "^12.29.0",
     "hastscript": "^9.0.1",
     "mdast-util-to-string": "^4.0.0",
-    "nodemailer": "^7.0.12",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-google-recaptcha": "^3.1.0",
     "reading-time": "^1.5.0",
     "rehype-accessible-emojis": "^0.3.2",
     "rehype-external-links": "^3.0.0",
@@ -46,8 +43,6 @@
   "devDependencies": {
     "@shikijs/transformers": "^3.21.0",
     "@tailwindcss/typography": "^0.5.19",
-    "@types/nodemailer": "^7.0.5",
-    "@types/react-google-recaptcha": "^2.1.9",
     "@typescript-eslint/parser": "^8.53.1",
     "eslint": "^9.39.2",
     "eslint-plugin-astro": "^1.5.0",
