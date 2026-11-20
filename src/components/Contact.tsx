@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 
 const TURNSTILE_SRC =
   'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
@@ -80,7 +80,7 @@ export default function Contact({
     }
   };
 
-  const submit = async (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 

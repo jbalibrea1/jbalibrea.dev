@@ -1,4 +1,5 @@
 import mdx from '@astrojs/mdx';
+import { unified } from '@astrojs/markdown-remark';
 import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -46,19 +47,21 @@ export default defineConfig({
         updateStyle(),
       ],
     },
-    remarkPlugins: [
-      [remarkToc, { heading: 'Tabla de contenidos', maxDepth: 3 }],
-      remarkReadingTime,
-      remarkDirective,
-      remarkAdmonitions,
-    ],
-    rehypePlugins: [
-      rehypeAccessibleEmojis,
-      [
-        rehypeExternalLinks,
-        { target: '_blank', rel: ['noopener', 'noreferrer'] },
+    processor: unified({
+      remarkPlugins: [
+        [remarkToc, { heading: 'Tabla de contenidos', maxDepth: 3 }],
+        remarkReadingTime,
+        remarkDirective,
+        remarkAdmonitions,
       ],
-    ],
+      rehypePlugins: [
+        rehypeAccessibleEmojis,
+        [
+          rehypeExternalLinks,
+          { target: '_blank', rel: ['noopener', 'noreferrer'] },
+        ],
+      ],
+    }),
   },
 
   integrations: [

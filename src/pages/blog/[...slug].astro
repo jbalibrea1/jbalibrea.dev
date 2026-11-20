@@ -1,19 +1,19 @@
 ---
 import MarkdownPostLayout from '@/layouts/MarkdownPostLayout.astro';
 import TOC from '@components/TOC/TOC.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import LinkWithArrow from '@/components/LinkWithArrow.astro';
 export async function getStaticPaths() {
   const blogEntries = await getCollection('posts');
 
   return blogEntries.map((post) => ({
-    params: { slug: post.slug.split('/')[0] },
+    params: { slug: post.id.split('/')[0] },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content, headings, remarkPluginFrontmatter } = await post.render();
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
 ---
 
 <MarkdownPostLayout
