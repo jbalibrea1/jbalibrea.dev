@@ -10,21 +10,7 @@ on:
       - refactor/*
 
 jobs:
-  skip-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-      - name: Cancel workflow if commit contains [skip ci]
-        run: |
-          if git log -1 --pretty=%B | grep -iq '\[skip ci\]'; then
-            echo "🛑 Workflow cancelled by commit message."
-            exit 1
-          fi
-
   build-and-push:
-    needs: skip-check
-    if: needs.skip-check.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -60,13 +46,15 @@ jobs:
           docker build \
             --build-arg PUBLIC_CONTACT_ENDPOINT=${{ secrets.PUBLIC_CONTACT_ENDPOINT }} \
             --build-arg PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }} \
-            -t $IMAGE_NAME:$TAG .
+            -t $IMAGE_NAME:$TAG \
+            -t $IMAGE_NAME:${{ github.sha }} .
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
       - name: 🚀 Push Docker image
         run: |
           docker push ${{ steps.build-image.outputs.IMAGE_NAME }}:${{ steps.build-image.outputs.TAG }}
+          docker push ${{ steps.build-image.outputs.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     needs: build-and-push
@@ -86,13 +74,19 @@ jobs:
 
       - name: 🔐 Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1
+        env:
+          GHCR_USER: ${{ github.repository_owner }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
         with:
+          envs: GHCR_USER,GHCR_TOKEN
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            set -e
             cd ${{ secrets.VPS_PROJECT_PATH }}
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
             ls -l
             echo "🔧 Starting deployment on the VPS..."
 
@@ -110,7 +104,7 @@ jobs:
 
             export PATH="$HOME/.local/bin:$PATH"
             if command -v docker-clean > /dev/null; then
-              docker-clean
+              docker-clean || echo "⚠️ docker-clean falló (se ignora)"
             else
               echo "⚠️ docker-clean no está instalado o no está en PATH"
             fi

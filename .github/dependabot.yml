@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # Web (Astro): las PRs van a develop, que es donde se trabaja
+  - package-ecosystem: npm
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  # Worker de contacto (proyecto aparte con su propio lockfile)
+  - package-ecosystem: npm
+    directory: /worker/contact
+    target-branch: develop
+    schedule:
+      interval: weekly
+    groups:
+      worker:
+        patterns: ['*']
+
+  # Acciones de GitHub Actions (checkout, login, wrangler-action...)
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
