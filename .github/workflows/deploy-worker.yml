@@ -1,11 +1,16 @@
 name: Deploy contact Worker ☁️
 on:
   push:
-    branches: [main, develop]
+    # Solo main: el Worker es único y sirve a producción (y a pre)
+    branches: [main]
     paths:
       - 'worker/contact/**'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:
+
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
 
 jobs:
   deploy-worker:
