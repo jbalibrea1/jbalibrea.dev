@@ -4,7 +4,7 @@ const getShortedPosts = (posts: CollectionEntry<'posts'>[]) => {
   return posts
     .map((post) => ({
       ...post,
-      slug: post.slug.split('/')[0],
+      slug: post.id.split('/')[0],
     }))
     .sort(
       (a, b) =>

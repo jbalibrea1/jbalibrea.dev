@@ -7,7 +7,7 @@ const allPosts = await getCollection('posts');
 const tags = allPosts
   .map((post) => post.data.tags)
   .flat()
-  .reduce((acc, tag) => {
+  .reduce<Record<string, number>>((acc, tag) => {
     acc[tag] = acc[tag] ? acc[tag] + 1 : 1;
     return acc;
   }, {});

@@ -1,5 +1,6 @@
-// Import utilities from `astro:content`
-import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 
 function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array;
@@ -10,7 +11,14 @@ function removeDupsAndLowerCase(array: string[]) {
 
 // Define a `type` and `schema` for each collection
 const postsCollection = defineCollection({
-  type: 'content',
+  // Posts sueltos (`slug.mdx`) o con assets colocados (`slug/index.mdx`).
+  // El id es el slug: sin extensión y sin el `/index` final.
+  loader: glob({
+    pattern: '**/*.{md,mdx}',
+    base: './src/content/posts',
+    generateId: ({ entry }) =>
+      entry.replace(/\/index\.mdx?$/, '').replace(/\.mdx?$/, ''),
+  }),
   schema: z.object({
     title: z.string(),
     pubDateTime: z.coerce.date(),

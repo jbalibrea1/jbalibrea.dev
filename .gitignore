@@ -27,3 +27,6 @@ pnpm-debug.log*
 worker/**/node_modules/
 worker/**/.wrangler/
 worker/**/.dev.vars
+
+# documentación local (no se sube)
+docs/

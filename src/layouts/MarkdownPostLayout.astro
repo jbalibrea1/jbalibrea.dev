@@ -25,7 +25,7 @@ const dataPosts = sortedPosts.map(
 );
 
 // normalizmos el slug
-const currSlug = post.slug.split('/')[0];
+const currSlug = post.id.split('/')[0];
 const currPostIdx = dataPosts.findIndex((a) => a.slug === currSlug);
 
 const prevPost =
