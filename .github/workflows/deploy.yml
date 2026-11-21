@@ -18,7 +18,7 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
 
       - name: Log in to GitHub Container Registry
