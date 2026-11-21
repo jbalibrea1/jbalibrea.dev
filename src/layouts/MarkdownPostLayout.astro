@@ -13,14 +13,18 @@ import BaseLayout from './BaseLayout.astro';
 const { post, remarkPluginFrontmatter } = Astro.props;
 const { title, description, image, pubDateTime, modDateTime, tags } = post.data;
 
-// Vista previa (Open Graph): jpg de como mucho 1200 px de ancho. Astro no agranda
-// las imágenes pequeñas, así que se publican sus dimensiones reales.
-const ogImage = await getImage({ src: image.url, width: 1200, format: 'jpg' });
+// Vista previa (Open Graph): tarjeta 1200x630 generada en `src/pages/og/[slug].png.ts`.
+// La portada del post (jpg optimizado) se usa solo en los datos estructurados.
+const coverImage = await getImage({
+  src: image.url,
+  width: 1200,
+  format: 'jpg',
+});
 const ogImageData = {
-  url: ogImage.src,
-  alt: image.alt,
-  width: Number(ogImage.attributes.width),
-  height: Number(ogImage.attributes.height),
+  url: `/og/${post.id}.png`,
+  alt: title,
+  width: 1200,
+  height: 630,
 };
 
 const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -29,7 +33,10 @@ const jsonLd = {
   '@type': 'BlogPosting',
   headline: title,
   description,
-  image: [new URL(ogImage.src, Astro.site).toString()],
+  image: [
+    new URL(ogImageData.url, Astro.site).toString(),
+    new URL(coverImage.src, Astro.site).toString(),
+  ],
   datePublished: pubDateTime.toISOString(),
   dateModified: (modDateTime ?? pubDateTime).toISOString(),
   author: {

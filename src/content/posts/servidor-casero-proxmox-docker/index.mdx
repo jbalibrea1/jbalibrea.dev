@@ -9,6 +9,11 @@ image:
 tags: ['proxmox', 'docker', 'portainer', 'servidor']
 ---
 
+import proxmoxLight from './proxmox-logo-light.svg';
+import proxmoxDark from './proxmox-logo-dark.svg';
+import dockerLogo from './docker-logo.svg';
+import portainerLogo from './portainer-logo.svg';
+
 Después de un tiempo sin escribir nada, he decidido retomar el blog y contar un poco sobre mi experiencia montando un servidor en casa. La idea es tener un servidor que me permita hacer pruebas y aprender sobre Docker, Proxmox y otras tecnologías.
 
 _Te puede servir cualquier pc antiguo que no uses o como en mi caso un mini pc que compré para este propósito._
@@ -16,13 +21,13 @@ _Te puede servir cualquier pc antiguo que no uses o como en mi caso un mini pc q
 ## Qué es Proxmox
 
 <img
-  src="https://www.proxmox.com/images/proxmox/logos/mediakit-proxmox-server-solutions-logos-light.svg"
+  src={proxmoxLight.src}
   alt="Proxmox"
   class="dark:hidden float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
 
 <img
-  src="https://www.proxmox.com/images/proxmox/logos/mediakit-proxmox-server-solutions-logos-dark.svg"
+  src={proxmoxDark.src}
   alt="Proxmox"
   class="hidden dark:block float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
@@ -44,7 +49,7 @@ _En este caso tenemos 4 ip's diferentes, cada una apuntando a su respectivo cont
 ## Qué es docker
 
 <img
-  src="https://www.docker.com/app/uploads/2023/08/logo-guide-logos-1.svg"
+  src={dockerLogo.src}
   alt="Docker"
   class="dark:hidden float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
@@ -232,7 +237,7 @@ _**Docker** es una herramienta muy versátil que permite hacer todo tipo de cosa
 ## Qué es portainer
 
 <img
-  src="https://raw.githubusercontent.com/portainer/portainer/8cc28761d74f68eaf397a5b475aad2c27ad1dae8/app/assets/images/logo_alt.svg"
+  src={portainerLogo.src}
   alt="Portainer"
   class="float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
