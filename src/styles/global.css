@@ -92,7 +92,8 @@
     scrollbar-color: oklch(var(--theme-accent-2)) transparent;
   }
 
-  #sidebar {
+  #sidebar,
+  .sidebar-scroll {
     scrollbar-width: thin;
     scrollbar-color: #374151 transparent;
   }
@@ -124,13 +125,15 @@
     opacity: 0.5;
   }
 
-  #sidebar::-webkit-scrollbar {
+  #sidebar::-webkit-scrollbar,
+  .sidebar-scroll::-webkit-scrollbar {
     width: 6px !important;
     height: 6px !important;
     background: transparent;
   }
 
-  #sidebar::-webkit-scrollbar-thumb {
+  #sidebar::-webkit-scrollbar-thumb,
+  .sidebar-scroll::-webkit-scrollbar-thumb {
     background-color: #374151;
     border-radius: 999px;
     opacity: 0.5;

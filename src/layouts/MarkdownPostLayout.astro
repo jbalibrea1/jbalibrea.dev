@@ -5,7 +5,7 @@ import Prose from '@/components/Prose.astro';
 import type { InfoPost } from '@/interfaces/InfoPost';
 import MediumZoom from '@components/MediumZoom.astro';
 import ProgressBarBlog from '@components/ProgressBarBlog.astro';
-import getShortedPosts from '@utils/getSorterPosts';
+import getSortedPosts from '@utils/getSortedPosts';
 import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 
@@ -14,9 +14,9 @@ const { title, description, image } = post.data;
 
 /* ========== Prev/Next Posts ========== */
 const posts = await getCollection('posts');
-// obetnemos los posts ordenados por fecha
-const sortedPosts = getShortedPosts(posts);
-// obtenemos la info de los posts
+// posts ordenados por fecha
+const sortedPosts = getSortedPosts(posts);
+// info mínima para la navegación anterior/siguiente
 const dataPosts = sortedPosts.map(
   ({ data: { title }, slug }): InfoPost => ({
     slug,
@@ -24,9 +24,7 @@ const dataPosts = sortedPosts.map(
   }),
 );
 
-// normalizmos el slug
-const currSlug = post.id.split('/')[0];
-const currPostIdx = dataPosts.findIndex((a) => a.slug === currSlug);
+const currPostIdx = dataPosts.findIndex((a) => a.slug === post.id);
 
 const prevPost =
   currPostIdx < dataPosts.length - 1 ? dataPosts[currPostIdx + 1] : null;
@@ -36,7 +34,7 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
 
 <BaseLayout
   title={`${title}`}
-  description=`${description} - Por Jorge Balibrea · Desarrollador Full Stack en Murcia`
+  description={`${description} - Por Jorge Balibrea · Desarrollador Full Stack en Murcia`}
   sticky={false}
   image={image}
   postTitle={true}
@@ -57,7 +55,7 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
         class="fixed top-0 left-0 w-3/4 sm:w-2/3 md:w-2/4 lg:w-64 bg-bg-color-2 z-40 overflow-y-auto transform -translate-x-full transition-transform duration-300 lg:sticky lg:top-20 lg:translate-x-0 lg:block h-full lg:h-[calc(95vh-5rem)] lg:bg-transparent lg:shrink-0 py-4 px-2"
         id="sidebar"
       >
-        <div class="h-full overflow-y-auto" id="sidebar">
+        <div class="sidebar-scroll h-full overflow-y-auto">
           <slot name="sidebar" />
         </div>
       </aside>
@@ -71,50 +69,48 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
     </div>
     <PostComment client:only="react" />
     <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
-    <button id="sidebar-btn" class="lg:hidden helpers fixed bottom-22"
-      >☰</button
+    <button
+      id="sidebar-btn"
+      class="lg:hidden helpers fixed bottom-22"
+      aria-label="Abrir tabla de contenidos"
+      aria-controls="sidebar"
+      aria-expanded="false">☰</button
     >
   </main>
   <MediumZoom />
   <ProgressBarBlog />
 </BaseLayout>
 
-<script is:inline>
-  function initSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const sidebarBtn = document.getElementById('sidebar-btn');
-    const sidebarShade = document.getElementById('sidebar-shade');
+<script>
+  const OPEN_CLASS = '-translate-x-full';
 
-    function closeSidebar() {
-      sidebar.classList.add('-translate-x-full');
-      document.body.classList.remove('no-scroll');
-      sidebarShade.style.display = 'none';
-    }
+  const els = () => ({
+    sidebar: document.getElementById('sidebar'),
+    btn: document.getElementById('sidebar-btn'),
+    shade: document.getElementById('sidebar-shade'),
+  });
 
-    function openSidebar() {
-      sidebar.classList.remove('-translate-x-full');
-      document.body.classList.add('no-scroll');
-      sidebarShade.style.display = 'block';
-    }
-
-    function toggleSidebar() {
-      const isOpen = !sidebar.classList.contains('-translate-x-full');
-      isOpen ? closeSidebar() : openSidebar();
-    }
-
-    sidebarBtn?.addEventListener('click', toggleSidebar);
-    sidebarShade?.addEventListener('click', toggleSidebar);
-
-    function handleResize() {
-      if (window.innerWidth >= 1024) {
-        closeSidebar();
-      }
-    }
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
+  function setOpen(open: boolean) {
+    const { sidebar, btn, shade } = els();
+    if (!sidebar || !shade) return;
+    sidebar.classList.toggle(OPEN_CLASS, !open);
+    document.body.classList.toggle('no-scroll', open);
+    shade.style.display = open ? 'block' : 'none';
+    btn?.setAttribute('aria-expanded', String(open));
   }
 
-  initSidebar();
-  document.addEventListener('astro:after-swap', initSidebar);
+  const isOpen = () =>
+    !els().sidebar?.classList.contains(OPEN_CLASS);
+
+  // Este script se carga una sola vez; el sidebar es nuevo en cada navegación
+  document.addEventListener('astro:page-load', () => {
+    const { btn, shade } = els();
+    btn?.addEventListener('click', () => setOpen(!isOpen()));
+    shade?.addEventListener('click', () => setOpen(false));
+    if (window.innerWidth >= 1024) setOpen(false);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1024) setOpen(false);
+  });
 </script>

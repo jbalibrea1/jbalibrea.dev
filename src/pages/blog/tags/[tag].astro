@@ -2,12 +2,12 @@
 import PostCard from '@/components/PostCard.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Button from '@components/Button.astro';
-import getShortedPosts from '@utils/getSorterPosts';
+import getSortedPosts from '@utils/getSortedPosts';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('posts');
-  const shortedPosts = getShortedPosts(allPosts);
+  const shortedPosts = getSortedPosts(allPosts);
 
   const uniqueTags = [
     ...new Set(shortedPosts.map((post) => post.data.tags).flat()),

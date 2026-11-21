@@ -1,10 +1,10 @@
 import rss from '@astrojs/rss';
-import getShortedPosts from '@utils/getSorterPosts';
+import getSortedPosts from '@utils/getSortedPosts';
 import { getCollection } from 'astro:content';
 
 export async function GET(context) {
   const posts = await getCollection('posts');
-  const sorterPosts = getShortedPosts(posts);
+  const sorterPosts = getSortedPosts(posts);
   return rss({
     title: 'Jorge Balibrea Blog - jbalibrea.dev',
     description:
