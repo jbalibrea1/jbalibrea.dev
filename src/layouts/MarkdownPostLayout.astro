@@ -6,11 +6,22 @@ import type { InfoPost } from '@/interfaces/InfoPost';
 import MediumZoom from '@components/MediumZoom.astro';
 import ProgressBarBlog from '@components/ProgressBarBlog.astro';
 import getSortedPosts from '@utils/getSortedPosts';
+import { getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 
 const { post, remarkPluginFrontmatter } = Astro.props;
 const { title, description, image, pubDateTime, modDateTime, tags } = post.data;
+
+// Vista previa (Open Graph): jpg de como mucho 1200 px de ancho. Astro no agranda
+// las imágenes pequeñas, así que se publican sus dimensiones reales.
+const ogImage = await getImage({ src: image.url, width: 1200, format: 'jpg' });
+const ogImageData = {
+  url: ogImage.src,
+  alt: image.alt,
+  width: Number(ogImage.attributes.width),
+  height: Number(ogImage.attributes.height),
+};
 
 const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const jsonLd = {
@@ -18,7 +29,7 @@ const jsonLd = {
   '@type': 'BlogPosting',
   headline: title,
   description,
-  image: [new URL(image.url, Astro.site).toString()],
+  image: [new URL(ogImage.src, Astro.site).toString()],
   datePublished: pubDateTime.toISOString(),
   dateModified: (modDateTime ?? pubDateTime).toISOString(),
   author: {
@@ -55,7 +66,7 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
   title={`${title}`}
   description={`${description} - Por Jorge Balibrea · Desarrollador Full Stack en Murcia`}
   sticky={false}
-  image={image}
+  image={ogImageData}
   postTitle={true}
   article={{ published: pubDateTime, modified: modDateTime, tags }}
   jsonLd={jsonLd}

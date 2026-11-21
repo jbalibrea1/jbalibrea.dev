@@ -4,7 +4,7 @@ pubDateTime: 2025-04-25T14:22:00Z
 description: 'Pequeña guía para montar tu propio servidor en casa utilizando Proxmox para la virtualización y Docker para la gestión de contenedores.'
 author: 'Jorge Balibrea'
 image:
-  url: '/blog/servidor-casero-proxmox-docker/proxmox.png'
+  url: './proxmox.png'
   alt: 'Servidor casero con Proxmox y Docker'
 tags: ['proxmox', 'docker', 'portainer', 'servidor']
 ---
@@ -33,7 +33,7 @@ En mi caso tengo un mini-pc y un HDD conectado, en Proxmox tengo varios contened
 
 Así es como se vería Proxmox al entrar a nuestro servidor `http://<ip_servidor>` con el navegador:
 
-<img src="/blog/servidor-casero-proxmox-docker/proxmox.png" alt="Proxmox" />
+![Proxmox](./proxmox.png)
 
 Tenemos el server/root llamado **pve**, dentro de este tenemos varios **contenedores LXC**. En uno de estos contenedores tengo instalado **Docker** y lo administro junto a **Portainer**. Además, es importante mencionar que cada contenedor tiene su propia configuración y recursos asignados, lo que permite una gran flexibilidad en la gestión de servicios. Cada contenedor se administra a través de Proxmox entrando en la consola o a través de SSH.
 
@@ -241,10 +241,7 @@ _**Docker** es una herramienta muy versátil que permite hacer todo tipo de cosa
 
 Portainer es muy útil para aquellos que no están familiarizados con la línea de comandos de Docker, ya que proporciona una interfaz gráfica intuitiva. Además, puedes gestionar múltiples entornos Docker desde una sola instancia de Portainer.
 
-<img
-  src="/blog/servidor-casero-proxmox-docker/servicios.png"
-  alt="Servicios corriendo en docker"
-/>
+![Servicios corriendo en docker](./servicios.png)
 
 Estos son algunos de los servicios que tengo corriendo en mi servidor.
 

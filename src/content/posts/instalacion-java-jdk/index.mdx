@@ -5,7 +5,7 @@ modDateTime: 2024-09-16T20:00:00Z
 description: 'Todo lo que necesitas para instalar el JDK de Java en Windows.'
 author: 'Jorge Balibrea'
 image:
-  url: '/blog/instalacion-java-jdk/java.png'
+  url: './java.png'
   alt: 'Java'
 tags: ['java']
 ---
@@ -37,10 +37,8 @@ Para instalar Adoptium Eclipse Temurin OpenJDK, sigue estos pasos:
 
 1. Nos descargamos el .zip de la página oficial de [Adoptium Eclipse Temurin OpenJDK](https://adoptium.net/).
 
-   <img
-     src="/blog/instalacion-java-jdk/adoptium-1.png"
-     alt="Adoptium Eclipse Temurin OpenJDK"
-   />
+   ![Adoptium Eclipse Temurin OpenJDK](./adoptium-1.png)
+
    **Nota**: En este caso, vamos a instalar la versión LTS (Long Term Support)
    de Java 21.
 
@@ -50,10 +48,9 @@ Para instalar Adoptium Eclipse Temurin OpenJDK, sigue estos pasos:
    - Añadimos la siguiente variable de entorno globales:
    - `JAVA_HOME`: `C:\Java\jdk-21.0.4+7`
    - Y editamos la variable `PATH` añadiendo el valor `%JAVA_HOME%\bin`.
-     <img
-       src="/blog/instalacion-java-jdk/variables-entorno.png"
-       alt="Variables de entorno"
-     />
+
+     ![Variables de entorno](./variables-entorno.png)
+
 4. Comprobamos que la instalación ha sido correcta ejecutando el comando `java -version` en la consola de comandos. Deberíamos ver algo similar a esto:
 
 ```bash
