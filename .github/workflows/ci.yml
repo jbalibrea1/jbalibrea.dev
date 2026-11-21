@@ -1,0 +1,47 @@
+name: CI ✅
+# Valida cada PR (también las de Dependabot): type check + build de la web,
+# lint y type check del Worker. No despliega nada.
+on:
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Este nombre es el check que se marca como obligatorio en la protección de rama
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            worker/contact/pnpm-lock.yaml
+
+      - name: Web - install
+        run: pnpm install --frozen-lockfile
+      - name: Web - astro check + build
+        env:
+          # Valores de relleno: la web los incrusta en el build y aquí no se usan
+          PUBLIC_CONTACT_ENDPOINT: https://example.invalid
+          PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+        run: pnpm build
+
+      - name: Worker - install
+        working-directory: worker/contact
+        run: pnpm install --frozen-lockfile
+      - name: Worker - typecheck
+        working-directory: worker/contact
+        run: pnpm typecheck
