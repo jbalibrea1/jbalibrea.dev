@@ -38,61 +38,15 @@
   }
 </style>
 <script is:inline>
-  (function () {
-    // Detectar el tema preferido del usuario
-    const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)',
-    ).matches;
-    // Obtener el tema guardado en localStorage o usar el tema preferido
-    const savedTheme = localStorage.getItem('theme');
-    // Si no hay tema guardado, usar el tema preferido
-    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-    // Función para establecer el tema light/dark
-    const setTheme = (theme) => {
-      const isDark = theme === 'dark';
-      document.documentElement.classList.toggle('dark', isDark);
-      // document.documentElement.style.backgroundColor = isDark
-      //   ? 'rgb(39, 43, 52)'
-      //   : 'rgb(250, 250, 250)';
-
-      let meta = document.getElementById('theme-color');
-      if (!meta) {
-        meta = document.createElement('meta');
-        meta.name = 'theme-color';
-        meta.id = 'theme-color';
-        document.head.appendChild(meta);
-      }
-
-      const root = document.documentElement;
-      const styles = getComputedStyle(root);
-      const bg = styles.getPropertyValue('--theme-bg').trim();
-      meta.setAttribute('content', `oklch(${bg})`);
-
-      localStorage.setItem('theme', theme);
-    };
-
-    // Inicializar
-    setTheme(theme);
-
-    //astro:page-load event para establecer el tema cuando la página se carga
-    document.addEventListener('astro:page-load', () => {
-      setTheme(localStorage.getItem('theme') || 'light');
-
-      const toggle = document.getElementById('themeToggle');
-      if (toggle) {
-        toggle.addEventListener('click', () => {
-          const newTheme = document.documentElement.classList.contains('dark')
-            ? 'light'
-            : 'dark';
-          setTheme(newTheme);
-        });
-      }
+  // La lógica de tema vive en el <head> de BaseLayout (window.__theme)
+  document.addEventListener('astro:page-load', () => {
+    const toggle = document.getElementById('themeToggle');
+    if (!toggle) return;
+    const isDark = () => document.documentElement.classList.contains('dark');
+    toggle.setAttribute('aria-pressed', String(isDark()));
+    toggle.addEventListener('click', () => {
+      window.__theme.set(isDark() ? 'light' : 'dark');
+      toggle.setAttribute('aria-pressed', String(isDark()));
     });
-
-    // astro:after-swap event para actualizar el tema después de un cambio de página sin recargar
-    document.addEventListener('astro:after-swap', () => {
-      setTheme(localStorage.getItem('theme') || 'light');
-    });
-  })();
+  });
 </script>

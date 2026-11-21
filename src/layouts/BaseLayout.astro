@@ -22,7 +22,7 @@ interface Image {
 const descriptionDefault =
   'Jorge Balibrea — desarrollador Full Stack en Murcia. Especializado en React y Node.js. Explora mis proyectos y artículos sobre desarrollo web y tecnología.';
 const imageDefault = {
-  url: '/jorge-balibrea-foto-perfil.png',
+  url: '/og-default.jpg',
   alt: 'Foto de perfil de Jorge Balibrea',
 };
 const canonicalURLdefault = new URL(Astro.url.pathname, Astro.site);
@@ -59,11 +59,52 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     </script>
     <!-- end Google Tag Manager -->
 
-    <!-- Meta tags -->
     <meta charset="utf-8" />
-    <meta id="theme-color" name="theme-color" content="#fff" />
+    <meta id="theme-color" name="theme-color" content="#ffffff" />
+
+    <!-- Tema: se aplica antes del primer pintado para evitar el parpadeo -->
+    <script is:inline>
+      (function () {
+        var COLORS = { light: '#ffffff', dark: '#09090b' };
+
+        function getTheme() {
+          var saved = null;
+          try {
+            saved = localStorage.getItem('theme');
+          } catch (e) {}
+          if (saved === 'dark' || saved === 'light') return saved;
+          return window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+
+        function applyTheme(theme, doc) {
+          doc.documentElement.classList.toggle('dark', theme === 'dark');
+          var meta = doc.getElementById('theme-color');
+          if (meta) meta.setAttribute('content', COLORS[theme]);
+        }
+
+        window.__theme = {
+          get: getTheme,
+          set: function (theme) {
+            try {
+              localStorage.setItem('theme', theme);
+            } catch (e) {}
+            applyTheme(theme, document);
+          },
+        };
+
+        applyTheme(getTheme(), document);
+        // Con ClientRouter, aplicar el tema al documento nuevo antes del swap
+        document.addEventListener('astro:before-swap', function (e) {
+          applyTheme(getTheme(), e.newDocument);
+        });
+      })();
+    </script>
+
+    <!-- Meta tags -->
     <meta name="generator" content={Astro.generator} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="author" content="Jorge Balibrea" />
     <meta name="robots" content="index, follow" />
@@ -96,29 +137,14 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <!-- Canonical URL  -->
     <link rel="canonical" href={canonicalURL} />
 
-    <!--  Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
     <!-- Local Fonts preloads  -->
     <link
       rel="preload"
-      href="/fonts/satoshi/Satoshi-Variable.ttf"
+      href="/fonts/satoshi/Satoshi-Variable.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
-    <link
-      rel="preload"
-      href="/fonts/satoshi/Satoshi-VariableItalic.ttf"
-      as="font"
-      type="font/ttf"
-      crossorigin
-    />
-
     <link
       rel="alternate"
       type="application/rss+xml"

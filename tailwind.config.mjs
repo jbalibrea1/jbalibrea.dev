@@ -47,14 +47,8 @@ export default {
       },
       scale: ['group-a-hover'],
       fontFamily: {
-        // Satoshi, Inter, Montserrat
-        sans: ['"Satoshi"', '"Inter"', ...defaultTheme.fontFamily.sans],
-        //Funnel display, Montserrat, parkinsans
-        title: [
-          '"Funnel Display"',
-          '"Parkinsans"',
-          ...defaultTheme.fontFamily.serif,
-        ],
+        sans: ['"Satoshi"', ...defaultTheme.fontFamily.sans],
+        title: ['"Funnel Display Variable"', ...defaultTheme.fontFamily.serif],
       },
     },
   },
