@@ -16,23 +16,21 @@ const {
 } = Astro.props;
 ---
 
-{
-  disabled ? (
-    <span
-      class:list={['group inline-block', className]}
-      title={title}
-      aria-disabled={disabled}
-    >
-      <slot />
-    </span>
-  ) : (
-    <a
-      {href}
-      class:list={['group inline-block hover:text-accent-2', className]}
-      aria-label={ariaLabel}
-      title={title}
-    >
-      <slot />
-    </a>
-  )
-}
+{disabled ? (
+  <span
+    class:list={['group inline-block', className]}
+    title={title}
+    aria-disabled={disabled}
+  >
+    <slot />
+  </span>
+) : (
+  <a
+    {href}
+    class:list={['group inline-block hover:text-accent-2', className]}
+    aria-label={ariaLabel}
+    title={title}
+  >
+    <slot />
+  </a>
+)}

@@ -1,0 +1,13 @@
+# Lockfiles y salidas generadas
+pnpm-lock.yaml
+worker/**/pnpm-lock.yaml
+dist/
+.astro/
+node_modules/
+
+# Estáticos y documentación local
+public/
+docs/
+
+# Posts: llevan ejemplos de código (a propósito) que Prettier no debe reformatear
+src/content/

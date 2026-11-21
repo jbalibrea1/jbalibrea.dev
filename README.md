@@ -24,13 +24,13 @@ pnpm install
 pnpm dev          # http://localhost:4321
 ```
 
-| Command | What it does |
-| --- | --- |
-| `pnpm dev` | Dev server on port 4321 |
-| `pnpm build` | `astro check` (type check) + `astro build` → `dist/` |
-| `pnpm preview` | Serve the production build |
-| `pnpm lint` | ESLint (Astro, a11y, TypeScript, React hooks) |
-| `pnpm format` | Prettier |
+| Command        | What it does                                         |
+| -------------- | ---------------------------------------------------- |
+| `pnpm dev`     | Dev server on port 4321                              |
+| `pnpm build`   | `astro check` (type check) + `astro build` → `dist/` |
+| `pnpm preview` | Serve the production build                           |
+| `pnpm lint`    | ESLint (Astro, a11y, TypeScript, React hooks)        |
+| `pnpm format`  | Prettier                                             |
 
 Or with Docker: `docker compose -f docker-compose.dev.yml up`.
 

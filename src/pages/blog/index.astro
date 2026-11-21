@@ -12,18 +12,16 @@ const page1Posts = sortedPosts.slice(0, SITE.postsPerPage);
 
 <BlogLayout data={page1Posts}>
   <div class="space-y-4">
-    {
-      sortedPosts.length > SITE.postsPerPage && (
-        <div>
-          <a
-            href="/blog/page/2"
-            class="text-accent hover:text-accent-2 transition-colors"
-          >
-            Ver más posts →
-          </a>
-        </div>
-      )
-    }
+    {sortedPosts.length > SITE.postsPerPage && (
+      <div>
+        <a
+          href="/blog/page/2"
+          class="text-accent hover:text-accent-2 transition-colors"
+        >
+          Ver más posts →
+        </a>
+      </div>
+    )}
     <div>
       <a
         href="/blog/archive"

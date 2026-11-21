@@ -23,7 +23,11 @@ const titleSlug = unifiedText(title);
   <div class="m-0 text-sm">
     <p class="flex items-center gap-2 text-xs text-mutedfg/80">
       <strong class="font-semibold tracking-tight">{author} </strong>
-      <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} /> |
+      <FormattedDatetime
+        pubDateTime={pubDateTime}
+        modDateTime={modDateTime}
+      />{' '}
+      |
       <svg
         class="w-4 h-4"
         fill="none"
@@ -34,7 +38,8 @@ const titleSlug = unifiedText(title);
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M12 6v6l4 2m6-4a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          d="M12 6v6l4 2m6-4a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
       </svg>
       {minutesRead}
     </p>

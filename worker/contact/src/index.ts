@@ -189,11 +189,18 @@ export default {
     const cors = corsHeaders(origin, env);
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: cors['Access-Control-Allow-Origin'] ? 204 : 403, headers: cors });
+      return new Response(null, {
+        status: cors['Access-Control-Allow-Origin'] ? 204 : 403,
+        headers: cors,
+      });
     }
 
     if (request.method !== 'POST') {
-      return json({ success: false, message: 'Método no permitido' }, 405, cors);
+      return json(
+        { success: false, message: 'Método no permitido' },
+        405,
+        cors,
+      );
     }
 
     // Solo aceptamos peticiones desde los orígenes permitidos
@@ -207,7 +214,10 @@ export default {
       const { success } = await env.RATE_LIMITER.limit({ key: ip });
       if (!success) {
         return json(
-          { success: false, message: 'Demasiados intentos. Prueba de nuevo en un minuto.' },
+          {
+            success: false,
+            message: 'Demasiados intentos. Prueba de nuevo en un minuto.',
+          },
           429,
           cors,
         );
@@ -223,7 +233,11 @@ export default {
 
     // Honeypot: fingimos éxito sin enviar nada
     if (data.botcheck) {
-      return json({ success: true, message: 'Mensaje enviado correctamente.' }, 200, cors);
+      return json(
+        { success: true, message: 'Mensaje enviado correctamente.' },
+        200,
+        cors,
+      );
     }
 
     const { name, email, message, token } = data;
@@ -235,7 +249,11 @@ export default {
       !email.trim() ||
       !message.trim()
     ) {
-      return json({ success: false, message: 'Faltan datos obligatorios' }, 400, cors);
+      return json(
+        { success: false, message: 'Faltan datos obligatorios' },
+        400,
+        cors,
+      );
     }
 
     if (
@@ -243,7 +261,11 @@ export default {
       email.length > MAX_EMAIL ||
       message.length > MAX_MESSAGE
     ) {
-      return json({ success: false, message: 'Datos demasiado largos' }, 400, cors);
+      return json(
+        { success: false, message: 'Datos demasiado largos' },
+        400,
+        cors,
+      );
     }
 
     if (!MAIL_REGEX.test(email)) {
@@ -267,13 +289,20 @@ export default {
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         return json(
-          { success: false, message: 'Timeout al verificar el captcha. Intenta de nuevo.' },
+          {
+            success: false,
+            message: 'Timeout al verificar el captcha. Intenta de nuevo.',
+          },
           408,
           cors,
         );
       }
       console.error('Turnstile error', error);
-      return json({ success: false, message: 'Error al verificar el captcha.' }, 500, cors);
+      return json(
+        { success: false, message: 'Error al verificar el captcha.' },
+        500,
+        cors,
+      );
     }
 
     const safeName = escapeHtml(name.trim());
@@ -293,7 +322,10 @@ export default {
     } catch (error) {
       console.error('Notification mail failed', error);
       return json(
-        { success: false, message: 'Ha ocurrido un error al enviar el mensaje.' },
+        {
+          success: false,
+          message: 'Ha ocurrido un error al enviar el mensaje.',
+        },
         500,
         cors,
       );

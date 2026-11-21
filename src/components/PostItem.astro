@@ -10,16 +10,12 @@ const dateFormatted = formattedDate(dataTime);
 const titleSlug = unifiedText(data.title);
 ---
 
-<div
-  class="flex flex-row flex-wrap items-center gap-x-4 group transition duration-300 ease-in-out"
->
+<div class="flex flex-row flex-wrap items-center gap-x-4 group transition duration-300 ease-in-out">
   <a
     href={`/blog/${slug}`}
     class="font-title decoration-dashed underline-offset-2 focus-visible:no-underline focus-visible:underline-offset-0 text-accent opacity-80 text-2xl font-extrabold tracking-tighter box-decoration-slice group-hover:underline group-hover:opacity-100 group-hover:decoration-2 group-hover:decoration-accent-2 group-hover:scale-[1.005] transition duration-300 ease-in-out"
   >
-    <h2 transition:name={titleSlug}>
-      {data.title}
-    </h2>
+    <h2 transition:name={titleSlug}>{data.title}</h2>
   </a>
   <span>
     <time

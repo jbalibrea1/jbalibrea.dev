@@ -47,12 +47,10 @@ const posts = await getCollection('posts');
 // posts ordenados por fecha
 const sortedPosts = getSortedPosts(posts);
 // info mínima para la navegación anterior/siguiente
-const dataPosts = sortedPosts.map(
-  ({ data: { title }, slug }): InfoPost => ({
-    slug,
-    title,
-  }),
-);
+const dataPosts = sortedPosts.map(({ data: { title }, slug }): InfoPost => ({
+  slug,
+  title,
+}));
 
 const currPostIdx = dataPosts.findIndex((a) => a.slug === post.id);
 
@@ -95,8 +93,7 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
         id="sidebar-shade"
         class="fixed top-0 start-0 w-full h-full"
         style="display:none;background-color:#00000091;z-index:31"
-      >
-      </div>
+      ></div>
       <!-- end side bar-->
     </div>
     <PostComment client:only="react" />
@@ -106,8 +103,10 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
       class="lg:hidden helpers fixed bottom-22"
       aria-label="Abrir tabla de contenidos"
       aria-controls="sidebar"
-      aria-expanded="false">☰</button
+      aria-expanded="false"
     >
+      ☰
+    </button>
   </main>
   <MediumZoom />
   <ProgressBarBlog />
@@ -131,8 +130,7 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
     btn?.setAttribute('aria-expanded', String(open));
   }
 
-  const isOpen = () =>
-    !els().sidebar?.classList.contains(OPEN_CLASS);
+  const isOpen = () => !els().sidebar?.classList.contains(OPEN_CLASS);
 
   // Este script se carga una sola vez; el sidebar es nuevo en cada navegación
   document.addEventListener('astro:page-load', () => {
