@@ -14,17 +14,15 @@ const description = "Blog's archivados del blog de jbalibrea.dev";
 
 <BaseLayout title={title} description={description}>
   <PostList pagePosts={page1Posts}>
-    {
-      sortedPosts.length > SITE.archivePostsPerPage && (
-        <div class="mt-8">
-          <a
-            href="/blog/archive/2"
-            class="text-accent hover:text-accent-2 transition-colors"
-          >
-            Ver más archivados →
-          </a>
-        </div>
-      )
-    }
+    {sortedPosts.length > SITE.archivePostsPerPage && (
+      <div class="mt-8">
+        <a
+          href="/blog/archive/2"
+          class="text-accent hover:text-accent-2 transition-colors"
+        >
+          Ver más archivados →
+        </a>
+      </div>
+    )}
   </PostList>
 </BaseLayout>

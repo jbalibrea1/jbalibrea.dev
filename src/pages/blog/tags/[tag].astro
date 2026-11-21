@@ -37,17 +37,15 @@ const description = `Artículos del blog filtrados por el tag #${tag}`;
       <Button text="Ver todos los tags" href="/blog/tags" />
     </div>
     <p>
-      Filtrando artículos por: <span
-        transition:name={tag}
-        class="font-bold dark:text-white">#{tag}</span
-      >
+      Filtrando artículos por:{' '}
+      <span transition:name={tag} class="font-bold dark:text-white">
+        #{tag}
+      </span>
     </p>
     <ul>
-      {
-        posts.map(({ data, slug }) => (
-          <PostCard href={`/blog/${slug}`} post={data} />
-        ))
-      }
+      {posts.map(({ data, slug }) => (
+        <PostCard href={`/blog/${slug}`} post={data} />
+      ))}
     </ul>
   </main>
 </BaseLayout>

@@ -37,18 +37,17 @@ const navigatorItems = [
     <a
       href="/"
       class=`${getNavItemClass(false)} opacity-100 font-bold hover-underline-animation transition-opacity bg-clip-text bg-linear-to-r from-header to-accent text-transparent`
-      >jbalibrea.dev</a
     >
+      jbalibrea.dev
+    </a>
     <ul class="flex gap-4 md:gap-4 items-center uppercase">
-      {
-        navigatorItems.map((item) => (
-          <li>
-            <a href={item.href} class={item.className}>
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
+      {navigatorItems.map((item) => (
+        <li>
+          <a href={item.href} class={item.className}>
+            {item.label}
+          </a>
+        </li>
+      ))}
       <ThemeIcon />
     </ul>
   </nav>
