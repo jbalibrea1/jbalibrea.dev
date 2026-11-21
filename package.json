@@ -54,6 +54,9 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.73.0"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "packageManager": "pnpm@10.18.0",
   "pnpm": {
     "overrides": {

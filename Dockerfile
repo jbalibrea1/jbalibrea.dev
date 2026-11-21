@@ -26,10 +26,20 @@ RUN pnpm run build
 FROM nginx:alpine AS runner
 
 # Config embebida (sin fichero aparte): sirve dist/ en el puerto 4321, detrás de Traefik
+# `add_header` de un location anula los del nivel superior, por eso las cabeceras
+# de seguridad van en un snippet que se incluye en cada location.
+COPY <<'SECHEADERS' /etc/nginx/snippets/security-headers.conf
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+SECHEADERS
+
 COPY <<'NGINXCONF' /etc/nginx/conf.d/default.conf
 server {
   listen 4321;
   server_name _;
+  server_tokens off;
 
   # Detrás de Traefik: nunca generar redirecciones con host/puerto internos (:4321)
   absolute_redirect off;
@@ -38,14 +48,26 @@ server {
   index index.html;
 
   gzip on;
-  gzip_types text/css application/javascript application/json image/svg+xml text/xml;
+  gzip_types text/css application/javascript application/json application/xml application/rss+xml application/manifest+json image/svg+xml text/xml;
 
+  # Assets con hash en el nombre: cacheables para siempre
   location /_astro/ {
+    include /etc/nginx/snippets/security-headers.conf;
     add_header Cache-Control "public, max-age=31536000, immutable";
     try_files $uri =404;
   }
 
+  # Fuentes e iconos (nombre sin hash): un mes
+  location ~* ^/(fonts|icons)/ {
+    include /etc/nginx/snippets/security-headers.conf;
+    add_header Cache-Control "public, max-age=2592000";
+    try_files $uri =404;
+  }
+
+  # HTML y resto: siempre revalidar para que un despliegue se vea al momento
   location / {
+    include /etc/nginx/snippets/security-headers.conf;
+    add_header Cache-Control "no-cache";
     try_files $uri $uri/index.html $uri.html =404;
   }
 
@@ -55,5 +77,8 @@ NGINXCONF
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 4321
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q --spider http://127.0.0.1:4321/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
