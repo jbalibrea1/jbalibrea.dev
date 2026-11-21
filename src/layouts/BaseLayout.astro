@@ -51,6 +51,8 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <script is:inline type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag() {
+        // gtag necesita el objeto `arguments` tal cual (no un array)
+        // eslint-disable-next-line prefer-rest-params
         dataLayer.push(arguments);
       }
       gtag('js', new Date());
@@ -65,13 +67,13 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <!-- Tema: se aplica antes del primer pintado para evitar el parpadeo -->
     <script is:inline>
       (function () {
-        var COLORS = { light: '#ffffff', dark: '#09090b' };
+        const COLORS = { light: '#ffffff', dark: '#09090b' };
 
         function getTheme() {
-          var saved = null;
+          let saved = null;
           try {
             saved = localStorage.getItem('theme');
-          } catch (e) {}
+          } catch {}
           if (saved === 'dark' || saved === 'light') return saved;
           return window.matchMedia('(prefers-color-scheme: dark)').matches
             ? 'dark'
@@ -80,7 +82,7 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
 
         function applyTheme(theme, doc) {
           doc.documentElement.classList.toggle('dark', theme === 'dark');
-          var meta = doc.getElementById('theme-color');
+          const meta = doc.getElementById('theme-color');
           if (meta) meta.setAttribute('content', COLORS[theme]);
         }
 
@@ -89,7 +91,7 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
           set: function (theme) {
             try {
               localStorage.setItem('theme', theme);
-            } catch (e) {}
+            } catch {}
             applyTheme(theme, document);
           },
         };

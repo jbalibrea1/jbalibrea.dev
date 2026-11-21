@@ -32,6 +32,8 @@ jobs:
 
       - name: Web - install
         run: pnpm install --frozen-lockfile
+      - name: Web - lint
+        run: pnpm lint
       - name: Web - astro check + build
         env:
           # Valores de relleno: la web los incrusta en el build y aquí no se usan

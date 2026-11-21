@@ -2,10 +2,16 @@
 
 ---
 
-<script is:inline src="/medium-zoom.min.js"></script>
-<script is:inline data-astro-rerun>
-  mediumZoom('img', {
-    background: 'oklch(var(--theme-bg) / 0.8 )',
+<!-- Marca: el script solo actúa en las páginas que incluyen este componente -->
+<div data-medium-zoom hidden></div>
+<script>
+  import mediumZoom from 'medium-zoom';
+
+  document.addEventListener('astro:page-load', () => {
+    if (!document.querySelector('[data-medium-zoom]')) return;
+    mediumZoom('img', {
+      background: 'oklch(var(--theme-bg) / 0.8 )',
+    });
   });
 </script>
 <style is:global>
