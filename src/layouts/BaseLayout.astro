@@ -23,11 +23,14 @@ interface Props {
 interface Image {
   url: string;
   alt: string;
+  /** Dimensiones reales de la imagen (por defecto, 1200x630) */
+  width?: number;
+  height?: number;
 }
 
 const descriptionDefault =
   'Jorge Balibrea — desarrollador Full Stack en Murcia. Especializado en React y Node.js. Explora mis proyectos y artículos sobre desarrollo web y tecnología.';
-const imageDefault = {
+const imageDefault: Image = {
   url: '/og-default.jpg',
   alt: 'Foto de perfil de Jorge Balibrea',
 };
@@ -128,8 +131,8 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="jbalibrea.dev" />
     <meta property="og:image" content={fullImageURL} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content={String(image.width ?? 1200)} />
+    <meta property="og:image:height" content={String(image.height ?? 630)} />
     <meta property="og:image:alt" content={image.alt} />
     {
       article && (

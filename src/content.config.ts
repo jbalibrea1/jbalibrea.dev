@@ -19,18 +19,20 @@ const postsCollection = defineCollection({
     generateId: ({ entry }) =>
       entry.replace(/\/index\.mdx?$/, '').replace(/\.mdx?$/, ''),
   }),
-  schema: z.object({
-    title: z.string(),
-    pubDateTime: z.coerce.date(),
-    modDateTime: z.coerce.date().optional(),
-    description: z.string(),
-    author: z.string(),
-    image: z.object({
-      url: z.string(),
-      alt: z.string(),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      pubDateTime: z.coerce.date(),
+      modDateTime: z.coerce.date().optional(),
+      description: z.string(),
+      author: z.string(),
+      // Portada junto al post (`./imagen.png`): se valida y se optimiza
+      image: z.object({
+        url: image(),
+        alt: z.string(),
+      }),
+      tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
     }),
-    tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
-  }),
 });
 
 // Export a single `collections` object to register your collection(s)
