@@ -2,7 +2,7 @@
 import jorge from '@/assets/jorge-wo-bg.png';
 import LinkWithArrow from '@/components/LinkWithArrow.astro';
 import { Image } from 'astro:assets';
-import AboutMeMessage from './AboutMeMessage.jsx';
+import AboutMeMessage from './AboutMeMessage.astro';
 ---
 
 <div
@@ -15,7 +15,7 @@ import AboutMeMessage from './AboutMeMessage.jsx';
         id="random-msg"
       >
         <span aria-label="saludo">👋</span>
-        <AboutMeMessage client:load />
+        <AboutMeMessage />
       </p>
       <h1
         class="font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight dark:text-white inline-block"

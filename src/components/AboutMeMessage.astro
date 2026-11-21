@@ -1,0 +1,35 @@
+<span id="msg" class="transition text-mutedfg" aria-live="off"></span>
+
+<script>
+  const messages = [
+    'Hey!',
+    'Hola!',
+    'Saludos!',
+    'Qué tal?',
+    'Hello!',
+    'Hi!',
+    'Bienvenido!',
+  ];
+
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  document.addEventListener('astro:page-load', async () => {
+    const el = document.getElementById('msg');
+    if (!el) return;
+
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    if (reduceMotion) {
+      el.textContent = msg;
+      return;
+    }
+
+    for (let i = 1; i <= msg.length; i++) {
+      el.textContent = msg.slice(0, i);
+      await sleep(50);
+    }
+  });
+</script>
