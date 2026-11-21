@@ -2,7 +2,57 @@
 @import './markdown.css';
 @import './fonts.css';
 @import '@fontsource-variable/funnel-display';
-@config '../../tailwind.config.mjs';
+@plugin '@tailwindcss/typography';
+
+/* Modo oscuro por clase (`.dark` en <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Variantes de estado que activa el JS añadiendo la clase al elemento */
+@custom-variant readed (&.readed);
+@custom-variant highlight (&.highlight);
+@custom-variant highlight-bg (&.highlight-bg);
+@custom-variant group-a-hover (.group-a:hover &);
+
+/*
+ * `inline`: las utilidades usan `oklch(var(--theme-*))` directamente, de modo
+ * que el valor cambia con `.dark`. Sin `inline` se resolverían en :root y se
+ * quedarían siempre en el tema claro.
+ */
+@theme inline {
+  --color-accent: oklch(var(--theme-accent));
+  --color-accent-bg: oklch(var(--theme-accent-bg));
+  --color-accent-2: oklch(var(--theme-accent-2));
+  --color-bg-color: oklch(var(--theme-bg));
+  --color-bg-color-2: oklch(var(--theme-bg-2));
+  --color-link: oklch(var(--theme-link));
+  --color-quote: oklch(var(--theme-quote));
+  --color-text-color: oklch(var(--theme-text));
+  --color-header: oklch(var(--theme-header));
+  --color-header-2: oklch(var(--theme-header-2));
+  --color-muted: oklch(var(--theme-muted));
+  --color-mutedfg: oklch(var(--theme-mutedfg));
+}
+
+@theme {
+  --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-title: 'Funnel Display Variable', ui-serif, Georgia, Cambria,
+    'Times New Roman', Times, serif;
+
+  --animate-shimmer: shimmer 8s infinite;
+
+  @keyframes shimmer {
+    0%,
+    90%,
+    100% {
+      background-position: calc(-100% - var(--shimmer-width)) 0;
+    }
+    30%,
+    60% {
+      background-position: calc(100% + var(--shimmer-width)) 0;
+    }
+  }
+}
 
 :root {
   --radius: 0.65rem;
@@ -180,5 +230,54 @@
 
   button.helpers {
     @apply z-90 rounded-full border border-muted/80 bg-bg-color hover:bg-muted/80 transition-all duration-300 outline outline-muted/20 shadow-lg h-10 w-10 sm:h-12 sm:w-12 right-5  sm:right-8 lg:right-30;
+  }
+}
+
+@layer base {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    scroll-margin-top: 3rem;
+    font-weight: 500;
+  }
+
+  h1 > a,
+  h2 > a,
+  h3 > a,
+  h4 > a,
+  h5 > a,
+  h6 > a {
+    margin-inline-start: 0.75rem;
+    transition: opacity 0.2s ease;
+    opacity: 1;
+  }
+
+  blockquote:not([class*='admonition-']) {
+    position: relative;
+    overflow: hidden;
+    border-width: 1px;
+    border-left: inherit;
+    border-radius: 10px;
+    padding-inline: 1.6rem;
+    border-color: oklch(var(--theme-muted));
+    box-shadow: 0 5px 0 oklch(var(--theme-muted));
+  }
+
+  blockquote:not([class*='admonition-'])::after {
+    color: oklch(var(--theme-mutedfg));
+    position: absolute;
+    content: '\201D';
+    top: -0.9rem;
+    right: -0.2rem;
+    font-size: 10rem;
+    transform: rotate(-15deg);
+    opacity: 0.1;
+  }
+
+  code:not(pre code) {
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
   }
 }
