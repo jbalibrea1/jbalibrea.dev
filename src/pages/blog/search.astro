@@ -1,0 +1,208 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Buscar en el blog"
+  description="Busca entre los artículos del blog de Jorge Balibrea sobre desarrollo web, Linux y herramientas para desarrolladores."
+>
+  <main>
+    <h1 class="title">
+      Buscar en el <span class="title-bold">blog</span>
+    </h1>
+
+    <div id="search" class="mt-4">
+      <label for="search-input" class="sr-only">Buscar en el blog</label>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Buscar en los artículos…"
+        autocomplete="off"
+        class="w-full rounded-xl border border-muted bg-bg-color-2/50 px-4 py-3 text-base outline-none transition focus:border-accent-2 focus:ring-2 focus:ring-accent-2/30"
+      />
+      <p
+        id="search-status"
+        class="mt-3 min-h-6 text-sm text-text-color/70"
+        role="status"
+      >
+      </p>
+      <ol id="search-results" class="mt-4 space-y-4"></ol>
+      <noscript>El buscador necesita JavaScript.</noscript>
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  /* Los extractos de Pagefind marcan la coincidencia con <mark> */
+  #search-results mark {
+    background-color: oklch(var(--theme-accent-2) / 0.25);
+    color: inherit;
+    border-radius: 0.2rem;
+    padding: 0 0.1rem;
+  }
+</style>
+
+<script>
+  // El índice (dist/pagefind) lo genera `pagefind` después del build.
+  interface SubResult {
+    title: string;
+    url: string;
+    excerpt: string;
+  }
+  interface ResultData {
+    url: string;
+    excerpt: string;
+    meta: { title?: string };
+    sub_results: SubResult[];
+  }
+  interface SearchResponse {
+    results: { data: () => Promise<ResultData> }[];
+  }
+  interface PagefindApi {
+    debouncedSearch: (
+      query: string,
+      options?: Record<string, unknown>,
+      wait?: number,
+    ) => Promise<SearchResponse | null>;
+  }
+
+  const MAX_RESULTS = 8;
+  const MAX_SUB_RESULTS = 3;
+
+  let pagefind: PagefindApi | undefined;
+
+  async function loadPagefind(): Promise<PagefindApi> {
+    if (pagefind) return pagefind;
+    // Ruta en una variable: no existe en tiempo de build, solo tras `pagefind`
+    const url = '/pagefind/pagefind.js';
+    pagefind = (await import(/* @vite-ignore */ url)) as PagefindApi;
+    return pagefind;
+  }
+
+  function el<K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    className: string,
+    text?: string,
+  ): HTMLElementTagNameMap[K] {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function renderResult(data: ResultData): HTMLElement {
+    const card = el(
+      'li',
+      'group relative rounded-xl border border-muted bg-bg-color-2/40 p-4 transition hover:border-accent-2/60 hover:bg-muted/60',
+    );
+
+    // Enlace principal: se extiende a toda la tarjeta (::after) para que todo
+    // el bloque sea clicable, incluido el extracto.
+    const heading = el('h2', 'text-xl font-bold tracking-tight');
+    const link = el(
+      'a',
+      "ms-0 text-accent after:absolute after:inset-0 after:content-[''] focus-visible:outline-2 focus-visible:outline-accent-2",
+      data.meta.title ?? data.url,
+    );
+    link.href = data.url;
+    heading.append(link);
+    card.append(heading);
+
+    // Secciones concretas del artículo donde aparece la búsqueda
+    const subs = data.sub_results
+      .filter((sub) => sub.url !== data.url)
+      .slice(0, MAX_SUB_RESULTS);
+
+    // Extracto general solo si no hay secciones a las que ir (si las hay, repetiría
+    // casi el mismo texto que la primera). HTML generado por Pagefind a partir de
+    // nuestro propio contenido: solo texto escapado y etiquetas <mark>.
+    if (subs.length === 0) {
+      const excerpt = el('p', 'mt-2 text-sm text-text-color/80');
+      excerpt.innerHTML = data.excerpt;
+      card.append(excerpt);
+    }
+
+    if (subs.length > 0) {
+      const list = el(
+        'ul',
+        'relative z-10 mt-3 space-y-2 border-t border-muted pt-3',
+      );
+      for (const sub of subs) {
+        const item = el('li', '');
+        const subLink = el(
+          'a',
+          'text-sm font-medium text-accent-2 underline-offset-4 hover:underline',
+          `→ ${sub.title}`,
+        );
+        subLink.href = sub.url;
+        const subExcerpt = el('p', 'mt-0.5 text-xs text-text-color/70');
+        subExcerpt.innerHTML = sub.excerpt;
+        item.append(subLink, subExcerpt);
+        list.append(item);
+      }
+      card.append(list);
+    }
+    return card;
+  }
+
+  async function runSearch(
+    query: string,
+    results: HTMLElement,
+    status: HTMLElement,
+  ) {
+    const term = query.trim();
+    if (!term) {
+      results.replaceChildren();
+      status.textContent = '';
+      return;
+    }
+
+    const api = await loadPagefind();
+    const response = await api.debouncedSearch(term, {}, 250);
+    if (response === null) return; // llegó una búsqueda más reciente
+
+    const found = response.results.length;
+    status.textContent =
+      found === 0
+        ? `Sin resultados para «${term}».`
+        : `${found} ${found === 1 ? 'artículo' : 'artículos'} para «${term}».`;
+
+    const shown = await Promise.all(
+      response.results.slice(0, MAX_RESULTS).map((r) => r.data()),
+    );
+    results.replaceChildren(...shown.map(renderResult));
+  }
+
+  document.addEventListener('astro:page-load', async () => {
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+    const status = document.getElementById('search-status');
+    if (!(input instanceof HTMLInputElement) || !results || !status) return;
+
+    try {
+      await loadPagefind();
+    } catch {
+      input.disabled = true;
+      status.textContent =
+        'El buscador solo funciona en la versión compilada (pnpm build y pnpm preview).';
+      return;
+    }
+
+    const search = () => {
+      void runSearch(input.value, results, status);
+      const url = new URL(window.location.href);
+      if (input.value.trim()) url.searchParams.set('q', input.value.trim());
+      else url.searchParams.delete('q');
+      history.replaceState(history.state, '', url);
+    };
+    input.addEventListener('input', search);
+
+    // /blog/search/?q=texto abre la búsqueda ya hecha
+    const initial = new URLSearchParams(window.location.search).get('q');
+    if (initial) {
+      input.value = initial;
+      search();
+    }
+    input.focus();
+  });
+</script>

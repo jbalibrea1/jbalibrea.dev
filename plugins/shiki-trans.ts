@@ -12,6 +12,9 @@ export const updateStyle = (): ShikiTransformer => {
       const container = h('pre', node.children);
       node.children = [container];
       node.tagName = 'div';
+      // El código no se indexa en el buscador: los extractos salían como
+      // texto aplanado ilegible (p. ej. "## Encabezado 2 ### Encabezado 3 …")
+      node.properties['data-pagefind-ignore'] = 'all';
     },
   };
 };

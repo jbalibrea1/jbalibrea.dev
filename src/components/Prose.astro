@@ -14,6 +14,7 @@ const titleSlug = unifiedText(title);
   id="content"
 >
   <h1
+    data-pagefind-meta="title"
     class="font-title mb-1 antialiased hover:subpixel-antialiased text-5xl md:text-6xl lg:text-7xl text-accent font-light"
     transition:name={titleSlug}
   >
@@ -44,7 +45,7 @@ const titleSlug = unifiedText(title);
     </p>
   </div>
   <hr class="!my-1" />
-  <article class="prose-a:hover:text-accent-2">
+  <article class="prose-a:hover:text-accent-2" data-pagefind-body>
     <slot />
   </article>
 </div>
