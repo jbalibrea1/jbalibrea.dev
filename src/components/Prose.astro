@@ -19,7 +19,7 @@ const titleSlug = unifiedText(title);
   >
     {title}
   </h1>
-  <p class="m-0 text-sm">
+  <div class="m-0 text-sm">
     <p class="flex items-center gap-2 text-xs text-mutedfg/80">
       <strong class="font-semibold tracking-tight">{author} </strong>
       <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} /> |
@@ -37,7 +37,7 @@ const titleSlug = unifiedText(title);
       </svg>
       {minutesRead}
     </p>
-  </p>
+  </div>
   <div transition:animate={fade({ duration: '1s' })}>
     <p class="text-xs text italic" transition:name={`desc-${description}`}>
       {description}
