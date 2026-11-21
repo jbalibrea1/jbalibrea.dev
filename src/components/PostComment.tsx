@@ -8,38 +8,23 @@ interface CommentsProps {
   darkTheme?: Theme;
 }
 
+// La clase `dark` de <html> la fija el script del <head> (BaseLayout)
+const currentTheme = () =>
+  document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+
 export default function Comments({
   lightTheme = 'light',
   darkTheme = 'dark',
 }: CommentsProps) {
-  const [theme, setTheme] = useState(() => {
-    const currentTheme = localStorage.getItem('theme');
-    const browserTheme = window.matchMedia('(prefers-color-scheme: dark)')
-      .matches
-      ? 'dark'
-      : 'light';
-
-    return currentTheme || browserTheme;
-  });
+  // Solo se renderiza en cliente (client:only), así que `document` existe
+  const [theme, setTheme] = useState(currentTheme);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'dark' : 'light');
-  }, []);
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const isDark = document.documentElement.classList.contains('dark');
-      setTheme(isDark ? 'dark' : 'light');
-    });
-
+    const observer = new MutationObserver(() => setTheme(currentTheme()));
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class'],
     });
-
     return () => observer.disconnect();
   }, []);
 

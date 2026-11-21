@@ -1,9 +1,10 @@
 ---
 import PostCard from '@/components/PostCard.astro';
+import type { SortedPost } from '@utils/getSortedPosts';
 import BaseLayout from '@layouts/BaseLayout.astro';
 
 interface Props {
-  data: any[];
+  data: SortedPost[];
   title?: string;
   description?: string;
   canonicalURL?: string;

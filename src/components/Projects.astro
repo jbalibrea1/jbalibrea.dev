@@ -1,6 +1,6 @@
 ---
 import ButtonWithArrow from './ButtonWithArrow.astro';
-import { GitCard } from './GitCard';
+import GitCard from './GitCard.astro';
 import LastProject from './LastProject.astro';
 ---
 
@@ -16,7 +16,7 @@ import LastProject from './LastProject.astro';
     </div>
   </div>
   <div class="flex flex-col gap-2">
-    <GitCard client:load latest={true} />
+    <GitCard latest />
   </div>
 </article>
 

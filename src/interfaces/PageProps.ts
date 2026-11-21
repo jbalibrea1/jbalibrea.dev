@@ -1,7 +1,8 @@
 import type { Page } from 'astro';
-import type { CollectionEntry } from 'astro:content';
+import type { SortedPost } from '@utils/getSortedPosts';
 
-export type Post = CollectionEntry<'posts'>;
+// Todas las listas de posts salen de getSortedPosts, que añade `slug`
+export type Post = SortedPost;
 export interface PageProps {
   page: Page<Post>;
 }

@@ -1,6 +1,6 @@
 ---
 import Button from '@/components/Button.astro';
-import { GitCard } from '@/components/GitCard';
+import GitCard from '@/components/GitCard.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
@@ -33,7 +33,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
       </Button>
     </div>
     <section class="grid grid-cols-1 place-content-center gap-y-2 gap-x-1">
-      <GitCard client:load />
+      <GitCard />
     </section>
   </main>
 </BaseLayout>
