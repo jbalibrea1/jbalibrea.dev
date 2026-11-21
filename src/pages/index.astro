@@ -3,9 +3,40 @@ import AboutMe from '@/components/AboutMe.astro';
 import TimeLine from '@/components/TimeLine.astro';
 import Projects from '@components/Projects.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
+
+const siteUrl = new URL('/', Astro.site).toString();
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${siteUrl}#person`,
+    name: 'Jorge Balibrea',
+    url: siteUrl,
+    jobTitle: 'Desarrollador Full Stack',
+    knowsAbout: ['React', 'Node.js', 'TypeScript', 'Astro'],
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Murcia',
+      addressCountry: 'ES',
+    },
+    sameAs: [
+      'https://github.com/jbalibrea1',
+      'https://www.linkedin.com/in/jbalibrea/',
+      'https://twitter.com/jbalibrea1',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    url: siteUrl,
+    name: 'jbalibrea.dev',
+    inLanguage: 'es',
+    author: { '@id': `${siteUrl}#person` },
+  },
+];
 ---
 
-<BaseLayout title="Home">
+<BaseLayout title="Home" jsonLd={jsonLd}>
   <main transition:name={'pages'} class="pb-14">
     <AboutMe />
     <Projects />

@@ -12,6 +12,12 @@ interface Props {
   image?: Image;
   canonicalURL?: string;
   postTitle?: boolean;
+  /** Evita la indexación (p. ej. la 404) */
+  noindex?: boolean;
+  /** Metadatos de artículo para Open Graph */
+  article?: { published: Date; modified?: Date; tags: string[] };
+  /** Datos estructurados (schema.org) */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 interface Image {
@@ -34,6 +40,9 @@ const {
   image = imageDefault,
   canonicalURL = canonicalURLdefault,
   postTitle = false,
+  noindex = false,
+  article,
+  jsonLd,
 } = Astro.props;
 
 const fullImageURL = `${import.meta.env.SITE}${image.url}`;
@@ -109,8 +118,7 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="author" content="Jorge Balibrea" />
-    <meta name="robots" content="index, follow" />
-    <meta name="googlebot" content="index, follow" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <!-- Open Graph -->
     <meta property="og:title" content={`${title} | jbalibrea.dev`} />
@@ -123,6 +131,26 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={image.alt} />
+    {
+      article && (
+        <>
+          <meta
+            property="article:published_time"
+            content={article.published.toISOString()}
+          />
+          {article.modified && (
+            <meta
+              property="article:modified_time"
+              content={article.modified.toISOString()}
+            />
+          )}
+          <meta property="article:author" content="Jorge Balibrea" />
+          {article.tags.map((tag) => (
+            <meta property="article:tag" content={tag} />
+          ))}
+        </>
+      )
+    }
     <!-- end Open Graph -->
 
     <!-- Twitter -->
@@ -138,6 +166,16 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
 
     <!-- Canonical URL  -->
     <link rel="canonical" href={canonicalURL} />
+
+    {
+      jsonLd && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')}
+        />
+      )
+    }
 
     <!-- Local Fonts preloads  -->
     <link
@@ -169,7 +207,6 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
       sizes="512x512"
       href="/android-chrome-512x512.png"
     />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <title>
