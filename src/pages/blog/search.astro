@@ -1,0 +1,76 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Buscar en el blog"
+  description="Busca entre los artículos del blog de Jorge Balibrea sobre desarrollo web, Linux y herramientas para desarrolladores."
+>
+  <main>
+    <h1 class="title">
+      Buscar en el <span class="title-bold">blog</span>
+    </h1>
+    <div id="search" class="mt-4">
+      <noscript>El buscador necesita JavaScript.</noscript>
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  /* Pagefind sigue el tema del sitio (cambia con .dark) */
+  #search {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: oklch(var(--theme-accent));
+    --pagefind-ui-text: oklch(var(--theme-text));
+    --pagefind-ui-background: oklch(var(--theme-bg));
+    --pagefind-ui-border: oklch(var(--theme-muted));
+    --pagefind-ui-tag: oklch(var(--theme-muted));
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 0.65rem;
+    --pagefind-ui-font: inherit;
+  }
+</style>
+
+<script>
+  // El índice y la interfaz los genera `pagefind` después del build (dist/pagefind).
+  type PagefindUI = new (options: Record<string, unknown>) => unknown;
+  type PagefindWindow = Window & { PagefindUI?: PagefindUI };
+
+  const load = (tag: 'script' | 'link', url: string) =>
+    new Promise<void>((resolve, reject) => {
+      const el = document.createElement(tag);
+      if (el instanceof HTMLScriptElement) el.src = url;
+      else if (el instanceof HTMLLinkElement) {
+        el.rel = 'stylesheet';
+        el.href = url;
+      }
+      el.onload = () => resolve();
+      el.onerror = () => reject(new Error(`No se pudo cargar ${url}`));
+      document.head.appendChild(el);
+    });
+
+  document.addEventListener('astro:page-load', async () => {
+    const container = document.getElementById('search');
+    if (!container || container.childElementCount > 0) return;
+
+    const win = window as PagefindWindow;
+    try {
+      if (!win.PagefindUI) {
+        await Promise.all([
+          load('link', '/pagefind/pagefind-ui.css'),
+          load('script', '/pagefind/pagefind-ui.js'),
+        ]);
+      }
+      if (!win.PagefindUI) throw new Error('PagefindUI no disponible');
+      new win.PagefindUI({
+        element: container,
+        showImages: false,
+        showSubResults: true,
+        resetStyles: false,
+      });
+    } catch {
+      container.textContent =
+        'El buscador solo funciona en la versión compilada (pnpm build y pnpm preview).';
+    }
+  });
+</script>
