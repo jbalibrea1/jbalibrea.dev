@@ -10,7 +10,26 @@ import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 
 const { post, remarkPluginFrontmatter } = Astro.props;
-const { title, description, image } = post.data;
+const { title, description, image, pubDateTime, modDateTime, tags } = post.data;
+
+const postUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  image: [new URL(image.url, Astro.site).toString()],
+  datePublished: pubDateTime.toISOString(),
+  dateModified: (modDateTime ?? pubDateTime).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: post.data.author,
+    url: new URL('/', Astro.site).toString(),
+  },
+  mainEntityOfPage: postUrl,
+  inLanguage: 'es',
+  keywords: tags.join(', '),
+};
 
 /* ========== Prev/Next Posts ========== */
 const posts = await getCollection('posts');
@@ -38,6 +57,8 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
   sticky={false}
   image={image}
   postTitle={true}
+  article={{ published: pubDateTime, modified: modDateTime, tags }}
+  jsonLd={jsonLd}
 >
   <main>
     <div class="flex gap-12 max-w-full">
