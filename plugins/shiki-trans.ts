@@ -1,8 +1,11 @@
-// @ts-nocheck
+import type { transformerNotationDiff } from '@shikijs/transformers';
 import { h } from 'hastscript';
 
+// Tipo del transformer de Shiki (shiki no es dependencia directa)
+type ShikiTransformer = ReturnType<typeof transformerNotationDiff>;
+
 // Nest a div in the outer layer
-export const updateStyle = () => {
+export const updateStyle = (): ShikiTransformer => {
   return {
     name: 'shiki-transformer-update-style',
     pre(node) {
@@ -13,7 +16,7 @@ export const updateStyle = () => {
   };
 };
 
-export const addCopyButton = (timeout?: number) => {
+export const addCopyButton = (timeout?: number): ShikiTransformer => {
   const toggleMs = timeout || 3000;
 
   return {
