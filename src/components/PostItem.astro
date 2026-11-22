@@ -18,10 +18,7 @@ const titleSlug = unifiedText(data.title);
     <h2 transition:name={titleSlug}>{data.title}</h2>
   </a>
   <span>
-    <time
-      datetime={dataTime.toISOString()}
-      class="text-sm text-accent opacity-80"
-    >
+    <time datetime={dataTime.toISOString()} class="text-sm text-accent">
       {dateFormatted}
     </time>
   </span>

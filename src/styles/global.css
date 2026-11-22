@@ -64,7 +64,7 @@
   --theme-text: 11.3% 0.019 268.4;
   --theme-accent: 58.6% 0.253 17.585;
   --theme-accent-bg: 58.6% 0.253 17.585;
-  --theme-accent-2: 68.4% 0.1236 176.93;
+  --theme-accent-2: 50% 0.1236 176.93;
   --theme-quote: 38.3% 0.252 345.98;
   --theme-header: 58.9% 0.258 341.56;
   --theme-header-2: 26.4% 0.198 293.87;
@@ -75,7 +75,7 @@
 .dark {
   --theme-bg: 0.141 0.005 285.823;
   --theme-bg-2: 6.6% 0 0;
-  --theme-link: 55.9% 0.162 336.74;
+  --theme-link: 64% 0.162 336.74;
   --theme-text: 88.5% 0.004 264.36;
   --theme-accent: 82.4% 0.1079 358.16;
   --theme-accent-bg: 64.5% 0.246 16.439;
