@@ -1,5 +1,6 @@
 ---
 import PostCard from '@/components/PostCard.astro';
+import { getMinutesRead } from '@utils/getMinutesRead';
 import type { SortedPost } from '@utils/getSortedPosts';
 import BaseLayout from '@layouts/BaseLayout.astro';
 
@@ -16,10 +17,12 @@ const {
   description = 'Recursos sobre desarrollo Full Stack, React, Linux y herramientas para desarrolladores. Buenas prácticas, productividad y curiosidades del mundo del software.',
   canonicalURL,
 } = Astro.props;
+
+const minutesRead = await Promise.all(data.map(getMinutesRead));
 ---
 
 <BaseLayout title={title} description={description} canonicalURL={canonicalURL}>
-  <main>
+  <main id="main-content">
     <div class="pb-4">
       <h1 class="title">
         Blog de <span class="title-bold"> jbalibrea</span>
@@ -53,10 +56,14 @@ const {
       </p>
     </div>
     <ul>
-      {data.map(({ data, slug }) => (
+      {data.map(({ data, slug }, i) => (
         <li class="mb-10">
           <article>
-            <PostCard href={`/blog/${slug}`} post={data} />
+            <PostCard
+              href={`/blog/${slug}`}
+              post={data}
+              minutesRead={minutesRead[i]}
+            />
           </article>
         </li>
       ))}

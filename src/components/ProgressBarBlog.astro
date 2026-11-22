@@ -70,6 +70,25 @@
       span.ariaHidden = 'true';
       span.innerText = '#';
       link.appendChild(span);
+
+      // Además de ir a la sección, copia el enlace y lo avisa (también a lectores de pantalla)
+      link.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(link.href);
+        } catch {
+          return; // sin permisos o contexto no seguro: solo navega
+        }
+        const status = document.getElementById('copy-link-status');
+        span.innerText = '✓';
+        link.classList.add('opacity-100');
+        if (status) status.textContent = 'Enlace copiado';
+        setTimeout(() => {
+          span.innerText = '#';
+          link.classList.remove('opacity-100');
+          if (status) status.textContent = '';
+        }, 2000);
+      });
+
       heading.appendChild(link);
     }
   }

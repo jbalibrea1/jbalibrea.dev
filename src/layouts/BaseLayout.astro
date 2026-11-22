@@ -221,6 +221,9 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
   </head>
 
   <body class={Astro.url.pathname.startsWith('/blog') ? 'blog' : ''}>
+    <a href="#main-content" class="skip-link">
+      Saltar al contenido
+    </a>
     <MainNavigation sticky={sticky} />
     <slot />
     <BackToTop />

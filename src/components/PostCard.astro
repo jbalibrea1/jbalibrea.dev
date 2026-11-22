@@ -2,7 +2,7 @@
 import Datetime from './DateTime';
 import Tag from './Tag.astro';
 import unifiedText from '@utils/unifiedText';
-const { post, href } = Astro.props;
+const { post, href, minutesRead } = Astro.props;
 const { title, pubDateTime, modDateTime, description, tags } = post;
 const titleSlug = unifiedText(title);
 ---
@@ -31,5 +31,8 @@ const titleSlug = unifiedText(title);
       ))}
     </div>
     <Datetime pubDateTime={pubDateTime} modDateTime={modDateTime} />
+    {minutesRead && (
+      <p class="mt-1 text-xs italic opacity-80 md:text-right">{minutesRead}</p>
+    )}
   </div>
 </div>
