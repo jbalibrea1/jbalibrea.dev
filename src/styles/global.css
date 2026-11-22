@@ -286,3 +286,54 @@
     overflow-wrap: anywhere !important;
   }
 }
+
+/* Accesibilidad */
+
+/* Foco visible y consistente para teclado (no afecta al clic con ratón) */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent-2);
+  outline-offset: 3px;
+  border-radius: 0.25rem;
+}
+
+/* Enlace "Saltar al contenido": solo aparece al recibir foco */
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-bg-color);
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent-2);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Respeta "reducir movimiento" del sistema: sin animaciones, transiciones ni scroll suave */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -1,8 +1,8 @@
-FROM node:22
+FROM node:26
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN npm install -g corepack && corepack enable
 
 USER node
 WORKDIR /app
