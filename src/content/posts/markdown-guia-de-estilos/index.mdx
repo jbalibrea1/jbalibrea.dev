@@ -1,6 +1,7 @@
 ---
 title: 'Markdown: guía de estilos, sintaxis y resaltado con Shiki en Astro'
 pubDateTime: 2025-06-19
+modDateTime: 2026-11-22T12:00:00Z
 description: 'Explora una guía práctica de Markdown que incluye estilos y sintaxis, con código resaltado usando Shiki para mejorar la visualización.'
 author: 'Jorge Balibrea'
 image:
@@ -14,7 +15,7 @@ En [jbalibrea.dev](https://jbalibrea.dev) el resaltado de sintaxis se renderiza 
 
 ## Encabezados
 
-Para crear encabezados, agregue el signo numeral de `#` delante de una palabra o frase. El número de signos de numeral corresponde al nivel del encabezado.
+Para crear encabezados, agrega el signo numeral de `#` delante de una palabra o frase. El número de signos de numeral corresponde al nivel del encabezado.
 
 ### Sintaxis
 
@@ -69,11 +70,11 @@ Duis pharetra mi vel velit sodales, a tincidunt mauris eleifend. Suspendisse gra
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus egestas interdum. Nam volutpat tristique ullamcorper. Cras blandit vulputate enim vel ultrices. Curabitur quis elementum odio. In rhoncus fringilla facilisis. Phasellus semper leo ac nibh fermentum, eu tristique quam hendrerit.
 
-Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.
+Duis pharetra mi vel velit sodales, a tincidunt mauris eleifend. Suspendisse gravida risus nec velit interdum, id rhoncus libero venenatis.
 
 ## Imágenes y enlaces
 
-Para agregar una imagen, añada un signo de exclamación `!`, seguido de texto alternativo entre corchetes `[]`, y la ruta o URL de la imagen entre paréntesis `()`.
+Para agregar una imagen, añade un signo de exclamación `!`, seguido de texto alternativo entre corchetes `[]`, y la ruta o URL de la imagen entre paréntesis `()`.
 Para agregar un enlace es igual pero sin añadir la exclamación.
 
 ### Sintaxis
@@ -87,12 +88,12 @@ Para agregar un enlace es igual pero sin añadir la exclamación.
 
 ### Resultado
 
-![Descripción de la Imagen](https://jbalibrea.dev/img/dotfiles/nvim1.png)
+![Descripción de la Imagen](./nvim1.png)
 [enlace a URL](https://jbalibrea.dev/img/dotfiles/nvim1.png)
 
 ## Citas en Bloque
 
-Para destacar citas, crea una cita en bloque, agregando un `>` delante de un párrafo. En citas con múltiples párrafos, añade `>` también antes de los espacios entre párrafos. Cuando necesites atribuir la fuente `<cite>nombre del autor</cite>` o `<footer>nombre del autor</footer>` para referencias bibliográficas, mientras que las notas al pie pueden insertarse usando la sintaxis con número `[^1]` o `[^note]`. Las notas se muestra con `[^1]: Texto explicativo` al final del documento.
+Para destacar citas, crea una cita en bloque, agregando un `>` delante de un párrafo. En citas con múltiples párrafos, añade `>` también antes de los espacios entre párrafos. Cuando necesites atribuir la fuente `<cite>nombre del autor</cite>` o `<footer>nombre del autor</footer>` para referencias bibliográficas, mientras que las notas al pie pueden insertarse usando la sintaxis con número `[^1]` o `[^note]`. Las notas se muestran con `[^1]: Texto explicativo` al final del documento.
 
 ### Cita en bloque con múltiples párrafos
 
@@ -101,14 +102,14 @@ Para destacar citas, crea una cita en bloque, agregando un `>` delante de un pá
 ```markdown
 > Morbi in lorem pellentesque, cursus orci vitae, egestas quam. Phasellus.
 >
-> **Fijate** que se puede usar `sintaxis Markdown` dentro de una cita en bloque.
+> **Fíjate** que se puede usar `sintaxis Markdown` dentro de una cita en bloque.
 ```
 
 #### Resultado
 
 > Morbi in lorem pellentesque, cursus orci vitae, egestas quam. Phasellus.
 >
-> **Fijate** que se puede usar `sintaxis Markdown` dentro de una cita en bloque.
+> **Fíjate** que se puede usar `sintaxis Markdown` dentro de una cita en bloque.
 
 ### Cita en bloque con fuentes citadas
 
@@ -158,7 +159,7 @@ Resultado:
 
 ## Bloques de Código
 
-Para crear bloques de código, agregue tres "backticks" ` ``` ` al inicio y al final de su código. Puedes indicar el lenguaje de programación después
+Para crear bloques de código, agrega tres "backticks" ` ``` ` al inicio y al final de tu código. Puedes indicar el lenguaje de programación después
 de la primera línea de "backticks" para resaltar la sintaxis, por ejemplo: `js`, `html`, `css`, `markdown`, etc. Esto permite que el código se muestre con resaltado de sintaxis y formato adecuado.
 
 ### Sintaxis
@@ -182,8 +183,7 @@ for (let i = 0; i < n; i++) {
 ````
 
 > [!NOTE]
-> He añadido una barra invertida (\\) delante del comentario [!code ++\:4] para mejorar la legibilidad y evitar que se muestre un fondo de color en el ejemplo.
-> En la versión final, eliminaré ese backslash.
+> He añadido una barra invertida (\\) delante del comentario [!code ++\:4] solo en este ejemplo, para que Shiki no lo interprete y el texto se vea tal cual. No la incluyas en tu código.
 
 ### Resultado
 
@@ -340,5 +340,3 @@ secciones, usa la etiqueta `<hr />` o tres guiones `---` para crear una línea
 horizontal como la siguiente:
 
 ---
-
-axaxa
