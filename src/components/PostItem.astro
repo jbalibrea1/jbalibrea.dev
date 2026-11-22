@@ -1,11 +1,9 @@
 ---
-import { formattedDate } from '@utils/formattedDateTime';
+import { FormattedDatetime } from '@/components/DateTime';
 import unifiedText from '@utils/unifiedText';
 
 const { post } = Astro.props;
 const { data, slug } = post;
-const dataTime = data.modDateTime || data.pubDateTime;
-const dateFormatted = formattedDate(dataTime);
 
 const titleSlug = unifiedText(data.title);
 ---
@@ -17,9 +15,10 @@ const titleSlug = unifiedText(data.title);
   >
     <h2 transition:name={titleSlug}>{data.title}</h2>
   </a>
-  <span>
-    <time datetime={dataTime.toISOString()} class="text-sm text-accent">
-      {dateFormatted}
-    </time>
+  <span class="text-sm text-accent">
+    <FormattedDatetime
+      pubDateTime={data.pubDateTime}
+      modDateTime={data.modDateTime}
+    />
   </span>
 </div>

@@ -1,6 +1,7 @@
 ---
 title: 'Interceptor con Axios'
 pubDateTime: 2024-06-18T11:22:00Z
+modDateTime: 2026-11-22T12:00:00Z
 description: 'Modificar peticiones HTTP con interceptores en Axios.'
 author: 'Jorge Balibrea'
 image:
@@ -83,7 +84,8 @@ api.interceptors.request.use(
 export default api;
 ```
 
-_En este ejemplo, estamos haciendo uso del localStorage para almacenar el token de autorización y añadirlo a la cabecera de la petición. Como buena práctica y más segura, se recomienda almacenar el token en una cookie._
+> [!WARNING]
+> En este ejemplo uso `localStorage` por simplicidad, pero cualquier script que se ejecute en tu página (por ejemplo, tras un ataque XSS) puede leerlo. En producción es más seguro que el servidor entregue el token en una cookie `HttpOnly`, `Secure` y `SameSite`, que JavaScript no puede leer. En ese caso el interceptor ya no añade la cabecera: basta con crear la instancia con `withCredentials: true` para que el navegador envíe la cookie.
 
 Ya solo nos queda importar la instancia de axios en los servicios o componentes donde necesitemos hacer peticiones a la API.
 

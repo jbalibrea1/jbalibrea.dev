@@ -1,7 +1,7 @@
 ---
 title: 'Instalar JDK de Java en Windows'
 pubDateTime: 2024-09-16T15:22:00Z
-modDateTime: 2024-09-16T20:00:00Z
+modDateTime: 2026-11-22T12:00:00Z
 description: 'Todo lo que necesitas para instalar el JDK de Java en Windows.'
 author: 'Jorge Balibrea'
 image:
@@ -22,7 +22,7 @@ Cuando desarrollas en Java, uno de los primeros pasos es instalar el Java Develo
 
 A continuación, te presento las opciones más populares y sus principales diferencias.
 
-- ⛔**Oracle JDK**: Es la versión oficial proporcionada por Oracle. Ofrece soporte comercial y actualizaciones frecuentes, pero requiere licencia para uso comercial en producción. Ideal para grandes empresas que necesiten soporte directo de Oracle. **_No es la mejor opción para proyectos personales (no nos gustaría llegar a recibir una carta de Oracle por usar su JDK sin licencia😥)_**. <a href="https://www.oracle.com/java/technologies/downloads/" target="_blank">Descargar Oracle JDK</a>
+- **Oracle JDK**: Es la versión oficial proporcionada por Oracle. Ofrece soporte comercial y actualizaciones frecuentes. Desde Java 17 se publica bajo la licencia _Oracle No-Fee Terms and Conditions_ (NFTC), que permite usarlo gratis, también en producción, pero con condiciones y un plazo de gratuidad que depende de cada versión. Las versiones antiguas (como Java 8) sí requieren una suscripción para uso comercial. Si no quieres tener que revisar licencias, una distribución de OpenJDK es la opción más tranquila. <a href="https://www.oracle.com/java/technologies/downloads/" target="_blank">Descargar Oracle JDK</a>
 
 - **OpenJDK**: Es la versión de código abierto de Java. Es la opción más popular para proyectos de código abierto y para la mayoría de los desarrolladores. OpenJDK es la base de la mayoría de las distribuciones de Java, incluidas las versiones de Oracle y Adoptium Eclipse Temurin. <a href="https://openjdk.java.net/" target="_blank">Descargar OpenJDK</a>
 
@@ -41,6 +41,9 @@ Para instalar Adoptium Eclipse Temurin OpenJDK, sigue estos pasos:
 
    **Nota**: En este caso, vamos a instalar la versión LTS (Long Term Support)
    de Java 21.
+
+   > [!NOTE]
+   > Las capturas y los números de versión de este post son de Java 21, que sigue siendo LTS. A noviembre de 2026 la LTS más reciente es **Java 25** (Temurin 25.0.5.1). Los pasos son exactamente los mismos: descarga la versión que prefieras y sustituye el número en la ruta de `JAVA_HOME` (por ejemplo, `C:\Java\jdk-25.0.5.1+2`).
 
 2. Descomprimimos el archivo .zip en la carpeta que queramos. En este caso, lo descomprimiremos en la carpeta `C:\Java`.
 3. Configuramos las variables de entorno:

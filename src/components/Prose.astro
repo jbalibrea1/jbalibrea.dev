@@ -23,10 +23,12 @@ const titleSlug = unifiedText(title);
   <div class="m-0 text-sm">
     <p class="flex items-center gap-2 text-xs text-mutedfg/80">
       <strong class="font-semibold tracking-tight">{author} </strong>
-      <FormattedDatetime
-        pubDateTime={pubDateTime}
-        modDateTime={modDateTime}
-      />{' '}
+      <span>
+        <FormattedDatetime
+          pubDateTime={pubDateTime}
+          modDateTime={modDateTime}
+        />
+      </span>
       |
       <svg
         class="w-4 h-4"

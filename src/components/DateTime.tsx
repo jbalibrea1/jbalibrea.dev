@@ -1,5 +1,5 @@
 import type { DateTimeProps } from '@interfaces/DateTime';
-import { formattedDate, formattedTime } from '@utils/formattedDateTime';
+import { formattedDate } from '@utils/formattedDateTime';
 
 export default function Datetime({
   pubDateTime,
@@ -27,36 +27,59 @@ export default function Datetime({
           <FormattedDatetime
             pubDateTime={pubDateTime}
             modDateTime={modDateTime}
+            stacked
           />
         </span>
       </div>
-      {modDateTime && modDateTime > pubDateTime ? (
-        <span className={`italic ${size === 'sm' ? 'text-xs' : 'text-base'}`}>
-          Última actualización
-        </span>
-      ) : (
-        <span className="sr-only">Publicado</span>
-      )}
     </div>
   );
 }
 
+/** ¿Se editó el post en un día distinto al de publicación? */
+export const isUpdated = (
+  pubDateTime: string | Date,
+  modDateTime: string | Date | undefined | null,
+): modDateTime is string | Date =>
+  !!modDateTime &&
+  formattedDate(new Date(modDateTime)) !==
+    formattedDate(new Date(pubDateTime)) &&
+  new Date(modDateTime) > new Date(pubDateTime);
+
+const DateItem = ({ label, date }: { label: string; date: Date }) => (
+  <>
+    <span>{label}</span>{' '}
+    <time dateTime={date.toISOString()}>{formattedDate(date)}</time>
+  </>
+);
+
+/**
+ * Fecha de publicación y, si existe, la de actualización.
+ * `stacked`: una debajo de la otra (tarjetas); si no, en línea separadas por «·».
+ */
 export const FormattedDatetime = ({
   pubDateTime,
   modDateTime,
-}: DateTimeProps) => {
-  const myDatetime = new Date(
-    modDateTime && modDateTime > pubDateTime ? modDateTime : pubDateTime,
-  );
-
-  const date = formattedDate(myDatetime);
-  const time = formattedTime(myDatetime);
+  stacked = false,
+}: Pick<DateTimeProps, 'pubDateTime' | 'modDateTime'> & {
+  stacked?: boolean;
+}) => {
+  const pub = new Date(pubDateTime);
+  const updated = isUpdated(pubDateTime, modDateTime);
+  const Wrapper = stacked ? 'div' : 'span';
 
   return (
     <>
-      <time dateTime={myDatetime.toISOString()}>{date}</time>
-      <span className="sr-only">&nbsp;at&nbsp;</span>
-      <span className="text-nowrap sr-only">{time}</span>
+      <Wrapper>
+        <DateItem label="Publicado:" date={pub} />
+      </Wrapper>
+      {updated && (
+        <>
+          {!stacked && <span aria-hidden="true"> · </span>}
+          <Wrapper className={stacked ? 'text-xs' : undefined}>
+            <DateItem label="Actualizado:" date={new Date(modDateTime)} />
+          </Wrapper>
+        </>
+      )}
     </>
   );
 };
