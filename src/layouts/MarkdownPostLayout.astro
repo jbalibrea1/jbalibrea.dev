@@ -76,7 +76,7 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
   article={{ published: pubDateTime, modified: modDateTime, tags }}
   jsonLd={jsonLd}
 >
-  <main>
+  <main id="main-content">
     <div class="flex gap-12 max-w-full">
       <div class="flex-1 min-w-0">
         <Prose
@@ -117,6 +117,12 @@ const nextPost = currPostIdx > 0 ? dataPosts[currPostIdx - 1] : null;
   </main>
   <MediumZoom />
   <ProgressBarBlog />
+  <span
+    id="copy-link-status"
+    class="sr-only"
+    role="status"
+    aria-live="polite"
+  ></span>
 </BaseLayout>
 
 <script>
