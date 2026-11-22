@@ -21,19 +21,17 @@ const description =
   <main>
     <h1 class="title title-bold"># Tags</h1>
     <div class="flex flex-col flex-wrap gap-4 mt-5">
-      {
-        Object.keys(tags).map((k) => (
-          <div>
-            <span transition:name={k}>
-              <Tag
-                tag={k}
-                text="xl"
-                label={`#${k} (${tags[k]} ${tags[k] > 1 ? 'veces' : 'vez'})`}
-              />
-            </span>
-          </div>
-        ))
-      }
+      {Object.keys(tags).map((k) => (
+        <div>
+          <span transition:name={k}>
+            <Tag
+              tag={k}
+              text="xl"
+              label={`#${k} (${tags[k]} ${tags[k] > 1 ? 'veces' : 'vez'})`}
+            />
+          </span>
+        </div>
+      ))}
     </div>
   </main>
 </BaseLayout>

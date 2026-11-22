@@ -1,7 +1,7 @@
 services:
   web-dev:
     image: jbalibrea-web-dev
-    build: 
+    build:
       context: .
       dockerfile: dev.Dockerfile
     environment:
@@ -9,7 +9,8 @@ services:
       PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
     volumes:
       - ./:/app
+      - /app/node_modules
     expose:
-      - "4321"
+      - '4321'
     ports:
-      - "4321:4321"
+      - '4321:4321'

@@ -1,6 +1,6 @@
 ---
 import ButtonWithArrow from './ButtonWithArrow.astro';
-import { cn } from '@/lib/utils';
+import { cn } from '@utils/cn';
 import type { TimelineItem } from '@/interfaces/Timeline';
 
 const timelineData: TimelineItem[] = [
@@ -92,55 +92,53 @@ const timelineData: TimelineItem[] = [
     class="relative border-s border-gray-300 dark:border-gray-700 max-w-xl space-y-10"
     aria-label="Timeline de experiencia profesional"
   >
-    {
-      timelineData.map((item) => (
-        <li class="ms-4">
-          <div
-            class={cn(
-              'absolute w-3 h-3 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900',
-              item.isLast ? 'bg-accent-2' : 'bg-gray-200 dark:bg-gray-700',
-            )}
-          />
-          <time class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300">
-            {item.period}
-          </time>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
-            {item.title}
-            {item.achievement && (
-              <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-accent rounded-full border border-accent/20">
-                {item.achievement}
-              </span>
-            )}
-          </h3>
-          <p
-            class={cn(
-              'text-base font-normal text-gray-800 dark:text-slate-200',
-              (item.hasButton || item.technologies) && 'mb-4',
-            )}
-          >
-            {item.description}
-          </p>
-          {item.technologies && (
-            <div class="mb-4">
-              <div class="flex flex-wrap gap-2">
-                {item.technologies.map((tech) => (
-                  <span class="text-xs font-medium bg-muted text-accent-2/80 hover:text-accent-2 px-2 py-1 rounded-md transition duration-300 ease-in-out shadow-sm shadow-accent-2/40">
-                    {tech}
-                  </span>
-                ))}
-              </div>
+    {timelineData.map((item) => (
+      <li class="ms-4">
+        <div
+          class={cn(
+            'absolute w-3 h-3 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900',
+            item.isLast ? 'bg-accent-2' : 'bg-gray-200 dark:bg-gray-700',
+          )}
+        />
+        <time class="mb-1 text-sm font-normal leading-none text-gray-700 dark:text-slate-300">
+          {item.period}
+        </time>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
+          {item.title}
+          {item.achievement && (
+            <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-accent rounded-full border border-accent/20">
+              {item.achievement}
+            </span>
+          )}
+        </h3>
+        <p
+          class={cn(
+            'text-base font-normal text-gray-800 dark:text-slate-200',
+            (item.hasButton || item.technologies) && 'mb-4',
+          )}
+        >
+          {item.description}
+        </p>
+        {item.technologies && (
+          <div class="mb-4">
+            <div class="flex flex-wrap gap-2">
+              {item.technologies.map((tech) => (
+                <span class="text-xs font-medium bg-muted text-accent-2 hover:text-accent-2 px-2 py-1 rounded-md transition duration-300 ease-in-out shadow-sm shadow-accent-2/40">
+                  {tech}
+                </span>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {item.hasButton && item.buttonText && item.buttonHref && (
-            <ButtonWithArrow
-              href={item.buttonHref}
-              text={item.buttonText}
-              target="_blank"
-            />
-          )}
-        </li>
-      ))
-    }
+        {item.hasButton && item.buttonText && item.buttonHref && (
+          <ButtonWithArrow
+            href={item.buttonHref}
+            text={item.buttonText}
+            target="_blank"
+          />
+        )}
+      </li>
+    ))}
   </ol>
 </div>

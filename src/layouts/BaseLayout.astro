@@ -12,17 +12,26 @@ interface Props {
   image?: Image;
   canonicalURL?: string;
   postTitle?: boolean;
+  /** Evita la indexación (p. ej. la 404) */
+  noindex?: boolean;
+  /** Metadatos de artículo para Open Graph */
+  article?: { published: Date; modified?: Date; tags: string[] };
+  /** Datos estructurados (schema.org) */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 interface Image {
   url: string;
   alt: string;
+  /** Dimensiones reales de la imagen (por defecto, 1200x630) */
+  width?: number;
+  height?: number;
 }
 
 const descriptionDefault =
   'Jorge Balibrea — desarrollador Full Stack en Murcia. Especializado en React y Node.js. Explora mis proyectos y artículos sobre desarrollo web y tecnología.';
-const imageDefault = {
-  url: '/jorge-balibrea-foto-perfil.png',
+const imageDefault: Image = {
+  url: '/og-default.jpg',
   alt: 'Foto de perfil de Jorge Balibrea',
 };
 const canonicalURLdefault = new URL(Astro.url.pathname, Astro.site);
@@ -34,6 +43,9 @@ const {
   image = imageDefault,
   canonicalURL = canonicalURLdefault,
   postTitle = false,
+  noindex = false,
+  article,
+  jsonLd,
 } = Astro.props;
 
 const fullImageURL = `${import.meta.env.SITE}${image.url}`;
@@ -47,10 +59,13 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
       is:inline
       type="text/partytown"
       async
-      src="https://www.googletagmanager.com/gtag/js?id=G-3R2C9ZBRFV"></script>
+      src="https://www.googletagmanager.com/gtag/js?id=G-3R2C9ZBRFV"
+    ></script>
     <script is:inline type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag() {
+        // gtag necesita el objeto `arguments` tal cual (no un array)
+        // eslint-disable-next-line prefer-rest-params
         dataLayer.push(arguments);
       }
       gtag('js', new Date());
@@ -59,15 +74,55 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     </script>
     <!-- end Google Tag Manager -->
 
-    <!-- Meta tags -->
     <meta charset="utf-8" />
-    <meta id="theme-color" name="theme-color" content="#fff" />
+    <meta id="theme-color" name="theme-color" content="#ffffff" />
+
+    <!-- Tema: se aplica antes del primer pintado para evitar el parpadeo -->
+    <script is:inline>
+      (function () {
+        const COLORS = { light: '#ffffff', dark: '#09090b' };
+
+        function getTheme() {
+          let saved = null;
+          try {
+            saved = localStorage.getItem('theme');
+          } catch {}
+          if (saved === 'dark' || saved === 'light') return saved;
+          return window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+
+        function applyTheme(theme, doc) {
+          doc.documentElement.classList.toggle('dark', theme === 'dark');
+          const meta = doc.getElementById('theme-color');
+          if (meta) meta.setAttribute('content', COLORS[theme]);
+        }
+
+        window.__theme = {
+          get: getTheme,
+          set: function (theme) {
+            try {
+              localStorage.setItem('theme', theme);
+            } catch {}
+            applyTheme(theme, document);
+          },
+        };
+
+        applyTheme(getTheme(), document);
+        // Con ClientRouter, aplicar el tema al documento nuevo antes del swap
+        document.addEventListener('astro:before-swap', function (e) {
+          applyTheme(getTheme(), e.newDocument);
+        });
+      })();
+    </script>
+
+    <!-- Meta tags -->
     <meta name="generator" content={Astro.generator} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="author" content="Jorge Balibrea" />
-    <meta name="robots" content="index, follow" />
-    <meta name="googlebot" content="index, follow" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <!-- Open Graph -->
     <meta property="og:title" content={`${title} | jbalibrea.dev`} />
@@ -77,9 +132,27 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="jbalibrea.dev" />
     <meta property="og:image" content={fullImageURL} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content={String(image.width ?? 1200)} />
+    <meta property="og:image:height" content={String(image.height ?? 630)} />
     <meta property="og:image:alt" content={image.alt} />
+    {article && (
+      <>
+        <meta
+          property="article:published_time"
+          content={article.published.toISOString()}
+        />
+        {article.modified && (
+          <meta
+            property="article:modified_time"
+            content={article.modified.toISOString()}
+          />
+        )}
+        <meta property="article:author" content="Jorge Balibrea" />
+        {article.tags.map((tag) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+      </>
+    )}
     <!-- end Open Graph -->
 
     <!-- Twitter -->
@@ -96,29 +169,22 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
     <!-- Canonical URL  -->
     <link rel="canonical" href={canonicalURL} />
 
-    <!--  Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
+    {jsonLd && (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')}
+      />
+    )}
+
     <!-- Local Fonts preloads  -->
     <link
       rel="preload"
-      href="/fonts/satoshi/Satoshi-Variable.ttf"
+      href="/fonts/satoshi/Satoshi-Variable.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
-    <link
-      rel="preload"
-      href="/fonts/satoshi/Satoshi-VariableItalic.ttf"
-      as="font"
-      type="font/ttf"
-      crossorigin
-    />
-
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -141,7 +207,6 @@ const fullImageURL = `${import.meta.env.SITE}${image.url}`;
       sizes="512x512"
       href="/android-chrome-512x512.png"
     />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <title>

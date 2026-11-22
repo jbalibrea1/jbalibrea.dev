@@ -1,5 +1,5 @@
 name: CI/CD - Build, Push, Deploy 🐳
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Deploy ${{ github.ref_name }} (${{ github.actor }})
 on:
   push:
     branches:
@@ -9,76 +9,85 @@ on:
       - chore/*
       - refactor/*
 
+# Un solo despliegue a la vez por entorno. En staging un push nuevo cancela el
+# anterior; en producción nunca se cancela a mitad de despliegue.
+concurrency:
+  group: deploy-${{ github.ref_name == 'main' && 'production' || 'staging' }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
+
+permissions:
+  contents: read
+
+env:
+  IS_PROD: ${{ github.ref_name == 'main' }}
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
       - name: Checkout repo
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
-      - run: echo "🔐 Successfully logged in to GitHub Container Registry."
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - id: build-image
-        name: 🐳 Build and tag Docker image
-        run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/jbalibreadev-web
-          BRANCH_NAME="${{ github.ref_name }}"
+      # Tags: `latest` en main, `pre` en el resto, y siempre el SHA completo
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/jbalibreadev-web
+          tags: |
+            type=raw,value=latest,enable=${{ env.IS_PROD == 'true' }}
+            type=raw,value=pre,enable=${{ env.IS_PROD != 'true' }}
+            type=sha,format=long,prefix=
 
-          if [[ "$BRANCH_NAME" == "main" ]]; then
-            TAG="latest"
-          else
-            TAG="pre"
-          fi
-
-          echo "🔧 Building image with tag: $TAG"
-
-          docker build \
-            --build-arg PUBLIC_CONTACT_ENDPOINT=${{ secrets.PUBLIC_CONTACT_ENDPOINT }} \
-            --build-arg PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }} \
-            -t $IMAGE_NAME:$TAG \
-            -t $IMAGE_NAME:${{ github.sha }} .
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
-          echo "TAG=$TAG" >> $GITHUB_OUTPUT
-
-      - name: 🚀 Push Docker image
-        run: |
-          docker push ${{ steps.build-image.outputs.IMAGE_NAME }}:${{ steps.build-image.outputs.TAG }}
-          docker push ${{ steps.build-image.outputs.IMAGE_NAME }}:${{ github.sha }}
+      - name: Build and push image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            PUBLIC_CONTACT_ENDPOINT=${{ secrets.PUBLIC_CONTACT_ENDPOINT }}
+            PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     needs: build-and-push
-    if: needs.build-and-push.result == 'success'
     runs-on: ubuntu-latest
-    environment: ${{ contains(github.ref, 'main') && 'production' || 'staging' }}
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
     steps:
-      - name: 🧠 Determine compose file to use
-        id: branch-check
+      - name: Determine compose file
+        id: compose
         run: |
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            echo "COMPOSE_FILE=docker-compose.yml" >> $GITHUB_OUTPUT
+          if [[ "$IS_PROD" == "true" ]]; then
+            echo "file=docker-compose.yml" >> "$GITHUB_OUTPUT"
           else
-            echo "COMPOSE_FILE=docker-compose.pre.yml" >> $GITHUB_OUTPUT
+            echo "file=docker-compose.pre.yml" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: 🔐 Deploy to VPS via SSH
+      - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1
         env:
           GHCR_USER: ${{ github.repository_owner }}
           GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          COMPOSE_FILE: ${{ steps.compose.outputs.file }}
         with:
-          envs: GHCR_USER,GHCR_TOKEN
+          envs: GHCR_USER,GHCR_TOKEN,COMPOSE_FILE
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
@@ -87,24 +96,15 @@ jobs:
             set -e
             cd ${{ secrets.VPS_PROJECT_PATH }}
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
-            ls -l
-            echo "🔧 Starting deployment on the VPS..."
 
-            if [[ "${{ github.ref_name }}" == "main" ]]; then
-              echo "🚀 Deploying production image using docker-compose.yml"
-            else
-              echo "⚙️ Deploying pre-production image using docker-compose.pre.yml"
-            fi
-
-            docker compose -f ${{ steps.branch-check.outputs.COMPOSE_FILE }} pull
-            echo "📦 Pulled the latest Docker image from GitHub Container Registry."
-
-            docker compose -f ${{ steps.branch-check.outputs.COMPOSE_FILE }} up -d --force-recreate
-            echo "✅ Deployment completed successfully on the VPS."
+            echo "Deploying with $COMPOSE_FILE"
+            docker compose -f "$COMPOSE_FILE" pull
+            docker compose -f "$COMPOSE_FILE" up -d --force-recreate
+            echo "Deployment completed"
 
             export PATH="$HOME/.local/bin:$PATH"
             if command -v docker-clean > /dev/null; then
-              docker-clean || echo "⚠️ docker-clean falló (se ignora)"
+              docker-clean || echo "docker-clean falló (se ignora)"
             else
-              echo "⚠️ docker-clean no está instalado o no está en PATH"
+              echo "docker-clean no está instalado o no está en PATH"
             fi

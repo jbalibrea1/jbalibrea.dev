@@ -2,28 +2,26 @@
 import MediumZoom from '@components/MediumZoom.astro';
 import { SITE } from '@config';
 import BlogLayout from '@layouts/BlogLayout.astro';
-import getShortedPosts from '@utils/getSorterPosts';
+import getSortedPosts from '@utils/getSortedPosts';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('posts');
-const sortedPosts = getShortedPosts(posts);
+const sortedPosts = getSortedPosts(posts);
 const page1Posts = sortedPosts.slice(0, SITE.postsPerPage);
 ---
 
 <BlogLayout data={page1Posts}>
   <div class="space-y-4">
-    {
-      sortedPosts.length > SITE.postsPerPage && (
-        <div>
-          <a
-            href="/blog/page/2"
-            class="text-accent hover:text-accent-2 transition-colors"
-          >
-            Ver más posts →
-          </a>
-        </div>
-      )
-    }
+    {sortedPosts.length > SITE.postsPerPage && (
+      <div>
+        <a
+          href="/blog/page/2"
+          class="text-accent hover:text-accent-2 transition-colors"
+        >
+          Ver más posts →
+        </a>
+      </div>
+    )}
     <div>
       <a
         href="/blog/archive"

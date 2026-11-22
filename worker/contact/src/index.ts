@@ -5,6 +5,8 @@ export interface Env {
   MAIL_FROM: string;
   REPLY_TO: string;
   ALLOWED_ORIGINS: string;
+  // Binding de rate limiting (ver wrangler.toml). Opcional para poder correr en local.
+  RATE_LIMITER?: RateLimit;
 }
 
 type ContactPayload = {
@@ -71,9 +73,24 @@ async function fetchWithTimeout(
   }
 }
 
+// Hostnames permitidos, derivados de ALLOWED_ORIGINS
+function allowedHostnames(env: Env): string[] {
+  return (env.ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((o) => {
+      try {
+        return new URL(o.trim()).hostname;
+      } catch {
+        return '';
+      }
+    })
+    .filter(Boolean);
+}
+
 async function verifyTurnstile(
   token: string,
   ip: string | null,
+  origin: string,
   env: Env,
 ): Promise<boolean> {
   const body = new URLSearchParams({
@@ -86,8 +103,17 @@ async function verifyTurnstile(
     'https://challenges.cloudflare.com/turnstile/v0/siteverify',
     { method: 'POST', body },
   );
-  const result = (await res.json()) as { success?: boolean };
-  return result.success === true;
+  const result = (await res.json()) as { success?: boolean; hostname?: string };
+  if (result.success !== true) return false;
+
+  // Un token emitido para otro sitio no vale. En local las claves de prueba de
+  // Turnstile devuelven siempre `example.com`, así que ahí no se comprueba.
+  const originHost = new URL(origin).hostname;
+  if (originHost === 'localhost') return true;
+  return (
+    typeof result.hostname === 'string' &&
+    allowedHostnames(env).includes(result.hostname)
+  );
 }
 
 async function sendMail(
@@ -134,14 +160,14 @@ function notificationHtml(name: string, email: string, message: string) {
   </div>`;
 }
 
-function confirmationHtml(name: string, message: string) {
+// El autoreply NO incluye el texto del visitante: si no, el Worker serviría para
+// enviar contenido arbitrario a cualquier dirección desde nuestro dominio.
+function confirmationHtml(name: string) {
   return `
   <div style="font-family: sans-serif; background-color: #f4f4f4; padding: 20px;">
     <div style="max-width: 600px; margin: auto; background: #fff; padding: 24px; border-radius: 8px;">
       <h2>¡Hola ${name}!</h2>
-      <p>¡Gracias por tu mensaje! Se ha recibido correctamente:</p>
-      <blockquote style="border-left: 4px solid #ccc; margin: 10px 0; padding-left: 10px; color: #555; white-space: pre-wrap;">${message}</blockquote>
-      <hr style="margin: 24px 0;" />
+      <p>¡Gracias por tu mensaje! Lo he recibido correctamente.</p>
       <p>En caso de ser necesario, me pondré en contacto contigo lo antes posible.</p>
       <p>
         Un saludo,<br />
@@ -151,6 +177,7 @@ function confirmationHtml(name: string, message: string) {
       <p style="font-size: 12px; color: gray; margin-top: 20px;">
         Este mensaje ha sido enviado automáticamente desde
         <a href="https://jbalibrea.dev" style="color: #1a0dab; text-decoration: none;">jbalibrea.dev</a>
+        porque alguien (esperamos que tú) usó el formulario de contacto con esta dirección.
       </p>
     </div>
   </div>`;
@@ -162,16 +189,39 @@ export default {
     const cors = corsHeaders(origin, env);
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: cors['Access-Control-Allow-Origin'] ? 204 : 403, headers: cors });
+      return new Response(null, {
+        status: cors['Access-Control-Allow-Origin'] ? 204 : 403,
+        headers: cors,
+      });
     }
 
     if (request.method !== 'POST') {
-      return json({ success: false, message: 'Método no permitido' }, 405, cors);
+      return json(
+        { success: false, message: 'Método no permitido' },
+        405,
+        cors,
+      );
     }
 
     // Solo aceptamos peticiones desde los orígenes permitidos
     if (!cors['Access-Control-Allow-Origin']) {
       return json({ success: false, message: 'Origen no permitido' }, 403, {});
+    }
+
+    // Rate limiting por IP (best effort, por ubicación de Cloudflare)
+    if (env.RATE_LIMITER) {
+      const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+      const { success } = await env.RATE_LIMITER.limit({ key: ip });
+      if (!success) {
+        return json(
+          {
+            success: false,
+            message: 'Demasiados intentos. Prueba de nuevo en un minuto.',
+          },
+          429,
+          cors,
+        );
+      }
     }
 
     let data: ContactPayload;
@@ -183,7 +233,11 @@ export default {
 
     // Honeypot: fingimos éxito sin enviar nada
     if (data.botcheck) {
-      return json({ success: true, message: 'Mensaje enviado correctamente.' }, 200, cors);
+      return json(
+        { success: true, message: 'Mensaje enviado correctamente.' },
+        200,
+        cors,
+      );
     }
 
     const { name, email, message, token } = data;
@@ -195,7 +249,11 @@ export default {
       !email.trim() ||
       !message.trim()
     ) {
-      return json({ success: false, message: 'Faltan datos obligatorios' }, 400, cors);
+      return json(
+        { success: false, message: 'Faltan datos obligatorios' },
+        400,
+        cors,
+      );
     }
 
     if (
@@ -203,7 +261,11 @@ export default {
       email.length > MAX_EMAIL ||
       message.length > MAX_MESSAGE
     ) {
-      return json({ success: false, message: 'Datos demasiado largos' }, 400, cors);
+      return json(
+        { success: false, message: 'Datos demasiado largos' },
+        400,
+        cors,
+      );
     }
 
     if (!MAIL_REGEX.test(email)) {
@@ -218,6 +280,7 @@ export default {
       const human = await verifyTurnstile(
         token,
         request.headers.get('CF-Connecting-IP'),
+        origin as string,
         env,
       );
       if (!human) {
@@ -226,13 +289,20 @@ export default {
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         return json(
-          { success: false, message: 'Timeout al verificar el captcha. Intenta de nuevo.' },
+          {
+            success: false,
+            message: 'Timeout al verificar el captcha. Intenta de nuevo.',
+          },
           408,
           cors,
         );
       }
       console.error('Turnstile error', error);
-      return json({ success: false, message: 'Error al verificar el captcha.' }, 500, cors);
+      return json(
+        { success: false, message: 'Error al verificar el captcha.' },
+        500,
+        cors,
+      );
     }
 
     const safeName = escapeHtml(name.trim());
@@ -252,7 +322,10 @@ export default {
     } catch (error) {
       console.error('Notification mail failed', error);
       return json(
-        { success: false, message: 'Ha ocurrido un error al enviar el mensaje.' },
+        {
+          success: false,
+          message: 'Ha ocurrido un error al enviar el mensaje.',
+        },
         500,
         cors,
       );
@@ -265,8 +338,8 @@ export default {
         to: email.trim(),
         reply_to: env.REPLY_TO,
         subject: 'Gracias por contactar conmigo en jbalibrea.dev',
-        text: `Hola ${name}, gracias por tu mensaje.`,
-        html: confirmationHtml(safeName, safeMessage),
+        text: `Hola ${headerName}, gracias por tu mensaje. Lo he recibido correctamente.`,
+        html: confirmationHtml(safeName),
       });
     } catch (error) {
       console.error('Autoreply mail failed', error);

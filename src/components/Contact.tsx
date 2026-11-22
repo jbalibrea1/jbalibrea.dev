@@ -38,7 +38,8 @@ export default function Contact({
 
   useEffect(() => {
     const renderWidget = () => {
-      if (!window.turnstile || !turnstileRef.current || widgetId.current) return;
+      if (!window.turnstile || !turnstileRef.current || widgetId.current)
+        return;
       widgetId.current = window.turnstile.render(turnstileRef.current, {
         sitekey: turnstileSiteKey,
         callback: setToken,

@@ -14,15 +14,22 @@ const titleSlug = unifiedText(title);
   id="content"
 >
   <h1
+    data-pagefind-meta="title"
     class="font-title mb-1 antialiased hover:subpixel-antialiased text-5xl md:text-6xl lg:text-7xl text-accent font-light"
     transition:name={titleSlug}
   >
     {title}
   </h1>
-  <p class="m-0 text-sm">
+  <div class="m-0 text-sm">
     <p class="flex items-center gap-2 text-xs text-mutedfg/80">
       <strong class="font-semibold tracking-tight">{author} </strong>
-      <FormattedDatetime pubDateTime={pubDateTime} modDateTime={modDateTime} /> |
+      <span>
+        <FormattedDatetime
+          pubDateTime={pubDateTime}
+          modDateTime={modDateTime}
+        />
+      </span>
+      |
       <svg
         class="w-4 h-4"
         fill="none"
@@ -33,18 +40,19 @@ const titleSlug = unifiedText(title);
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M12 6v6l4 2m6-4a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          d="M12 6v6l4 2m6-4a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
       </svg>
       {minutesRead}
     </p>
-  </p>
+  </div>
   <div transition:animate={fade({ duration: '1s' })}>
     <p class="text-xs text italic" transition:name={`desc-${description}`}>
       {description}
     </p>
   </div>
   <hr class="!my-1" />
-  <article class="prose-a:hover:text-accent-2">
+  <article class="prose-a:hover:text-accent-2" data-pagefind-body>
     <slot />
   </article>
 </div>

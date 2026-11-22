@@ -10,4 +10,10 @@ ALLOWED_ORIGINS = "https://jbalibrea.dev,https://pre.jbalibrea.dev,http://localh
 MAIL_FROM = "contact@alerts.jbalibrea.dev"
 REPLY_TO = "contact@jbalibrea.dev"
 
+# Rate limiting por IP: 3 envíos cada 60 s (period solo admite 10 o 60)
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 3, period = 60 }
+
 # Secrets (wrangler secret put <NAME>): RESEND_API_KEY, TURNSTILE_SECRET, CONTACT_TO

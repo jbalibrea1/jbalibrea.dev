@@ -1,11 +1,16 @@
 name: Deploy contact Worker ☁️
 on:
   push:
-    branches: [main, develop]
+    # Solo main: el Worker es único y sirve a producción (y a pre)
+    branches: [main]
     paths:
       - 'worker/contact/**'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:
+
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
 
 jobs:
   deploy-worker:
@@ -14,11 +19,11 @@ jobs:
       run:
         working-directory: worker/contact
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
           version: 10.18.0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -26,7 +31,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - name: Deploy to Cloudflare
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

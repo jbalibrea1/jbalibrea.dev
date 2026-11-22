@@ -1,13 +1,19 @@
 ---
 title: 'Servidor casero con Proxmox y Docker'
 pubDateTime: 2025-04-25T14:22:00Z
+modDateTime: 2026-11-22T12:00:00Z
 description: 'Pequeña guía para montar tu propio servidor en casa utilizando Proxmox para la virtualización y Docker para la gestión de contenedores.'
 author: 'Jorge Balibrea'
 image:
-  url: '/blog/servidor-casero-proxmox-docker/proxmox.png'
+  url: './proxmox.png'
   alt: 'Servidor casero con Proxmox y Docker'
 tags: ['proxmox', 'docker', 'portainer', 'servidor']
 ---
+
+import proxmoxLight from './proxmox-logo-light.svg';
+import proxmoxDark from './proxmox-logo-dark.svg';
+import dockerLogo from './docker-logo.svg';
+import portainerLogo from './portainer-logo.svg';
 
 Después de un tiempo sin escribir nada, he decidido retomar el blog y contar un poco sobre mi experiencia montando un servidor en casa. La idea es tener un servidor que me permita hacer pruebas y aprender sobre Docker, Proxmox y otras tecnologías.
 
@@ -16,13 +22,13 @@ _Te puede servir cualquier pc antiguo que no uses o como en mi caso un mini pc q
 ## Qué es Proxmox
 
 <img
-  src="https://www.proxmox.com/images/proxmox/logos/mediakit-proxmox-server-solutions-logos-light.svg"
+  src={proxmoxLight.src}
   alt="Proxmox"
   class="dark:hidden float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
 
 <img
-  src="https://www.proxmox.com/images/proxmox/logos/mediakit-proxmox-server-solutions-logos-dark.svg"
+  src={proxmoxDark.src}
   alt="Proxmox"
   class="hidden dark:block float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
@@ -33,18 +39,18 @@ En mi caso tengo un mini-pc y un HDD conectado, en Proxmox tengo varios contened
 
 Así es como se vería Proxmox al entrar a nuestro servidor `http://<ip_servidor>` con el navegador:
 
-<img src="/blog/servidor-casero-proxmox-docker/proxmox.png" alt="Proxmox" />
+![Proxmox](./proxmox.png)
 
 Tenemos el server/root llamado **pve**, dentro de este tenemos varios **contenedores LXC**. En uno de estos contenedores tengo instalado **Docker** y lo administro junto a **Portainer**. Además, es importante mencionar que cada contenedor tiene su propia configuración y recursos asignados, lo que permite una gran flexibilidad en la gestión de servicios. Cada contenedor se administra a través de Proxmox entrando en la consola o a través de SSH.
 
-_En este caso tenemos 4 ip's diferentes, cada una apuntando a su respectivo contenedor + la ip del servidor. Todas las ip's de Proxmox las tengo configuradas como **estáticas** en el router, de esta forma siempre apuntarán a la misma ip y no tendré problemas al reiniciar el servidor o el contenedor._
+_En este caso tenemos 4 IP diferentes, cada una apuntando a su respectivo contenedor + la IP del servidor. Todas las IP de Proxmox las tengo configuradas como **estáticas** en el router, de esta forma siempre apuntarán a la misma IP y no tendré problemas al reiniciar el servidor o el contenedor._
 
 [Más info sobre Proxmox](https://www.proxmox.com/en/proxmox-ve)
 
-## Qué es docker
+## Qué es Docker
 
 <img
-  src="https://www.docker.com/app/uploads/2023/08/logo-guide-logos-1.svg"
+  src={dockerLogo.src}
   alt="Docker"
   class="dark:hidden float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
@@ -72,7 +78,7 @@ services:
       - /docker/appdata/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt
 ```
 
-En mi caso ejecuto todo a través de Portainer (no es algo imprescindible), en caso de no usar Portainer también puedes levantar los contenedores con `docker compose up -d` en la carpeta donde tenemos el docker-compose.yml, se creará un contenedor y tendríamos nuestro Nginx Proxy Manger corriendo.
+En mi caso ejecuto todo a través de Portainer (no es algo imprescindible), en caso de no usar Portainer también puedes levantar los contenedores con `docker compose up -d` en la carpeta donde tenemos el docker-compose.yml, se creará un contenedor y tendríamos nuestro Nginx Proxy Manager corriendo.
 
 ### Algunos servicios interesantes que puedes montar en tu servidor
 
@@ -93,7 +99,6 @@ En mi caso ejecuto todo a través de Portainer (no es algo imprescindible), en c
 - **Jellyfin**: para gestionar y reproducir contenido multimedia.
 - **Home Assistant**: para gestionar dispositivos IoT y automatización del hogar.
 - **Nginx Proxy Manager**: para gestionar dominios y certificados SSL de forma sencilla.
-- **Wireguard**: para crear una red privada virtual (VPN) y acceder a la red local de forma segura desde fuera de casa.
 
 </details>
 
@@ -136,7 +141,7 @@ ports:
 
 Hay que tener en cuenta los **puertos que se exponen**, en el caso de Nginx Proxy Manager los puertos 80, 81 y 443.
 
-Si, por ejemplo, cambiamos '81:81' por '84:81', significa que el puerto 84 del host se redirige al puerto 81 del contenedor. Ahora, al acceder a `http://<ip_servidor>:84`, serías redirigido al puerto 81 del contenedor, mostrando la interfaz de administración de Nginx Proxy Manager.
+Si, por ejemplo, cambiamos `'81:81'` por `'84:81'`, significa que el puerto 84 del host se redirige al puerto 81 del contenedor. Ahora, al acceder a `http://<ip_servidor>:84`, serías redirigido al puerto 81 del contenedor, mostrando la interfaz de administración de Nginx Proxy Manager.
 
 #### Configuración de Volúmenes en el Host
 
@@ -218,21 +223,24 @@ docker build -t <nombre_imagen> .
 docker image prune
 # Limpiar contenedores
 docker container prune
-# Limpiar volúmenes
+# Limpiar volúmenes (⚠️ borra los volúmenes que no use ningún contenedor, con sus datos)
 docker volume prune
 # Limpiar redes
 docker network prune
-# Limpiar todo
+# Limpiar todo (⚠️ elimina contenedores parados, redes e imágenes sin usar)
 docker system prune
 ```
 </details>
 
+> [!WARNING]
+> Los comandos `prune` y `rm` **borran datos de forma permanente**. Antes de ejecutar `docker volume prune` o `docker system prune` comprueba con `docker ps -a` y `docker volume ls` qué se va a eliminar: un volumen que no esté en uso en ese momento puede contener los datos de un servicio que tienes parado.
+
 _**Docker** es una herramienta muy versátil que permite hacer todo tipo de cosas, como **crear tus propias imágenes personalizadas**. Por ejemplo, puedes generar una imagen que incluya tanto el frontend de tu proyecto en React como el backend, todo en uno. Así, cualquier persona podrá ejecutar tu proyecto directamente desde esa imagen, sin necesidad de instalar dependencias ni preocuparse por versiones incompatibles de Node u otros entornos. Todo estará contenido y listo para funcionar._
 
-## Qué es portainer
+## Qué es Portainer
 
 <img
-  src="https://raw.githubusercontent.com/portainer/portainer/8cc28761d74f68eaf397a5b475aad2c27ad1dae8/app/assets/images/logo_alt.svg"
+  src={portainerLogo.src}
   alt="Portainer"
   class="float-right ml-5 mb-5 max-w-[200px] max-h-[200px]"
 />
@@ -241,10 +249,7 @@ _**Docker** es una herramienta muy versátil que permite hacer todo tipo de cosa
 
 Portainer es muy útil para aquellos que no están familiarizados con la línea de comandos de Docker, ya que proporciona una interfaz gráfica intuitiva. Además, puedes gestionar múltiples entornos Docker desde una sola instancia de Portainer.
 
-<img
-  src="/blog/servidor-casero-proxmox-docker/servicios.png"
-  alt="Servicios corriendo en docker"
-/>
+![Servicios corriendo en docker](./servicios.png)
 
 Estos son algunos de los servicios que tengo corriendo en mi servidor.
 
@@ -257,6 +262,9 @@ docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /va
 ```
 
 (info: [Portainer](https://docs.portainer.io/start/install-ce/server/docker/linux))
+
+> [!WARNING]
+> Este comando monta `/var/run/docker.sock` dentro del contenedor, lo que da a Portainer (y a quien consiga acceso a él) control total sobre Docker y, en la práctica, sobre el host. No expongas el puerto 9443 a internet y protege el acceso con una contraseña fuerte, o mejor, accede solo desde tu red local o por VPN.
 
 Una vez instalado, puedes acceder a Portainer a través de `http://<ip_servidor>:9443` y gestionar tus contenedores de manera sencilla.
 

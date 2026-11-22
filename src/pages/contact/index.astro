@@ -17,20 +17,22 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         <div class="w-full md:w-1/3">
           <p class="max-w-prose text-sm">
             Si has llegado hasta aquí, probablemente quieras ponerte en contacto
-            conmigo. Suelo responder lo antes posible —<i
-              >a veces incluso más rápido de lo que imaginas</i
-            >
-            <span role="img" aria-label="wink">😉</span>
-            —. Puedes escribirme directamente a través del formulario o, si lo prefieres,
-            por correo electrónico a
+            conmigo. Suelo responder lo antes posible —
+            <i>a veces incluso más rápido de lo que imaginas</i>
+            <span role="img" aria-label="wink">
+              😉
+            </span>
+            —. Puedes escribirme directamente a través del formulario o, si lo
+            prefieres, por correo electrónico a
             <LinkWithArrow arrow={false} href="mailto:contact@jbalibrea.dev">
               contact@jbalibrea.dev
-            </LinkWithArrow>.
+            </LinkWithArrow>
+            .
           </p>
         </div>
         <div class="flex-1 w-full md:w-2/3 text-base md:text-xl">
           <Contact
-            client:load
+            client:visible
             contactEndpoint={CONTACT_ENDPOINT}
             turnstileSiteKey={TURNSTILE_SITE_KEY}
           />

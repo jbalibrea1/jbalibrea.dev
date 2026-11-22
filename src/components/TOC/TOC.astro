@@ -18,7 +18,9 @@ const toc = generateToc(headings);
 <toc-heading class={className} {...props}>
   <h2 class="font-semibold text-sm">TABLA DE CONTENIDOS</h2>
   <ul class="mt-4 text-card-foreground">
-    {toc.map((heading) => <TOCHeading heading={heading} />)}
+    {toc.map((heading) => (
+      <TOCHeading heading={heading} />
+    ))}
   </ul>
 </toc-heading>
 
@@ -42,6 +44,8 @@ const toc = generateToc(headings);
     headings: HTMLElement[] = [];
     tocLinks: TOCLink[] = [];
     headingProgress: Record<string, HeadingProgress> = {};
+    private frame = 0;
+    private resizeObserver?: ResizeObserver;
 
     constructor() {
       super();
@@ -119,10 +123,33 @@ const toc = generateToc(headings);
       });
     };
 
+    // Recalcula como mucho una vez por frame
+    private schedule = () => {
+      if (this.frame) return;
+      this.frame = requestAnimationFrame(() => {
+        this.frame = 0;
+        this.updatePositionAndStyle();
+      });
+    };
+
     connectedCallback() {
-      // Initial first and listen to scroll event
-      setInterval(this.updatePositionAndStyle, 500);
-      window.addEventListener('scroll', this.updatePositionAndStyle);
+      this.updatePositionAndStyle();
+      window.addEventListener('scroll', this.schedule, { passive: true });
+      window.addEventListener('resize', this.schedule);
+      // Las imágenes que cargan después cambian la altura del contenido
+      const content = document.querySelector('#content');
+      if (content) {
+        this.resizeObserver = new ResizeObserver(this.schedule);
+        this.resizeObserver.observe(content);
+      }
+    }
+
+    // Con ClientRouter este elemento se destruye al cambiar de página
+    disconnectedCallback() {
+      window.removeEventListener('scroll', this.schedule);
+      window.removeEventListener('resize', this.schedule);
+      this.resizeObserver?.disconnect();
+      if (this.frame) cancelAnimationFrame(this.frame);
     }
   }
 

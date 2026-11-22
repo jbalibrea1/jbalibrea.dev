@@ -26,3 +26,10 @@ updates:
     target-branch: develop
     schedule:
       interval: monthly
+
+  # Imágenes base de Docker (node, nginx) en Dockerfile y dev.Dockerfile
+  - package-ecosystem: docker
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
